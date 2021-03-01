@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Strasnote.Auth.Data.Entities
 {
-    public class RoleEntity : IdentityRole<long>
-    {
-    }
+	public class RoleEntity : IdentityRole<long>
+	{
+	}
 }

@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Strasnote.Auth
 {
-    public class JwtToken : IJwtToken
-    {
-        public Task<TokenResponse> GetRefreshToken()
-        {
-            throw new NotImplementedException();
-        }
+	public class JwtToken : IJwtToken
+	{
+		public Task<TokenResponse> GetRefreshToken()
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task<TokenResponse> GetToken()
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public Task<TokenResponse> GetToken()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

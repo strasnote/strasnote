@@ -10,81 +10,81 @@ using System.Threading.Tasks;
 
 namespace Strasnote.Auth.Data
 {
-    public class UserStore : 
-        IUserStore<UserEntity>
-    {
-        private readonly IUserContext _userContext;
+	public class UserStore :
+		IUserStore<UserEntity>
+	{
+		private readonly IUserContext _userContext;
 
-        private bool _disposed;
+		private bool _disposed;
 
-        public UserStore(IUserContext userContext)
-        {
-            _userContext = userContext;
-        }
+		public UserStore(IUserContext userContext)
+		{
+			_userContext = userContext;
+		}
 
-        public Task<IdentityResult> CreateAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<IdentityResult> CreateAsync(UserEntity user, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task<IdentityResult> DeleteAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<IdentityResult> DeleteAsync(UserEntity user, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task<UserEntity> FindByIdAsync(string userId, CancellationToken cancellationToken)
-        {
-            ThrowIfDisposed();
+		public Task<UserEntity> FindByIdAsync(string userId, CancellationToken cancellationToken)
+		{
+			ThrowIfDisposed();
 
-            return _userContext.Retrieve(int.Parse(userId));
-        }
+			return _userContext.Retrieve(int.Parse(userId));
+		}
 
-        public Task<UserEntity> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<UserEntity> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task<string> GetNormalizedUserNameAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<string> GetNormalizedUserNameAsync(UserEntity user, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task<string> GetUserIdAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<string> GetUserIdAsync(UserEntity user, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task<string> GetUserNameAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<string> GetUserNameAsync(UserEntity user, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task SetNormalizedUserNameAsync(UserEntity user, string normalizedName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task SetNormalizedUserNameAsync(UserEntity user, string normalizedName, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task SetUserNameAsync(UserEntity user, string userName, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task SetUserNameAsync(UserEntity user, string userName, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+		public Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
 
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-        }
-    }
+		private void ThrowIfDisposed()
+		{
+			if (_disposed)
+			{
+				throw new ObjectDisposedException(GetType().Name);
+			}
+		}
+	}
 }

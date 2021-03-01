@@ -4,5 +4,5 @@ using System.Text;
 
 namespace Strasnote.Auth.Models
 {
-    public record TokenResponse(string AccessToken, string RefreshToken);
+	public record TokenResponse(string AccessToken, string RefreshToken);
 }
