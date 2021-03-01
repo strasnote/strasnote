@@ -1,7 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project>
+	
+	<!-- Standard Configuration -->
  <PropertyGroup>
-   <Nullable>enable</Nullable>
-   <LangVersion>latest</LangVersion>
-   <TargetFramework>net5.0</TargetFramework>
+	 <TargetFramework>net5.0</TargetFramework>
+	 <LangVersion>latest</LangVersion>
+	 <Nullable>enable</Nullable>
  </PropertyGroup>
+
+	<!-- Import Licence file -->
+	<ItemGroup Label="Licence">
+		<None Include="../../LICENSE" Pack="true" PackagePath=""/>
+	</ItemGroup>
+	
 </Project>
