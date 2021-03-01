@@ -66,9 +66,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Models", "Au
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{4547EACD-9D5D-432D-A4C3-2B6C6BC8D95F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strasnote.Logging.Abstracts", "Logging\Strasnote.Logging.Abstracts\Strasnote.Logging.Abstracts.csproj", "{7DA70A67-8798-41A2-B7A2-FD411BAD9F44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Logging.Abstracts", "Logging\Strasnote.Logging.Abstracts\Strasnote.Logging.Abstracts.csproj", "{7DA70A67-8798-41A2-B7A2-FD411BAD9F44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strasnote.Logging.Serilog", "Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj", "{7CD8A877-9D62-4711-AA6F-99D848B226E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Logging.Serilog", "Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj", "{7CD8A877-9D62-4711-AA6F-99D848B226E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
