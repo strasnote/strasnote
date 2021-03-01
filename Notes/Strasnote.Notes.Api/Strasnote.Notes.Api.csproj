@@ -1,3 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
+  <ItemGroup>
+    <ProjectReference Include="..\..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
+  </ItemGroup>
 </Project>
