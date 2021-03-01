@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Strasnote.Auth.Abstracts
 {
-    public interface IJwtToken
-    {
-        Task<TokenResponse> GetToken();
+	public interface IJwtToken
+	{
+		Task<TokenResponse> GetToken();
 
-        Task<TokenResponse> GetRefreshToken();
-    }
+		Task<TokenResponse> GetRefreshToken();
+	}
 }

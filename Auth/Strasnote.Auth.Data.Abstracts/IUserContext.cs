@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Strasnote.Auth.Data.Abstracts
 {
-    public interface IUserContext
-    {
-        Task<UserEntity> Retrieve(int id);
-    }
+	public interface IUserContext
+	{
+		Task<UserEntity> Retrieve(int id);
+	}
 }

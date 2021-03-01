@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Strasnote.Auth.Api.Controllers
 {
-    [AllowAnonymous]
-    public class TokenController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
+	[AllowAnonymous]
+	public class TokenController : Controller
+	{
+		public IActionResult Index()
+		{
+			return View();
+		}
+	}
 }
