@@ -5,5 +5,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Strasnote.Auth.Data.Entities\Strasnote.Auth.Data.Entities.csproj" />
+  </ItemGroup>
+
 
 </Project>

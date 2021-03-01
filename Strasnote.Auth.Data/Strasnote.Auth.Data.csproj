@@ -1,7 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Strasnote.Auth.Abstracts\Strasnote.Auth.Abstracts.csproj" />
+    <ProjectReference Include="..\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
+    <ProjectReference Include="..\Strasnote.Auth.Data.Entities\Strasnote.Auth.Data.Entities.csproj" />
+  </ItemGroup>
 
 </Project>
