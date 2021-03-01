@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
     <ProjectReference Include="..\Strasnote.Auth.Data.Entities\Strasnote.Auth.Data.Entities.csproj" />
   </ItemGroup>
 
