@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api.Controllers
 {
@@ -6,6 +7,11 @@ namespace Strasnote.Auth.Api.Controllers
 	[Route("[controller]")]
 	public class HomeController : ControllerBase
 	{
+		private readonly ILog<HomeController> log;
+
+		public HomeController(ILog<HomeController> log) =>
+			this.log = log;
+
 		[HttpGet]
 		public ActionResult<string> Get()
 		{
