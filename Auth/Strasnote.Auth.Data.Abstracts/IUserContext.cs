@@ -1,8 +1,5 @@
-﻿using Strasnote.Auth.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Strasnote.Auth.Data.Entities;
 
 namespace Strasnote.Auth.Data.Abstracts
 {

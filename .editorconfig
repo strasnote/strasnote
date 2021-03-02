@@ -7,7 +7,9 @@
 #Core editorconfig formatting - indentation
 
 #use soft tabs (spaces) for indentation
-indent_style = tabs
+indent_style = tab
+indent_size = tab
+tab_size = 4
 
 #Formatting - new line options
 
@@ -17,7 +19,8 @@ csharp_new_line_before_open_brace = types, control_blocks, methods, lambdas
 #Formatting - organize using options
 
 #do not place System.* using directives before other using directives
-dotnet_sort_system_directives_first = false
+dotnet_sort_system_directives_first = true
+
 
 #Formatting - spacing options
 
