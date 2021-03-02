@@ -52,6 +52,8 @@ namespace Strasnote.Auth.Api
 			{
 				endpoints.MapControllers();
 			});
+
+			app.ApplicationServices.GetService<ILog<Startup>>()?.Information("Application Configured.");
 		}
 	}
 }
