@@ -1,7 +1,7 @@
-﻿using Strasnote.Auth.Data.Abstracts;
-using Strasnote.Auth.Data.Entities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Data.Entities;
 
 namespace Strasnote.Auth.Data.MySql
 {

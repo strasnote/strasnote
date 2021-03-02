@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Strasnote.Auth.Abstracts;
-using Strasnote.Auth.Data.Abstracts;
-using Strasnote.Auth.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Data.Entities;
 
 namespace Strasnote.Auth.Data
 {
