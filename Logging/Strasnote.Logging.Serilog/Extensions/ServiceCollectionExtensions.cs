@@ -16,11 +16,12 @@ namespace Strasnote.Logging
 			// Override default console logger using configuration
 			Log.Logger = new LoggerConfiguration()
 				.ReadFrom.Configuration(configuration)
+				.Enrich.FromLogContext()
 				.CreateLogger();
 
 			// Register logger classes
-			services.AddScoped<ILog, SerilogLogger>();
-			services.AddScoped(typeof(ILog<>), typeof(SerilogLogger<>));
+			services.AddSingleton<ILog>(new SerilogLogger(Log.Logger));
+			services.AddTransient(typeof(ILog<>), typeof(SerilogLogger<>));
 
 			return services;
 		}
