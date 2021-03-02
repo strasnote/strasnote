@@ -23,6 +23,8 @@ namespace Strasnote.Logging
 	{
 		private readonly ILogger logger;
 
+		private readonly string prefix = "{Suite} | ";
+
 		/// <summary>
 		/// Use global logger
 		/// </summary>
@@ -41,34 +43,34 @@ namespace Strasnote.Logging
 
 		/// <inheritdoc/>
 		public void Trace(string message, params object[] args) =>
-			logger.Verbose(message, args);
+			logger.Verbose(prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Debug(string message, params object[] args) =>
-			logger.Debug(message, args);
+			logger.Debug(prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Information(string message, params object[] args) =>
-			logger.Information(message, args);
+			logger.Information(prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Warning(string message, params object[] args) =>
-			logger.Warning(message, args);
+			logger.Warning(prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Error(string message, params object[] args) =>
-			logger.Error(message, args);
+			logger.Error(prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Error(Exception ex, string message, params object[] args) =>
-			logger.Error(ex, message, args);
+			logger.Error(ex, prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Critical(string message, params object[] args) =>
-			logger.Fatal(message, args);
+			logger.Fatal(prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Critical(Exception ex, string message, params object[] args) =>
-			logger.Fatal(ex, message, args);
+			logger.Fatal(ex, prefix + message, args);
 	}
 }
