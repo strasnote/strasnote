@@ -23,7 +23,7 @@ namespace Strasnote.Logging
 	{
 		private readonly ILogger logger;
 
-		private readonly string prefix = "{Suite} | ";
+		private readonly string prefix = "Strasnote | ";
 
 		/// <summary>
 		/// Use global logger
