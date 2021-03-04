@@ -4,7 +4,7 @@ using Strasnote.Logging;
 using Strasnote.Util;
 using Xunit;
 
-namespace Tests.Strasnote.Logging.Serilog_Tests
+namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 {
 	public class Trace_Tests
 	{

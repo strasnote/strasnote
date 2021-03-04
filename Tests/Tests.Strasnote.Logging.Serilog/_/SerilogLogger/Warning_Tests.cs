@@ -4,12 +4,12 @@ using Strasnote.Logging;
 using Strasnote.Util;
 using Xunit;
 
-namespace Tests.Strasnote.Logging.Serilog_Tests
+namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 {
-	public class Information_Tests
+	public class Warning_Tests
 	{
 		[Fact]
-		public void Calls_Serilog_Information_With_Message_And_Args()
+		public void Calls_Serilog_Warning_With_Message_And_Args()
 		{
 			// Arrange
 			var serilog = Substitute.For<ILogger>();
@@ -20,10 +20,10 @@ namespace Tests.Strasnote.Logging.Serilog_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
-			logger.Information(message, args);
+			logger.Warning(message, args);
 
 			// Assert
-			serilog.Received().Information(SerilogLogger.Prefix + message, args);
+			serilog.Received().Warning(SerilogLogger.Prefix + message, args);
 		}
 	}
 }

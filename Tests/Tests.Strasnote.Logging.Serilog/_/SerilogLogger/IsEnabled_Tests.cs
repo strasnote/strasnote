@@ -4,7 +4,7 @@ using Serilog.Events;
 using Strasnote.Logging;
 using Xunit;
 
-namespace Tests.Strasnote.Logging.Serilog_Tests
+namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 {
 	public class IsEnabled_Tests
 	{

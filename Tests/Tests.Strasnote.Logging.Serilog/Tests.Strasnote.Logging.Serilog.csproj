@@ -20,4 +20,8 @@
     <ProjectReference Include="..\..\Util\Strasnote.Util.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>

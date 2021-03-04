@@ -5,12 +5,12 @@ using Strasnote.Logging;
 using Strasnote.Util;
 using Xunit;
 
-namespace Tests.Strasnote.Logging.Serilog_Tests
+namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 {
-	public class Error_Tests
+	public class Critical_Tests
 	{
 		[Fact]
-		public void Calls_Serilog_Error_With_Message_And_Args()
+		public void Calls_Serilog_Fatal_With_Message_And_Args()
 		{
 			// Arrange
 			var serilog = Substitute.For<ILogger>();
@@ -21,14 +21,14 @@ namespace Tests.Strasnote.Logging.Serilog_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
-			logger.Error(message, args);
+			logger.Critical(message, args);
 
 			// Assert
-			serilog.Received().Error(SerilogLogger.Prefix + message, args);
+			serilog.Received().Fatal(SerilogLogger.Prefix + message, args);
 		}
 
 		[Fact]
-		public void Calls_Serilog_Error_With_Exception_And_Message_And_Args()
+		public void Calls_Serilog_Fatal_With_Exception_And_Message_And_Args()
 		{
 			// Arrange
 			var serilog = Substitute.For<ILogger>();
@@ -40,10 +40,10 @@ namespace Tests.Strasnote.Logging.Serilog_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
-			logger.Error(exception, message, args);
+			logger.Critical(exception, message, args);
 
 			// Assert
-			serilog.Received().Error(exception, SerilogLogger.Prefix + message, args);
+			serilog.Received().Fatal(exception, SerilogLogger.Prefix + message, args);
 		}
 	}
 }
