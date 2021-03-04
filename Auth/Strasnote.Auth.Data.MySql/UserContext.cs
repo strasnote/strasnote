@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Auth.Data.Entities;
 
@@ -7,9 +9,11 @@ namespace Strasnote.Auth.Data.MySql
 {
 	public sealed class UserContext : IUserContext
 	{
-		public Task<UserEntity> Retrieve(int id)
-		{
-			throw new NotImplementedException();
-		}
+		public Task<IdentityResult> CreateAsync(UserEntity user, CancellationToken cancellationToken) => throw new NotImplementedException();
+		public Task<IdentityResult> DeleteAsync(UserEntity user, CancellationToken cancellationToken) => throw new NotImplementedException();
+		public void Dispose() => throw new NotImplementedException();
+		public Task<UserEntity> RetrieveAsync(int id, CancellationToken cancellationToken) => throw new NotImplementedException();
+		public Task<UserEntity> RetrieveAsync(string name, CancellationToken cancellationToken) => throw new NotImplementedException();
+		public Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken) => throw new NotImplementedException();
 	}
 }

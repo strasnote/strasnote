@@ -3,10 +3,19 @@ using Strasnote.Auth.Models;
 
 namespace Strasnote.Auth.Abstracts
 {
+	/// <summary>
+	/// JSON Web Token
+	/// </summary>
 	public interface IJwtToken
 	{
-		Task<TokenResponse> GetToken();
+		/// <summary>
+		/// Get token content
+		/// </summary>
+		Task<TokenResponse> GetTokenAsync();
 
-		Task<TokenResponse> GetRefreshToken();
+		/// <summary>
+		/// Get refresh token
+		/// </summary>
+		Task<TokenResponse> GetRefreshTokenAsync();
 	}
 }

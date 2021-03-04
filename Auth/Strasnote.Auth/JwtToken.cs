@@ -5,14 +5,17 @@ using Strasnote.Auth.Models;
 
 namespace Strasnote.Auth
 {
+	/// <inheritdoc cref="IJwtToken"/>
 	public class JwtToken : IJwtToken
 	{
-		public Task<TokenResponse> GetRefreshToken()
+		/// <inheritdoc/>
+		public async Task<TokenResponse> GetRefreshTokenAsync()
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<TokenResponse> GetToken()
+		/// <inheritdoc/>
+		public async Task<TokenResponse> GetTokenAsync()
 		{
 			throw new NotImplementedException();
 		}
