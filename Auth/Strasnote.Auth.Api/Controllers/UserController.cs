@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.Auth.Data;
-using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Auth.Data.Entities;
 using Strasnote.Logging;
 
