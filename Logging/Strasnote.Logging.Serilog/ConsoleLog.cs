@@ -9,12 +9,18 @@ namespace Strasnote.Logging
 	public static class ConsoleLog
 	{
 		/// <summary>
-		/// Enable basic console logging using Serilog
+		/// Create a basic console logger
 		/// </summary>
-		public static void Enable() =>
-			Log.Logger = new LoggerConfiguration()
+		public static ILogger CreateConsoleLogger =>
+			new LoggerConfiguration()
 				.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
 				.WriteTo.Console()
 				.CreateLogger();
+
+		/// <summary>
+		/// Enable basic console logging using Serilog
+		/// </summary>
+		public static void Enable() =>
+			Log.Logger = CreateConsoleLogger;
 	}
 }
