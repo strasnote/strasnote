@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Logging;
 
@@ -30,6 +31,7 @@ namespace Strasnote.Auth.Api
 
 			services.AddControllers();
 
+			services.AddScoped<UserStore>();
 			services.AddScoped<IUserContext, Data.Fake.UserContext>();
 		}
 

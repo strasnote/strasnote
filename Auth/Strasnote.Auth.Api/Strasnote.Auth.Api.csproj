@@ -14,6 +14,7 @@
     <ProjectReference Include="..\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
     <ProjectReference Include="..\Strasnote.Auth.Data.Entities\Strasnote.Auth.Data.Entities.csproj" />
     <ProjectReference Include="..\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj" />
+    <ProjectReference Include="..\Strasnote.Auth.Data\Strasnote.Auth.Data.csproj" />
   </ItemGroup>
 
 
