@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System;
+using NSubstitute;
 using Serilog;
 using Strasnote.Logging;
 using Strasnote.Util;
@@ -20,10 +21,12 @@ namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
+			logger.Information(message);
 			logger.Information(message, args);
 
 			// Assert
-			serilog.Received().Information(SerilogLogger.Prefix + message, args);
+			serilog.Received(1).Information(SerilogLogger.Prefix + message, Array.Empty<object>());
+			serilog.Received(1).Information(SerilogLogger.Prefix + message, args);
 		}
 	}
 }

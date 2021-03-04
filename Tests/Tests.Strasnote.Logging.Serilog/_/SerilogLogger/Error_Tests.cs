@@ -21,10 +21,12 @@ namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
+			logger.Error(message);
 			logger.Error(message, args);
 
 			// Assert
-			serilog.Received().Error(SerilogLogger.Prefix + message, args);
+			serilog.Received(1).Error(SerilogLogger.Prefix + message, Array.Empty<object>());
+			serilog.Received(1).Error(SerilogLogger.Prefix + message, args);
 		}
 
 		[Fact]
@@ -40,10 +42,12 @@ namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
+			logger.Error(exception, message);
 			logger.Error(exception, message, args);
 
 			// Assert
-			serilog.Received().Error(exception, SerilogLogger.Prefix + message, args);
+			serilog.Received(1).Error(exception, SerilogLogger.Prefix + message, Array.Empty<object>());
+			serilog.Received(1).Error(exception, SerilogLogger.Prefix + message, args);
 		}
 	}
 }

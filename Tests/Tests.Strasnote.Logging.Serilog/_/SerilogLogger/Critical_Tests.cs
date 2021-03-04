@@ -21,10 +21,12 @@ namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
+			logger.Critical(message);
 			logger.Critical(message, args);
 
 			// Assert
-			serilog.Received().Fatal(SerilogLogger.Prefix + message, args);
+			serilog.Received(1).Fatal(SerilogLogger.Prefix + message, Array.Empty<object>());
+			serilog.Received(1).Fatal(SerilogLogger.Prefix + message, args);
 		}
 
 		[Fact]
@@ -40,10 +42,12 @@ namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 			var args = new object[] { arg0, arg1 };
 
 			// Act
+			logger.Critical(exception, message);
 			logger.Critical(exception, message, args);
 
 			// Assert
-			serilog.Received().Fatal(exception, SerilogLogger.Prefix + message, args);
+			serilog.Received(1).Fatal(exception, SerilogLogger.Prefix + message, Array.Empty<object>());
+			serilog.Received(1).Fatal(exception, SerilogLogger.Prefix + message, args);
 		}
 	}
 }
