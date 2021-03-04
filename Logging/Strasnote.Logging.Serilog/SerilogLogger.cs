@@ -21,9 +21,12 @@ namespace Strasnote.Logging
 	/// </summary>
 	public class SerilogLogger : ILog
 	{
-		private readonly ILogger logger;
+		private readonly ILogger serilog;
 
-		private readonly string prefix = "Strasnote | ";
+		/// <summary>
+		/// Prefix added to all messages
+		/// </summary>
+		public const string Prefix = "Strasnote | ";
 
 		/// <summary>
 		/// Use global logger
@@ -33,44 +36,44 @@ namespace Strasnote.Logging
 		/// <summary>
 		/// Use specified logger
 		/// </summary>
-		/// <param name="logger">Serilog.ILogger instance</param>
-		internal SerilogLogger(ILogger logger) =>
-			this.logger = logger;
+		/// <param name="serilog">Serilog.ILogger instance</param>
+		internal SerilogLogger(ILogger serilog) =>
+			this.serilog = serilog;
 
 		/// <inheritdoc/>
 		public bool IsEnabled(Microsoft.Extensions.Logging.LogLevel level) =>
-			logger.IsEnabled((LogEventLevel)level);
+			serilog.IsEnabled((LogEventLevel)level);
 
 		/// <inheritdoc/>
 		public void Trace(string message, params object[] args) =>
-			logger.Verbose(prefix + message, args);
+			serilog.Verbose(Prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Debug(string message, params object[] args) =>
-			logger.Debug(prefix + message, args);
+			serilog.Debug(Prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Information(string message, params object[] args) =>
-			logger.Information(prefix + message, args);
+			serilog.Information(Prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Warning(string message, params object[] args) =>
-			logger.Warning(prefix + message, args);
+			serilog.Warning(Prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Error(string message, params object[] args) =>
-			logger.Error(prefix + message, args);
+			serilog.Error(Prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Error(Exception ex, string message, params object[] args) =>
-			logger.Error(ex, prefix + message, args);
+			serilog.Error(ex, Prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Critical(string message, params object[] args) =>
-			logger.Fatal(prefix + message, args);
+			serilog.Fatal(Prefix + message, args);
 
 		/// <inheritdoc/>
 		public void Critical(Exception ex, string message, params object[] args) =>
-			logger.Fatal(ex, prefix + message, args);
+			serilog.Fatal(ex, Prefix + message, args);
 	}
 }
