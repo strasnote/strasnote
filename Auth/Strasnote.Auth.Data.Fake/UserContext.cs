@@ -56,7 +56,6 @@ namespace Strasnote.Auth.Data.Fake
 		}
 
 		/// <inheritdoc/>
-		public void Dispose() =>
-			log.Information("Disposing...");
+		public void Dispose() { }
 	}
 }
