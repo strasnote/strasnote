@@ -1,7 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="5.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Logging\Strasnote.Logging.Abstracts\Strasnote.Logging.Abstracts.csproj" />
+    <ProjectReference Include="..\..\Util\Strasnote.Util.csproj" />
     <ProjectReference Include="..\Strasnote.Auth.Abstracts\Strasnote.Auth.Abstracts.csproj" />
+    <ProjectReference Include="..\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
+    <ProjectReference Include="..\Strasnote.Auth.Data.Entities\Strasnote.Auth.Data.Entities.csproj" />
   </ItemGroup>
 
 </Project>
