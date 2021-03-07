@@ -1,10 +1,22 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Strasnote.Auth.Abstracts;
+using Strasnote.Auth.Config;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Data.Entities;
+using Strasnote.Auth.Data.Fake.Extensions;
+using Strasnote.Auth.Extensions;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api
@@ -21,18 +33,49 @@ namespace Strasnote.Auth.Api
 		{
 			services.AddLogging(Configuration);
 
-			//services
-			//	.AddIdentity<UserEntity, RoleEntity>()
-			//	.AddDefaultTokenProviders();
+			// ToDo: add some IServiceCollection extensions
+			services
+				.AddIdentity<UserEntity, RoleEntity>(options =>
+				{
+					options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
+				})
+				.AddDefaultTokenProviders();
 
 			services
-				.AddAuthentication()
-				.AddJwtBearer();
+				.AddAuthentication(options =>
+				{
+					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				})
+				.AddJwtBearer(config =>
+				{
+					config.RequireHttpsMetadata = true;
+					config.SaveToken = true;
+					config.TokenValidationParameters = new TokenValidationParameters 
+					{
+						ValidIssuer = "https://localhost:5001",
+						ValidAudience = "https://localhost:5001",
+						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Fanatic-Onion8-Sports")),
+						RequireExpirationTime = true,
+						ValidateIssuer = true,
+						ValidateIssuerSigningKey = true,
+						ValidateAudience = true,
+						ValidateLifetime = true,
+						ClockSkew = TimeSpan.Zero
+					};
+				});
 
 			services.AddControllers();
 
-			services.AddScoped<UserStore>();
-			services.AddScoped<IUserContext, Data.Fake.UserContext>();
+			services.AddTransient<IUserStore<UserEntity>, UserStore>();
+			services.AddTransient<IRoleStore<RoleEntity>, RoleStore>();
+
+			services.AddAuthDataFakeServices();
+			services.AddAuthServices(Configuration);
+
+			services.Configure<AuthConfig>(Configuration.GetSection("Auth"));
+
+			services.AddTransient<JwtSecurityTokenHandler>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +90,7 @@ namespace Strasnote.Auth.Api
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>

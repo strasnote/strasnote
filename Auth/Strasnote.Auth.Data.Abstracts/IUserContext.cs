@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Entities;
@@ -9,7 +8,7 @@ namespace Strasnote.Auth.Data.Abstracts
 	/// <summary>
 	/// Abstraction for interacting with the user / authentication / identity database
 	/// </summary>
-	public interface IUserContext : IDisposable
+	public interface IUserContext
 	{
 		/// <summary>
 		/// Create a user
@@ -31,6 +30,13 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// <param name="name">Username</param>
 		/// <param name="cancellationToken">CancellationToken</param>
 		Task<UserEntity> RetrieveAsync(string name, CancellationToken cancellationToken);
+
+		/// <summary>
+		/// Retrieve a User by email
+		/// </summary>
+		/// <param name="email">Email</param>
+		/// <param name="cancellationToken">CancellationToken</param>
+		Task<UserEntity> RetrieveByEmail(string email, CancellationToken cancellationToken);
 
 		/// <summary>
 		/// Update a user

@@ -13,8 +13,8 @@ tab_size = 4
 
 #Formatting - new line options
 
-#require braces to be on a new line for types, control_blocks, methods, and lambdas (also known as "Allman" style)
-csharp_new_line_before_open_brace = types, control_blocks, methods, lambdas
+#require braces to be on a new line always ('Allman' style)
+csharp_new_line_before_open_brace = all
 
 #Formatting - organize using options
 

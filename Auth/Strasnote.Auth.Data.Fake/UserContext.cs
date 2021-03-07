@@ -41,6 +41,24 @@ namespace Strasnote.Auth.Data.Fake
 		}
 
 		/// <inheritdoc/>
+		public Task<UserEntity> RetrieveByEmail(string email, CancellationToken cancellationToken)
+		{
+			log.Information("Retrieve user with email: {Email}", email);
+
+			var user = new UserEntity 
+			{
+				Email = email,
+				Id = 1,
+				LockoutEnabled = true,
+				LockoutEnd = null,
+				PasswordHash = "AQAAAAEAACcQAAAAEHn2EWqFQl3+BRPBdGgLPWifuv1xysXz1zQxwq+bRCPUvwNoHk0fowP9wxp83hXJoA==",
+				UserName = email
+			};
+
+			return Task.FromResult(user);
+		}
+
+		/// <inheritdoc/>
 		public Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			log.Information("Updating user: {@User}", user);
@@ -53,8 +71,5 @@ namespace Strasnote.Auth.Data.Fake
 			log.Information("Deleting user: {@User}", user);
 			return Task.FromResult(IdentityResult.Success);
 		}
-
-		/// <inheritdoc/>
-		public void Dispose() { }
 	}
 }

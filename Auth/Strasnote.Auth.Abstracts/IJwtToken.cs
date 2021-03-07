@@ -11,11 +11,11 @@ namespace Strasnote.Auth.Abstracts
 		/// <summary>
 		/// Get token content
 		/// </summary>
-		Task<TokenResponse> GetTokenAsync();
+		Task<TokenResponse> GetTokenAsync(string email, string password);
 
 		/// <summary>
 		/// Get refresh token
 		/// </summary>
-		Task<TokenResponse> GetRefreshTokenAsync();
+		Task<TokenResponse> GetRefreshTokenAsync(string accessToken, string refreshToken);
 	}
 }
