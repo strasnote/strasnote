@@ -8,6 +8,13 @@
 	 <Nullable>enable</Nullable>
  </PropertyGroup>
 
+	<!-- Enable Internal Testing -->
+	<ItemGroup Label="Test Internals">
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>Tests.$(AssemblyName)</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
 	<!-- Import Licence file -->
 	<ItemGroup Label="Licence">
 		<None Include="../../LICENSE" Pack="true" PackagePath=""/>

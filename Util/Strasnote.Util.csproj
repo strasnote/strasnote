@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- Import Licence file -->
+	<ItemGroup Label="Licence">
+		<None Include="../LICENSE" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+</Project>

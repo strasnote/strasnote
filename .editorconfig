@@ -7,17 +7,20 @@
 #Core editorconfig formatting - indentation
 
 #use soft tabs (spaces) for indentation
-indent_style = space
+indent_style = tab
+indent_size = tab
+tab_size = 4
 
 #Formatting - new line options
 
-#require braces to be on a new line for types, control_blocks, methods, and lambdas (also known as "Allman" style)
-csharp_new_line_before_open_brace = types, control_blocks, methods, lambdas
+#require braces to be on a new line always ('Allman' style)
+csharp_new_line_before_open_brace = all
 
 #Formatting - organize using options
 
 #do not place System.* using directives before other using directives
-dotnet_sort_system_directives_first = false
+dotnet_sort_system_directives_first = true
+
 
 #Formatting - spacing options
 
@@ -42,14 +45,14 @@ csharp_preserve_single_line_blocks = true
 #Style - Code block preferences
 
 #prefer curly braces even for one line of code
-csharp_prefer_braces = true:suggestion
+csharp_prefer_braces = false:suggestion
 
 #Style - expression bodied member options
 
 #prefer block bodies for constructors
-csharp_style_expression_bodied_constructors = false:suggestion
+csharp_style_expression_bodied_constructors = true:suggestion
 #prefer block bodies for methods
-csharp_style_expression_bodied_methods = false:suggestion
+csharp_style_expression_bodied_methods = true:suggestion
 #prefer expression-bodied members for properties
 csharp_style_expression_bodied_properties = true:suggestion
 
@@ -72,3 +75,6 @@ csharp_preferred_modifier_order = public,static:suggestion
 
 #prefer properties not to be prefaced with this. or Me. in Visual Basic
 dotnet_style_qualification_for_property = false:suggestion
+
+# Default severity for analyzer diagnostics with category 'Style' (escalated to build warnings)
+dotnet_analyzer_diagnostic.category-Style.severity = warning

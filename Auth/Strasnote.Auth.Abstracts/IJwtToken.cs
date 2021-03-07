@@ -1,15 +1,21 @@
-﻿using Strasnote.Auth.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Strasnote.Auth.Models;
 
 namespace Strasnote.Auth.Abstracts
 {
-    public interface IJwtToken
-    {
-        Task<TokenResponse> GetToken();
+	/// <summary>
+	/// JSON Web Token
+	/// </summary>
+	public interface IJwtToken
+	{
+		/// <summary>
+		/// Get token content
+		/// </summary>
+		Task<TokenResponse> GetTokenAsync(string email, string password);
 
-        Task<TokenResponse> GetRefreshToken();
-    }
+		/// <summary>
+		/// Get refresh token
+		/// </summary>
+		Task<TokenResponse> GetRefreshTokenAsync(string accessToken, string refreshToken);
+	}
 }

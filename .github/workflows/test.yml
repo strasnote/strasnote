@@ -1,0 +1,56 @@
+name: Test
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+    tags-ignore:
+      - '**'
+    paths:
+      - '.github/workflows/test.yml'
+      - 'Auth/**'
+      - 'Encryption/**'
+      - 'Notes/**'
+      - 'Tests/**'
+
+jobs:
+  restore-build-test:
+    runs-on: ubuntu-latest
+    steps:
+    - 
+      name: Prepare - Checkout Code
+      uses: actions/checkout@v2
+    - 
+      name: Prepare - Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+    - 
+      name: A - Restore
+      run: dotnet restore Test.csproj
+    - 
+      name: B - Build
+      run: dotnet build Test.csproj --no-restore -c Release
+    - 
+      name: C - Test
+      run: dotnet test Test.csproj --no-restore --no-build -c Release --verbosity normal
+    - 
+      if: success()
+      name: Finish - Success
+      uses: bencgreen/action-slack-notify@master
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TESTS }}
+        SLACK_USERNAME: Strasnote (Strasnote)
+        SLACK_MESSAGE: Tests Passed
+        SLACK_COLOR: good
+        SLACK_ICON: https://avatars.githubusercontent.com/u/78848948?s=60&v=4
+    - 
+      if: failure()
+      name: Finish - Failure
+      uses: bencgreen/action-slack-notify@master
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TESTS }}
+        SLACK_USERNAME: Strasnote (Strasnote)
+        SLACK_MESSAGE: Test Failed
+        SLACK_COLOR: danger
+        SLACK_ICON: https://avatars.githubusercontent.com/u/78848948?s=60&v=4
