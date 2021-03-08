@@ -75,6 +75,3 @@ csharp_preferred_modifier_order = public,static:suggestion
 
 #prefer properties not to be prefaced with this. or Me. in Visual Basic
 dotnet_style_qualification_for_property = false:suggestion
-
-# Default severity for analyzer diagnostics with category 'Style' (escalated to build warnings)
-dotnet_analyzer_diagnostic.category-Style.severity = warning
