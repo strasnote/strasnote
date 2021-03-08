@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Auth.Data.Entities;
 using Strasnote.Logging;
@@ -17,7 +18,7 @@ namespace Strasnote.Auth.Data.Fake
 		public Task<RefreshTokenEntity> CreateAsync(RefreshTokenEntity refreshToken)
 		{
 			log.Information("Create refresh token: {@RefreshToken}", refreshToken);
-			return Task.FromResult(new RefreshTokenEntity("token", 1));
+			return Task.FromResult(new RefreshTokenEntity("token", DateTimeOffset.Now.AddDays(1), 1));
 		}
 
 		/// <inheritdoc/>
@@ -31,7 +32,7 @@ namespace Strasnote.Auth.Data.Fake
 		public Task<RefreshTokenEntity> Retrieve(long userId, string refreshToken)
 		{
 			log.Information("Retrieve refresh token for user: {@UserId}, refresh token: {@ResfreshToken}", userId, refreshToken);
-			return Task.FromResult(new RefreshTokenEntity("token", 1));
+			return Task.FromResult(new RefreshTokenEntity("token", DateTimeOffset.Now.AddDays(1), 1));
 		}
 	}
 }

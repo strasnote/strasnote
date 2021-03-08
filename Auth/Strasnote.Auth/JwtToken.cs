@@ -62,12 +62,12 @@ namespace Strasnote.Auth
 				return new TokenResponse("User login failed", false);
 			}
 
-			var refreshToken = GenerateRefreshToken(user);
+			var refreshToken = GenerateRefreshTokenAsync(user);
 
 			await refreshTokenContext.DeleteByUserIdAsync(user.Id);
 			await refreshTokenContext.CreateAsync(refreshToken);
 
-			var accessToken = await GenerateToken(user);
+			var accessToken = await GenerateTokenAsync(user);
 
 			return new(accessToken, refreshToken.Token);
 		}
@@ -107,16 +107,16 @@ namespace Strasnote.Auth
 
 			await refreshTokenContext.DeleteByUserIdAsync(user.Id);
 
-			var newRefreshToken = GenerateRefreshToken(user);
+			var newRefreshToken = GenerateRefreshTokenAsync(user);
 
 			await refreshTokenContext.CreateAsync(newRefreshToken);
 
-			var newAccessToken = await GenerateToken(user);
+			var newAccessToken = await GenerateTokenAsync(user);
 
 			return new(newAccessToken, newRefreshToken.Token);
 		}
 
-		private async Task<string> GenerateToken(UserEntity user)
+		private async Task<string> GenerateTokenAsync(UserEntity user)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var secret = Encoding.ASCII.GetBytes(authConfig.Jwt.Secret);
@@ -151,7 +151,7 @@ namespace Strasnote.Auth
 			return await Task.FromResult(tokenHandler.WriteToken(token));
 		}
 
-		private RefreshTokenEntity GenerateRefreshToken(UserEntity userEntity)
+		private RefreshTokenEntity GenerateRefreshTokenAsync(UserEntity userEntity)
 		{
 			var token = Rnd.RndString.Get(50, numbers: true, special: true);
 			var hashedToken = userManager.PasswordHasher.HashPassword(userEntity, token);
