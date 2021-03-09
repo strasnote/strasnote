@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Encryption\Strasnote.Encryption\Strasnote.Encryption.csproj" />
+  </ItemGroup>
+
 </Project>
