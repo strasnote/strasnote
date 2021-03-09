@@ -17,6 +17,7 @@ namespace Strasnote.Auth.Data.MySql
 		public void Dispose() => throw new NotImplementedException();
 		public Task<UserEntity> RetrieveAsync(int id, CancellationToken cancellationToken) => throw new NotImplementedException();
 		public Task<UserEntity> RetrieveAsync(string name, CancellationToken cancellationToken) => throw new NotImplementedException();
+		public Task<UserEntity> RetrieveByEmail(string email, CancellationToken cancellationToken) => throw new NotImplementedException();
 		public Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken) => throw new NotImplementedException();
 	}
 }
