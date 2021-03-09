@@ -1,3 +1,6 @@
+// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -8,12 +11,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data;
-using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Auth.Data.Entities;
 using Strasnote.Auth.Data.Fake.Extensions;
 using Strasnote.Auth.Extensions;
@@ -51,7 +51,7 @@ namespace Strasnote.Auth.Api
 				{
 					config.RequireHttpsMetadata = true;
 					config.SaveToken = true;
-					config.TokenValidationParameters = new TokenValidationParameters 
+					config.TokenValidationParameters = new TokenValidationParameters
 					{
 						ValidIssuer = "https://localhost:5001",
 						ValidAudience = "https://localhost:5001",

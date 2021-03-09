@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
@@ -45,7 +48,7 @@ namespace Strasnote.Auth.Data.Fake
 		{
 			log.Information("Retrieve user with email: {Email}", email);
 
-			var user = new UserEntity 
+			var user = new UserEntity
 			{
 				Email = email,
 				Id = 1,

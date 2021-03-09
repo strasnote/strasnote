@@ -1,4 +1,7 @@
-﻿using Serilog;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using Serilog;
 using Serilog.Events;
 
 namespace Strasnote.Logging

@@ -1,4 +1,7 @@
-﻿namespace Strasnote.Auth.Models
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+namespace Strasnote.Auth.Models
 {
 	public record TokenResponse
 	{

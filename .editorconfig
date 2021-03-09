@@ -3,6 +3,7 @@
 # You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
 [*.cs]
 
+file_header_template = Copyright (c) Strasnote\nLicensed under https://strasnote.com/licence
 
 #Core editorconfig formatting - indentation
 

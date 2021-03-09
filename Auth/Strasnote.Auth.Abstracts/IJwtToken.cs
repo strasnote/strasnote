@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System.Threading.Tasks;
 using Strasnote.Auth.Models;
 
 namespace Strasnote.Auth.Abstracts

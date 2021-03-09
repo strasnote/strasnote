@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace Strasnote.Logging

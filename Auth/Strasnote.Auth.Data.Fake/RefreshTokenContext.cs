@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System;
 using System.Threading.Tasks;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Auth.Data.Entities;
