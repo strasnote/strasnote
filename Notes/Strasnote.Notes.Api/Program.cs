@@ -18,6 +18,10 @@ namespace Strasnote.Notes.Api
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
 				.UseLogging()
+				.ConfigureAppConfiguration((host, config) =>
+				{
+					config.AddSettings(host.HostingEnvironment);
+				})
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
 					webBuilder.UseStartup<Startup>();
