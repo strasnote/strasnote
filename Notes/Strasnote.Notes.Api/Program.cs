@@ -1,3 +1,6 @@
+// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Strasnote.Logging;

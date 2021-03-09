@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System;
 
 namespace Strasnote.Auth.Data.Entities
 {

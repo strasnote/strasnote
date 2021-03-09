@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;

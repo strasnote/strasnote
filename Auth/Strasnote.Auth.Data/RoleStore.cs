@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +14,7 @@ namespace Strasnote.Auth.Data
 	/// Handles roles CRUD
 	/// Implementation reference: https://github.com/aspnet/AspNetIdentity/blob/master/src/Microsoft.AspNet.Identity.EntityFramework/UserStore.cs
 	/// </summary>
-	public class RoleStore : 
+	public class RoleStore :
 		IRoleStore<RoleEntity>
 	{
 		private readonly IRoleContext roleContext;

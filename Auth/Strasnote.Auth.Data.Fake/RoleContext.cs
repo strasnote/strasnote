@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Strasnote.Auth.Data.Abstracts;

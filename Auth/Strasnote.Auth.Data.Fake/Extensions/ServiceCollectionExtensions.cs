@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using Microsoft.Extensions.DependencyInjection;
 using Strasnote.Auth.Data.Abstracts;
 
 namespace Strasnote.Auth.Data.Fake.Extensions

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using Microsoft.AspNetCore.Mvc;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api.Controllers

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
 using NSubstitute;
 using Serilog;
 using Strasnote.Logging;
