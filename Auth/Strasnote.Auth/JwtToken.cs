@@ -108,6 +108,11 @@ namespace Strasnote.Auth
 				return new("Refresh token invalid", false);
 			}
 
+			if (existingRefreshToken.Expires <= DateTimeOffset.Now)
+			{
+				return new("Refresh token has expired", false);
+			}
+
 			await refreshTokenContext.DeleteByUserIdAsync(user.Id);
 
 			var newRefreshToken = GenerateRefreshTokenAsync(user);
