@@ -16,5 +16,19 @@ namespace Strasnote.Notes.Data.Entities
 		/// Folder User ID
 		/// </summary>
 		public long FolderUserId { get; init; }
+
+		#region Relationships
+
+		/// <summary>
+		/// User ID
+		/// </summary>
+		public long UserId { get; init; }
+
+		/// <summary>
+		/// Folder ID
+		/// </summary>
+		public long FolderId { get; init; }
+
+		#endregion
 	}
 }

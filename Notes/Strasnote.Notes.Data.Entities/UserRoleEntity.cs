@@ -16,5 +16,19 @@ namespace Strasnote.Notes.Data.Entities
 		/// User Role ID
 		/// </summary>
 		public long UserRoleId { get; init; }
+
+		#region Relationships
+
+		/// <summary>
+		/// User ID
+		/// </summary>
+		public long UserId { get; init; }
+
+		/// <summary>
+		/// Role ID
+		/// </summary>
+		public long RoleId { get; init; }
+
+		#endregion
 	}
 }
