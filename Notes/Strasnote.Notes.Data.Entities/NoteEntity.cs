@@ -38,18 +38,23 @@ namespace Strasnote.Notes.Data.Entities
 		#region Relationships
 
 		/// <summary>
-		/// The ID of the User who owns this Note
-		/// </summary>
-		public long UserId { get; init; }
-
-		/// <summary>
 		/// The ID of the Folder this Note is in
 		/// </summary>
 		public long FolderId { get; init; }
 
+		/// <summary>
+		/// The ID of the User who owns this Note
+		/// </summary>
+		public long UserId { get; init; }
+
 		#endregion
 
 		#region Lookups
+
+		/// <summary>
+		/// The list of Users who have access to this Note
+		/// </summary>
+		public List<NoteUserEntity>? NoteUsers { get; set; }
 
 		/// <summary>
 		/// The list of Tags this Note has

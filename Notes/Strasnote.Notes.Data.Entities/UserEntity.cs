@@ -61,6 +61,16 @@ namespace Strasnote.Notes.Data.Entities
 		/// </summary>
 		public List<TagEntity>? Tags { get; set; }
 
+		/// <summary>
+		/// Folder encryption keys
+		/// </summary>
+		public List<EncryptedEntity>? FolderEncryptionKeys { get; set; }
+
+		/// <summary>
+		/// Note encryption keys
+		/// </summary>
+		public List<EncryptedEntity>? NoteEncryptionKeys { get; set; }
+
 		#endregion
 	}
 }

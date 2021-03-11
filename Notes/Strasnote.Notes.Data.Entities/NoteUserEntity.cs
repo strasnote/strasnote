@@ -6,30 +6,30 @@ using System;
 namespace Strasnote.Notes.Data.Entities
 {
 	/// <summary>
-	/// Folder User entity
+	/// Note User entity
 	/// </summary>
-	public sealed record FolderUserEntity : IEntity
+	public sealed record NoteUserEntity : IEntity
 	{
 		/// <inheritdoc/>
 		public long Id =>
-			FolderUserId;
+			NoteUserId;
 
 		/// <summary>
-		/// Folder User ID
+		/// Note User ID
 		/// </summary>
-		public long FolderUserId { get; init; }
+		public long NoteUserId { get; init; }
 
 		/// <summary>
-		/// [Optional] Expiry date of the User's access to this Folder
+		/// [Optional] Expiry date of the User's access to this Note
 		/// </summary>
-		public DateTimeOffset? FolderUserExpiry { get; init; }
+		public DateTimeOffset? NoteUserExpiry { get; init; }
 
 		#region Relationships
 
 		/// <summary>
-		/// Folder ID
+		/// Note ID
 		/// </summary>
-		public long FolderId { get; init; }
+		public long NoteId { get; init; }
 
 		/// <summary>
 		/// User ID

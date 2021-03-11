@@ -26,6 +26,11 @@ namespace Strasnote.Notes.Data.Entities
 		public string TagName { get; init; } = string.Empty;
 
 		/// <summary>
+		/// The Tag Name stripped of spaces and special characters
+		/// </summary>
+		public string TagNameNormalised { get; init; } = string.Empty;
+
+		/// <summary>
 		/// When the Tag was created
 		/// </summary>
 		public DateTimeOffset TagCreated { get; init; }

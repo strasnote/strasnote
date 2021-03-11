@@ -26,14 +26,9 @@ namespace Strasnote.Notes.Data.Entities
 		public string FolderName { get; init; } = string.Empty;
 
 		/// <summary>
-		/// Folder ID (of parent Folder)
+		/// Folder ID (of parent Folder) - 0 means it is the default
 		/// </summary>
 		public int FolderParentId { get; init; }
-
-		/// <summary>
-		/// True if this is the User's default Folder
-		/// </summary>
-		public bool FolderIsDefault { get; init; }
 
 		/// <summary>
 		/// When the Folder was created
@@ -55,6 +50,11 @@ namespace Strasnote.Notes.Data.Entities
 		#endregion
 
 		#region Lookups
+
+		/// <summary>
+		/// The list of Users who have access to this Folder (owner - User ID - has access by default)
+		/// </summary>
+		public List<FolderUserEntity>? FolderUsers { get; set; }
 
 		/// <summary>
 		/// The list of Notes contained in this Folder
