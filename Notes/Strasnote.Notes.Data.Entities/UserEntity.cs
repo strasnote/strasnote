@@ -20,16 +20,6 @@ namespace Strasnote.Notes.Data.Entities
 		}
 
 		/// <summary>
-		/// The User's given name (or Christian / first name)
-		/// </summary>
-		public string UserGivenName { get; init; } = string.Empty;
-
-		/// <summary>
-		/// The User's full name
-		/// </summary>
-		public string UserFullName { get; init; } = string.Empty;
-
-		/// <summary>
 		/// This User's Public Key (for encryption)
 		/// </summary>
 		public string UserPublicKey { get; set; } = string.Empty;
@@ -38,6 +28,11 @@ namespace Strasnote.Notes.Data.Entities
 		/// This User's Private Key (for decryption - encrypted using User's password)
 		/// </summary>
 		public string UserPrivateKey { get; set; } = string.Empty;
+
+		/// <summary>
+		/// User Profile information (e.g. name)
+		/// </summary>
+		public Profile UserProfile { get; init; } = new();
 
 		#region Lookups
 
@@ -72,5 +67,18 @@ namespace Strasnote.Notes.Data.Entities
 		public List<EncryptedEntity>? NoteEncryptionKeys { get; set; }
 
 		#endregion
+
+		/// <summary>
+		/// User Profile information
+		/// </summary>
+		/// <param name="UserGivenName">The User's given name (or Christian / first name)</param>
+		/// <param name="UserFullName">The User's full name</param>
+		public record Profile(string? UserGivenName, string? UserFullName)
+		{
+			/// <summary>
+			/// Create with blank details
+			/// </summary>
+			public Profile() : this(null, null) { }
+		}
 	}
 }
