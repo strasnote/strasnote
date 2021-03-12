@@ -52,6 +52,11 @@ namespace Strasnote.Notes.Data.Entities
 		#region Lookups
 
 		/// <summary>
+		/// The User this Tag belongs to
+		/// </summary>
+		public UserEntity? User { get; set; }
+
+		/// <summary>
 		/// List of notes with this Tag
 		/// </summary>
 		public List<NoteEntity>? Notes { get; set; }

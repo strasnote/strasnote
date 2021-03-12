@@ -47,5 +47,14 @@ namespace Strasnote.Notes.Data.Entities
 		public long UserId { get; init; }
 
 		#endregion
+
+		#region Lookups
+
+		/// <summary>
+		/// The User this Encrypted item belongs to
+		/// </summary>
+		public UserEntity? User { get; set; }
+
+		#endregion
 	}
 }

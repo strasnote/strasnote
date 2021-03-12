@@ -52,6 +52,11 @@ namespace Strasnote.Notes.Data.Entities
 		#region Lookups
 
 		/// <summary>
+		/// The User this Folder belongs to
+		/// </summary>
+		public UserEntity? User { get; set; }
+
+		/// <summary>
 		/// The list of Users who have access to this Folder (owner - User ID - has access by default)
 		/// </summary>
 		public List<FolderUserEntity>? FolderUsers { get; set; }
