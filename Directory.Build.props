@@ -16,8 +16,8 @@
 	</ItemGroup>
 
 	<!-- Import Licence file -->
-	<ItemGroup Label="Licence">
-		<None Include="../../LICENSE" Pack="true" PackagePath=""/>
-	</ItemGroup>
+  <ItemGroup Label="Licence">
+    <None Include="$([MSBuild]::GetPathOfFileAbove(LICENSE))" Pack="true" />
+  </ItemGroup>
 	
 </Project>

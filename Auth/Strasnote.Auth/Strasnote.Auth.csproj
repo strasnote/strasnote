@@ -8,11 +8,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Logging\Strasnote.Logging.Abstracts\Strasnote.Logging.Abstracts.csproj" />
+    <ProjectReference Include="..\..\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
     <ProjectReference Include="..\..\Util\Strasnote.Util.csproj" />
+    <ProjectReference Include="..\Storage\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
     <ProjectReference Include="..\Strasnote.Auth.Abstracts\Strasnote.Auth.Abstracts.csproj" />
-    <ProjectReference Include="..\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
-    <ProjectReference Include="..\Strasnote.Auth.Data.Entities\Strasnote.Auth.Data.Entities.csproj" />
   </ItemGroup>
 
 </Project>

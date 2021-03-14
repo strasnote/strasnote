@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.Auth.Data;
-using Strasnote.Auth.Data.Entities;
+using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api.Controllers

@@ -1,6 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\..\Auth\Strasnote.Auth.Data.Entities\Strasnote.Auth.Data.Entities.csproj" />
-    <ProjectReference Include="..\Strasnote.Notes.Data.Abstracts\Strasnote.Notes.Data.Abstracts.csproj" />
-  </ItemGroup>
-</Project>

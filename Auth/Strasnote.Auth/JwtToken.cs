@@ -14,8 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
-using Strasnote.Auth.Data.Entities;
 using Strasnote.Auth.Models;
+using Strasnote.Data.Entities.Auth;
 using Strasnote.Util;
 
 namespace Strasnote.Auth
