@@ -1,9 +1,7 @@
 // Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Fake.Extensions;
@@ -51,19 +48,7 @@ namespace Strasnote.Auth.Api
 				{
 					config.RequireHttpsMetadata = true;
 					config.SaveToken = true;
-					config.TokenValidationParameters = new TokenValidationParameters
-					{
-						ValidIssuer = "https://localhost:5001",
-						ValidAudience = "https://localhost:5001",
-						// ToDo: pull out of secrets. what's the best way to do this in ConfigureServices()?
-						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Fanatic-Onion8-Sports")), 
-						RequireExpirationTime = true,
-						ValidateIssuer = true,
-						ValidateIssuerSigningKey = true,
-						ValidateAudience = true,
-						ValidateLifetime = true,
-						ClockSkew = TimeSpan.Zero
-					};
+					config.TokenValidationParameters = new AuthConfigTokenValidationParameters(Configuration);
 				});
 
 			services.AddControllers();
