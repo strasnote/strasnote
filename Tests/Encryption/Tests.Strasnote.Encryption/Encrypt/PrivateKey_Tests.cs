@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using Jeebs;
+using Jeebs.Linq;
 using Strasnote.Util;
 using Xunit;
 
@@ -16,10 +18,12 @@ namespace Strasnote.Encryption.Encrypt_Tests
 			var password = Rnd.Str;
 
 			// Act
-			var value = Encrypt.PrivateKey(key, password);
+			var result = from encrypted in Encrypt.PrivateKey(key, password)
+						 select encrypted.key;
 
 			// Assert
-			Assert.NotEqual(key, value.key);
+			var some = result.AssertSome();
+			Assert.NotEqual(key, some);
 		}
 
 		[Fact]
@@ -34,22 +38,9 @@ namespace Strasnote.Encryption.Encrypt_Tests
 			var r1 = Encrypt.PrivateKey(key, password);
 
 			// Assert
-			Assert.NotEqual(r0.nonce, r1.nonce);
-		}
-
-		[Fact]
-		public void Can_Be_Decrypted()
-		{
-			// Arrange
-			var key = Rnd.RndBytes.Get(32);
-			var password = Rnd.Str;
-			var encrypted = Encrypt.PrivateKey(key, password);
-
-			// Act
-			var result = Decrypt.PrivateKey(new(Rnd.RndBytes.Get(32), encrypted.key, encrypted.nonce), password);
-
-			// Assert
-			Assert.Equal(key, result);
+			var s0 = r0.AssertSome();
+			var s1 = r1.AssertSome();
+			Assert.NotEqual(s0.nonce, s1.nonce);
 		}
 	}
 }

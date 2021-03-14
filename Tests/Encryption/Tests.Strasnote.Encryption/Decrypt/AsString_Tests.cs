@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Text;
+using Jeebs;
 using Strasnote.Util;
 using Xunit;
 
@@ -14,15 +14,16 @@ namespace Strasnote.Encryption.Decrypt_Tests
 		{
 			// Arrange
 			var password = Rnd.Str;
-			var encryptedKeyPair = Keys.Generate(password);
+			var encryptedKeyPair = Keys.Generate(password).UnsafeUnwrap();
 			var value = Rnd.Str;
-			var encrypted = Encrypt.String(value, encryptedKeyPair);
+			var encrypted = Encrypt.String(value, encryptedKeyPair).UnsafeUnwrap();
 
 			// Act
 			var result = Decrypt.AsString(encrypted, encryptedKeyPair, password);
 
 			// Assert
-			Assert.Equal(value, result);
+			var some = result.AssertSome();
+			Assert.Equal(value, some);
 		}
 	}
 }

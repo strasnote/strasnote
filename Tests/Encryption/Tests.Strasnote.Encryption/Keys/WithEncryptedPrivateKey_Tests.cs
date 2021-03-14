@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using Jeebs;
 using Sodium;
-using Strasnote.Encryption;
 using Strasnote.Util;
 using Xunit;
 
-namespace Tests.Strasnote.Encryption.Keys_Tests
+namespace Strasnote.Encryption.Keys_Tests
 {
 	public class WithEncryptedPrivateKey_Tests
 	{
@@ -21,9 +21,10 @@ namespace Tests.Strasnote.Encryption.Keys_Tests
 			var result = Keys.WithEncryptedPrivateKey(keyPair, password);
 
 			// Assert
-			Assert.Equal(keyPair.PublicKey, result.PublicKey);
-			Assert.NotEqual(keyPair.PrivateKey, result.PrivateKey);
-			Assert.NotEmpty(result.Nonce);
+			var some = Assert.IsType<Some<EncryptedKeyPair>>(result).Value;
+			Assert.Equal(keyPair.PublicKey, some.PublicKey);
+			Assert.NotEqual(keyPair.PrivateKey, some.PrivateKey);
+			Assert.NotEmpty(some.Nonce);
 		}
 
 		[Fact]
@@ -38,8 +39,10 @@ namespace Tests.Strasnote.Encryption.Keys_Tests
 			var r1 = Keys.WithEncryptedPrivateKey(keyPair, password);
 
 			// Assert
-			Assert.NotEqual(r0.PrivateKey, r1.PrivateKey);
-			Assert.NotEqual(r0.Nonce, r1.Nonce);
+			var s0 = r0.AssertSome();
+			var s1 = r1.AssertSome();
+			Assert.NotEqual(s0.PrivateKey, s1.PrivateKey);
+			Assert.NotEqual(s0.Nonce, s1.Nonce);
 		}
 	}
 }

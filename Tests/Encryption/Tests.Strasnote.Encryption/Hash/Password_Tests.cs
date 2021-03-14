@@ -1,13 +1,32 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
+using System.Linq;
+using Jeebs;
+using Jeebs.Linq;
 using Strasnote.Util;
 using Xunit;
+using static Strasnote.Encryption.Hash.Msg;
 
 namespace Strasnote.Encryption.Hash_Tests
 {
 	public class Password_Tests
 	{
+		[Theory]
+		[InlineData(null)]
+		public void Null_Password_Returns_None_With_NullPasswordExceptionMsg(string input)
+		{
+			// Arrange
+
+			// Act
+			var result = Hash.Password(input);
+
+			// Assert
+			var none = result.AssertNone();
+			Assert.IsType<NullPasswordExceptionMsg>(none);
+		}
+
 		[Fact]
 		public void Returns_32byte_Hashed_Password()
 		{
@@ -18,7 +37,8 @@ namespace Strasnote.Encryption.Hash_Tests
 			var result = Hash.Password(value);
 
 			// Assert
-			Assert.Equal(32, result.Length);
+			var some = result.AssertSome();
+			Assert.Equal(32, some.Length);
 		}
 
 		[Fact]
@@ -26,13 +46,15 @@ namespace Strasnote.Encryption.Hash_Tests
 		{
 			// Arrange
 			var value = Rnd.Str;
-			var hash = Hash.Password(value);
 
 			// Act
-			var result = Hash.Password(value);
+			var result = from h0 in Hash.Password(value)
+						 from h1 in Hash.Password(value)
+						 select h0.SequenceEqual(h1);
 
 			// Assert
-			Assert.Equal(hash, result);
+			var some = result.AssertSome();
+			Assert.True(some);
 		}
 	}
 }
