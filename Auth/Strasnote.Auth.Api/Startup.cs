@@ -14,9 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data;
-using Strasnote.Auth.Data.Entities;
 using Strasnote.Auth.Data.Fake.Extensions;
 using Strasnote.Auth.Extensions;
+using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api
@@ -55,7 +55,8 @@ namespace Strasnote.Auth.Api
 					{
 						ValidIssuer = "https://localhost:5001",
 						ValidAudience = "https://localhost:5001",
-						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Fanatic-Onion8-Sports")),
+						// ToDo: pull out of secrets. what's the best way to do this in ConfigureServices()?
+						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Fanatic-Onion8-Sports")), 
 						RequireExpirationTime = true,
 						ValidateIssuer = true,
 						ValidateIssuerSigningKey = true,

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.78" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
+    <ProjectReference Include="..\..\Strasnote.Auth.Abstracts\Strasnote.Auth.Abstracts.csproj" />
+    <ProjectReference Include="..\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
+  </ItemGroup>
+
+</Project>
