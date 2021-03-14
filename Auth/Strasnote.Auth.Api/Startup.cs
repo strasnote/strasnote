@@ -1,9 +1,7 @@
 // Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Fake.Extensions;

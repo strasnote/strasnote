@@ -1,7 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
+using Jeebs;
 using Sodium;
+using static F.OptionF;
 
 namespace Strasnote.Encryption
 {
@@ -14,8 +17,14 @@ namespace Strasnote.Encryption
 		/// Generate a key pair and encrypt the private key using a password
 		/// </summary>
 		/// <param name="password">User's password</param>
-		public static EncryptedKeyPair Generate(string password) =>
-			WithEncryptedPrivateKey(PublicKeyBox.GenerateKeyPair(), password);
+		public static Option<EncryptedKeyPair> Generate(string password) =>
+			Map(
+				PublicKeyBox.GenerateKeyPair,
+				e => new Msg.UnableToGenerateNewKeyPairExceptionMsg(e)
+			)
+			.Bind(
+				k => WithEncryptedPrivateKey(k, password)
+			);
 
 		// TODO: use pre-existing private key?  Does it need to be encrypted?
 
@@ -24,13 +33,19 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="keyPair">Key Pair</param>
 		/// <param name="password">The User's password</param>
-		static internal EncryptedKeyPair WithEncryptedPrivateKey(KeyPair keyPair, string password)
-		{
-			// Encrypt the private key
-			var (encryptedPrivateKey, nonce) = Encrypt.PrivateKey(keyPair.PrivateKey, password);
+		static internal Option<EncryptedKeyPair> WithEncryptedPrivateKey(KeyPair keyPair, string password) =>
+			Bind(
+				() => Encrypt.PrivateKey(keyPair.PrivateKey, password)
+			)
+			.Map(
+				p => new EncryptedKeyPair(keyPair.PublicKey, p.key, p.nonce)
+			);
 
-			// Create KeyPair
-			return new(keyPair.PublicKey, encryptedPrivateKey, nonce);
+		/// <summary>Messages</summary>
+		public static class Msg
+		{
+			/// <summary>Unable to generate fresh key pair</summary>
+			public sealed record UnableToGenerateNewKeyPairExceptionMsg(Exception Exception) : IExceptionMsg { }
 		}
 	}
 }
