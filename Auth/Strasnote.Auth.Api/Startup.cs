@@ -51,19 +51,7 @@ namespace Strasnote.Auth.Api
 				{
 					config.RequireHttpsMetadata = true;
 					config.SaveToken = true;
-					config.TokenValidationParameters = new TokenValidationParameters
-					{
-						ValidIssuer = "https://localhost:5001",
-						ValidAudience = "https://localhost:5001",
-						// ToDo: pull out of secrets. what's the best way to do this in ConfigureServices()?
-						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Fanatic-Onion8-Sports")), 
-						RequireExpirationTime = true,
-						ValidateIssuer = true,
-						ValidateIssuerSigningKey = true,
-						ValidateAudience = true,
-						ValidateLifetime = true,
-						ClockSkew = TimeSpan.Zero
-					};
+					config.TokenValidationParameters = new AuthConfigTokenValidationParameters(Configuration);
 				});
 
 			services.AddControllers();
