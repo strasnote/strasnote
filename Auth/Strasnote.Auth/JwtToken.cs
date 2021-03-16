@@ -101,7 +101,7 @@ namespace Strasnote.Auth
 			var userId = claimsPrincipal.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 			var user = await userManager.FindByIdAsync(userId);
 
-			var existingRefreshToken = await refreshTokenContext.Retrieve(user.Id, refreshToken);
+			var existingRefreshToken = await refreshTokenContext.RetrieveForUserAsync(user.Id, refreshToken);
 
 			if (existingRefreshToken == null)
 			{

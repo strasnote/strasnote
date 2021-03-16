@@ -46,17 +46,21 @@ namespace Strasnote.Data
 		/// <param name="operation">CRUD operation</param>
 		/// <param name="detail">Log message detail</param>
 		/// <param name="args">Log message args (should correspond to <paramref name="detail"/>)</param>
-		private void LogOperation(Operation operation, string detail, params object[] args) =>
+		protected virtual void LogOperation(string operation, string detail, params object[] args) =>
 			Log.Trace($"{operation} {typeof(TEntity)} {detail}", args);
 
+		/// <inheritdoc cref="LogOperation(string, string, object[])"/>
+		protected void LogOperation(Operation operation, string detail, params object[] args) =>
+			LogOperation(operation.ToString(), detail, args);
+
 		/// <inheritdoc/>
-		public virtual Task<TEntity> CreateAsync(TEntity entity)
+		public virtual Task<TModel> CreateAsync<TModel>(TEntity entity)
 		{
 			// Log create
 			LogOperation(Operation.Create, "{Entity}", entity);
 
 			// Perform create and return created entity
-			return Connection.QuerySingleOrDefaultAsync<TEntity>(
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: GetStoredProcedure(Operation.Create),
 				param: entity,
 				commandType: CommandType.StoredProcedure
@@ -67,7 +71,7 @@ namespace Strasnote.Data
 		public virtual Task<IEnumerable<TModel>> RetrieveAsync<TModel>(string query, object parameters, CommandType commandType)
 		{
 			// Log retrieve
-			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, parameters);
+			LogOperation(Operation.Retrieve, "{CommandType} {Query} - {@Parameters}", commandType, query, parameters);
 
 			// Perform retrieve and map to TModel
 			return Connection.QueryAsync<TModel>(
@@ -78,7 +82,7 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> RetrieveAsync<TModel>(long id)
+		public virtual Task<TModel> RetrieveByIdAsync<TModel>(long id)
 		{
 			// Log retrieve
 			LogOperation(Operation.RetrieveById, "{Id}", id);
@@ -92,13 +96,13 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TEntity> UpdateAsync(TEntity entity)
+		public virtual Task<TModel> UpdateAsync<TModel>(TEntity entity)
 		{
 			// Log update
 			LogOperation(Operation.Update, "{Entity}", entity);
 
 			// Perform update and return updated entity
-			return Connection.QuerySingleOrDefaultAsync<TEntity>(
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: GetStoredProcedure(Operation.Update),
 				param: entity,
 				commandType: CommandType.StoredProcedure

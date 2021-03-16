@@ -1,55 +1,30 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-<<<<<<< HEAD
-=======
 using System.Threading;
->>>>>>> parent of 6a1f088 (- Creating new Fake.DbContext and implementing)
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Data.Fake;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data.Fake
 {
 	/// <inheritdoc cref="IUserContext"/>
-	public sealed class UserContext : IUserContext
+	public sealed class UserContext : DbContext<UserEntity>, IUserContext
 	{
-		private readonly ILog log;
+		public UserContext(ILog<UserContext> Log) : base(Log) { }
 
-		/// <summary>
-		/// Inject dependencies
-		/// </summary>
-		/// <param name="log">ILog with context</param>
-		public UserContext(ILog<UserContext> log) =>
-			this.log = log;
+		protected override object GetFakeModelForCreate() =>
+			IdentityResult.Success;
 
-		/// <inheritdoc/>
-		public Task<IdentityResult> CreateAsync(UserEntity user, CancellationToken cancellationToken)
+		protected override object GetFakeModelForRetrieveById(long id) =>
+			new UserEntity { Id = id };
+
+		public Task<TModel> RetrieveByEmailAsync<TModel>(string email)
 		{
-			log.Information("Create user: {@User}", user);
-			return Task.FromResult(IdentityResult.Success);
-		}
-
-		/// <inheritdoc/>
-		public Task<UserEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
-		{
-			log.Information("Retrieve user with ID: {Id}", id);
-			return Task.FromResult(new UserEntity { Id = id });
-		}
-
-		/// <inheritdoc/>
-		public Task<UserEntity> RetrieveAsync(string name, CancellationToken cancellationToken)
-		{
-			log.Information("Retrieve user with name: {Name}", name);
-			return Task.FromResult(new UserEntity { UserName = name });
-		}
-
-		/// <inheritdoc/>
-		public Task<UserEntity> RetrieveByEmail(string email, CancellationToken cancellationToken)
-		{
-			log.Information("Retrieve user with email: {Email}", email);
+			Log.Information("Retrieve user with email: {Email}", email);
 
 			var user = new UserEntity
 			{
@@ -61,21 +36,20 @@ namespace Strasnote.Auth.Data.Fake
 				UserName = email
 			};
 
-			return Task.FromResult(user);
+			return ConvertToModel<TModel>(user);
 		}
 
-		/// <inheritdoc/>
-		public Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken)
+		public Task<TModel> RetrieveByUsernameAsync<TModel>(string name) =>
+			RetrieveByEmailAsync<TModel>(name);
+
+		protected override object GetFakeModelForRetrieve()
 		{
-			log.Information("Updating user: {@User}", user);
-			return Task.FromResult(IdentityResult.Success);
+			throw new System.NotImplementedException();
 		}
 
-		/// <inheritdoc/>
-		public Task<IdentityResult> DeleteAsync(UserEntity user, CancellationToken cancellationToken)
+		protected override object GetFakeModelForUpdate()
 		{
-			log.Information("Deleting user: {@User}", user);
-			return Task.FromResult(IdentityResult.Success);
+			throw new System.NotImplementedException();
 		}
 	}
 }

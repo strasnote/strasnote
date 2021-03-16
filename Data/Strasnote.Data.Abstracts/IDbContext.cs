@@ -18,7 +18,7 @@ namespace Strasnote.Data.Abstracts
 		/// Create an entity
 		/// </summary>
 		/// <param name="entity">Entity to create</param>
-		Task<TEntity> CreateAsync(TEntity entity);
+		Task<TModel> CreateAsync<TModel>(TEntity entity);
 
 		/// <summary>
 		/// Retrieve entities using a parameterised query
@@ -30,17 +30,17 @@ namespace Strasnote.Data.Abstracts
 		Task<IEnumerable<TModel>> RetrieveAsync<TModel>(string query, object parameters, CommandType commandType);
 
 		/// <summary>
-		/// Retrieve a single entity
+		/// Retrieve a single entity by ID
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="id">ID of entity to retrieve</param>
-		Task<TModel> RetrieveAsync<TModel>(long id);
+		Task<TModel> RetrieveByIdAsync<TModel>(long id);
 
 		/// <summary>
 		/// Update an entity
 		/// </summary>
 		/// <param name="entity">Entity to update</param>
-		Task<TEntity> UpdateAsync(TEntity entity);
+		Task<TModel> UpdateAsync<TModel>(TEntity entity);
 
 		/// <summary>
 		/// Delete an entity

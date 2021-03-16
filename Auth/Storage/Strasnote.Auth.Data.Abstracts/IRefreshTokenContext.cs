@@ -13,11 +13,17 @@ namespace Strasnote.Auth.Data.Abstracts
 	public interface IRefreshTokenContext : IDbContext<RefreshTokenEntity>
 	{
 		/// <summary>
+		/// Create an entity but do not return anything afterwards
+		/// </summary>
+		/// <param name="entity">Refresh Token to create</param>
+		Task CreateAsync(RefreshTokenEntity entity);
+
+		/// <summary>
 		/// Retrieve a refresh token by <paramref name="userId"/> and <paramref name="refreshToken"/>
 		/// </summary>
 		/// <param name="userId">The user's ID</param>
 		/// <param name="refreshToken">The user's current refresh token</param>
-		Task<RefreshTokenEntity> Retrieve(long userId, string refreshToken);
+		Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken);
 
 		/// <summary>
 		/// Delete a refresh token by <paramref name="userId"/>

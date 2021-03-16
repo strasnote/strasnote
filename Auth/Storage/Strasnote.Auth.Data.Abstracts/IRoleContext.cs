@@ -17,7 +17,7 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// Retrieve a role by <paramref name="roleName"/>
 		/// </summary>
 		/// <param name="roleName">Role name</param>
-		Task<TModel> RetrieveAsync<TModel>(string roleName);
+		Task<TModel> RetrieveByNameAsync<TModel>(string roleName);
 
 		/// <summary>
 		/// Retrieve the roles for a user, by <paramref name="userId"/>

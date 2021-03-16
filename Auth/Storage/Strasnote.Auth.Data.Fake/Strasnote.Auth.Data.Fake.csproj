@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
+    <ProjectReference Include="..\..\..\Data\Strasnote.Data\Strasnote.Data.csproj" />
     <ProjectReference Include="..\..\..\Logging\Strasnote.Logging.Abstracts\Strasnote.Logging.Abstracts.csproj" />
     <ProjectReference Include="..\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
   </ItemGroup>
