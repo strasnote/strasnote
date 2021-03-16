@@ -21,7 +21,7 @@ namespace Strasnote.Encryption
 		/// <param name="privateKey">Private key</param>
 		/// <param name="password">User's password</param>
 		static internal Option<(byte[] key, byte[] nonce)> PrivateKey(byte[] privateKey, string password) =>
-			Map(
+			Return(
 				SecretBox.GenerateNonce,
 				e => new Msg.UnableToGenerateNonceToEncryptPrivateKeyExceptionMsg(e)
 			)
@@ -39,7 +39,7 @@ namespace Strasnote.Encryption
 		/// <param name="json">JSON string</param>
 		/// <param name="recipientKeyPair">The recipient's key pair</param>
 		public static Option<byte[]> String(string json, EncryptedKeyPair recipientKeyPair) =>
-			Map(
+			Return(
 				() => SealedPublicKeyBox.Create(json, recipientKeyPair.PublicKey),
 				e => new Msg.UnableToEncryptStringExceptionMsg(e)
 			);
@@ -51,16 +51,19 @@ namespace Strasnote.Encryption
 		/// <param name="obj">Object value</param>
 		/// <param name="recipientKeyPair">The recipient's key pair</param>
 		public static Option<byte[]> Object<T>(T obj, EncryptedKeyPair recipientKeyPair) =>
-			Bind(() =>
-				obj switch
+			Return(
+				() => JsonSerializer.Serialize(obj),
+				e => new Msg.JsonSerialiseExceptionMsg(e)
+			)
+			.Bind(
+				x => obj switch
 				{
 					T =>
-						String(JsonSerializer.Serialize(obj), recipientKeyPair),
+						String(x, recipientKeyPair),
 
 					_ =>
 						String(string.Empty, recipientKeyPair)
-				},
-				e => new Msg.JsonSerialiseExceptionMsg(e)
+				}
 			);
 
 		/// <summary>Messages</summary>

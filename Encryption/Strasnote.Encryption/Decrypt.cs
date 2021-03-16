@@ -39,9 +39,7 @@ namespace Strasnote.Encryption
 		/// <param name="recipientKeyPair">The recipient's key pair</param>
 		/// <param name="password">The recipient's public key</param>
 		static internal Option<byte[]> AsBytes(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
-			Bind(
-				() => PrivateKey(recipientKeyPair, password)
-			)
+			PrivateKey(recipientKeyPair, password)
 			.Map(
 				k => SealedPublicKeyBox.Open(cipherText, k, recipientKeyPair.PublicKey),
 				e => new Msg.UnableToDecryptValueExceptionMsg(e)
@@ -52,9 +50,7 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <inheritdoc cref="AsBytes(byte[], EncryptedKeyPair, string)"/>
 		public static Option<string> AsString(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
-			Bind(
-				() => AsBytes(cipherText, recipientKeyPair, password)
-			)
+			AsBytes(cipherText, recipientKeyPair, password)
 			.Map(
 				b => Encoding.UTF8.GetString(b),
 				e => new Msg.UnableToConvertBytesToStringExceptionMsg(e)
@@ -66,9 +62,7 @@ namespace Strasnote.Encryption
 		/// <typeparam name="T">Object type</typeparam>
 		/// <inheritdoc cref="AsBytes(byte[], EncryptedKeyPair, string)"/>
 		public static Option<T> AsObject<T>(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
-			Bind(
-				() => AsString(cipherText, recipientKeyPair, password)
-			)
+			AsString(cipherText, recipientKeyPair, password)
 			.Map(
 				j => JsonSerializer.Deserialize<T>(j),
 				e => new Msg.JsonDeserialiseExceptionMsg(e)

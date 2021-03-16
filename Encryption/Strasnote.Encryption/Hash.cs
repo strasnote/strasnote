@@ -19,7 +19,7 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="password">Password string</param>
 		static internal Option<byte[]> Password(string password) =>
-			Map(
+			Return(
 				() => GenericHash.Hash(Encoding.UTF8.GetBytes(password), null, 32), // must be 32 bytes
 				e => new Msg.NullPasswordExceptionMsg(e)
 			);
