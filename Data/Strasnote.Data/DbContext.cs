@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using Strasnote.Logging;
 namespace Strasnote.Data
 {
 	/// <inheritdoc cref="IDbContext{TEntity}"/>
-	public abstract class DbContext<TEntity> : IDbContext<TEntity>
+	public abstract class DbContext<TEntity> : IDbContext<TEntity>, IDisposable
 		where TEntity : IEntity
 	{
 		/// <summary>
@@ -122,5 +123,43 @@ namespace Strasnote.Data
 				commandType: CommandType.StoredProcedure
 			);
 		}
+
+		#region Dispose
+
+		/// <summary>
+		/// Set to true if the object has been disposed
+		/// </summary>
+		private bool disposed = false;
+
+		/// <summary>
+		/// Suppress garbage collection and call <see cref="Dispose(bool)"/>
+		/// https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Dispose managed resources
+		/// </summary>
+		/// <param name="disposing">True if disposing</param>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+			{
+				return;
+			}
+
+			if (disposing)
+			{
+				Connection.Dispose();
+			}
+
+			disposed = true;
+		}
+
+		#endregion
 	}
 }
