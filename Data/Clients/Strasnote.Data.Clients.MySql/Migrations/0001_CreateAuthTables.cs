@@ -65,6 +65,19 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 				ENGINE=InnoDB
 				;
 			");
+
+			Execute(@"
+				CREATE TABLE `auth.refresh_token` (
+					`RefreshTokenId` BIGINT(20) NOT NULL AUTO_INCREMENT,
+					`RefreshTokenExpires` DATETIME NOT NULL,
+					`RefreshTokenValue` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
+					`UserId` BIGINT(20) NOT NULL,
+					PRIMARY KEY (`RefreshTokenId`) USING BTREE
+				)
+				COLLATE='utf8_general_ci'
+				ENGINE=InnoDB
+				;
+			");
 		}
 
 		protected override void Down()
@@ -72,6 +85,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 			Execute("DROP TABLE auth.user;");
 			Execute("DROP TABLE auth.role;");
 			Execute("DROP TABLE auth.user_role;");
+			Execute("DROP TABLE auth.refresh_token;");
 		}
 	}
 }
