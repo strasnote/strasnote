@@ -53,6 +53,8 @@ namespace Strasnote.Auth.Api
 
 			services.AddControllers();
 
+			services.AddTransient<UserStore>();
+			services.AddTransient<RoleStore>();
 			services.AddTransient<IUserStore<UserEntity>, UserStore>();
 			services.AddTransient<IRoleStore<RoleEntity>, RoleStore>();
 

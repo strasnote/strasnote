@@ -15,6 +15,12 @@ namespace Strasnote.Data.Fake
 	{
 		protected DbContext(ILog log) : base(new DbClient(), string.Empty, log) { }
 
+		/// <summary>
+		/// Force an object to <typeparamref name="TModel"/> - this can only be tested at runtime
+		/// so ensure you create the correct model in the first place
+		/// </summary>
+		/// <typeparam name="TModel">Model type</typeparam>
+		/// <param name="obj">Model object</param>
 		protected async Task<TModel> ConvertToModel<TModel>(object obj)
 		{
 			try
@@ -28,9 +34,19 @@ namespace Strasnote.Data.Fake
 				throw;
 			}
 		}
+
+		/// <summary>
+		/// Override base to log as Information (not Trace)
+		/// </summary>
+		/// <param name="operation"></param>
+		/// <param name="detail"></param>
+		/// <param name="args"></param>
 		protected override void LogOperation(string operation, string detail, params object[] args) =>
 		   Log.Information($"Fake {operation} {typeof(TEntity)} {detail}", args);
 
+		/// <summary>
+		/// Return a fake model to use in <see cref="CreateAsync{TModel}(TEntity)"/>
+		/// </summary>
 		protected abstract object GetFakeModelForCreate();
 
 		/// <inheritdoc/>
@@ -43,6 +59,9 @@ namespace Strasnote.Data.Fake
 			return ConvertToModel<TModel>(GetFakeModelForCreate());
 		}
 
+		/// <summary>
+		/// Return a fake model to use in <see cref="GetFakeModelForRetrieve"/>
+		/// </summary>
 		protected abstract object GetFakeModelForRetrieve();
 
 		/// <inheritdoc/>
@@ -55,6 +74,10 @@ namespace Strasnote.Data.Fake
 			return ConvertToModel<IEnumerable<TModel>>(GetFakeModelForRetrieve());
 		}
 
+		/// <summary>
+		/// Return a fake model to use in <see cref="GetFakeModelForRetrieveById(long)"/>
+		/// </summary>
+		/// <param name="id">Entity ID</param>
 		protected abstract object GetFakeModelForRetrieveById(long id);
 
 		/// <inheritdoc/>
@@ -67,6 +90,9 @@ namespace Strasnote.Data.Fake
 			return ConvertToModel<TModel>(GetFakeModelForRetrieveById(id));
 		}
 
+		/// <summary>
+		/// Return a fake model for use in <see cref="UpdateAsync{TModel}(TEntity)"/>
+		/// </summary>
 		protected abstract object GetFakeModelForUpdate();
 
 		/// <inheritdoc/>
@@ -79,6 +105,9 @@ namespace Strasnote.Data.Fake
 			return ConvertToModel<TModel>(GetFakeModelForUpdate());
 		}
 
+		/// <summary>
+		/// Return a fake result for use in <see cref="DeleteAsync(long)"/>
+		/// </summary>
 		protected virtual bool GetFakeResultForDelete() =>
 			true;
 
