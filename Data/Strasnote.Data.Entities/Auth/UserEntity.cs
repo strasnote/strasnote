@@ -33,8 +33,9 @@ namespace Strasnote.Data.Entities.Auth
 
 		/// <summary>
 		/// User Profile information (e.g. name)
+		/// TODO: Implement JSON converter to convert from string
 		/// </summary>
-		public Profile? UserProfile { get; init; }
+		public string UserProfile { get; init; } = string.Empty;
 
 		#region Lookups
 

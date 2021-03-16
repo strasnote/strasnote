@@ -2,7 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Data;
-using Microsoft.Extensions.Logging;
 
 namespace Strasnote.Data.Abstracts
 {
