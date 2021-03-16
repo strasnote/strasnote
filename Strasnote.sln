@@ -114,11 +114,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data.Abstracts", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{9A168021-B74B-44A4-9235-2D99FA049E50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strasnote.Data", "Data\Strasnote.Data\Strasnote.Data.csproj", "{19B5A8CE-D169-48D5-86C0-CBB91705160B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data", "Data\Strasnote.Data\Strasnote.Data.csproj", "{19B5A8CE-D169-48D5-86C0-CBB91705160B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{F92EB2C3-2A95-4CE4-895E-739E0BAFD73B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strasnote.Data.Clients.MySql", "Data\Clients\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj", "{853E12E4-073C-4FA4-A1E0-E1A26A359C6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data.Clients.MySql", "Data\Clients\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj", "{853E12E4-073C-4FA4-A1E0-E1A26A359C6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{2DE8483E-AE7A-4F2A-8EEB-45CFBD6684EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strasnote.Apps.Data.MySqlMigrator", "Apps\Data\Strasnote.Apps.Data.MySqlMigrator\Strasnote.Apps.Data.MySqlMigrator.csproj", "{1B8B9FD4-AC07-4E78-90F7-422608CC1051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -270,6 +274,10 @@ Global
 		{853E12E4-073C-4FA4-A1E0-E1A26A359C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{853E12E4-073C-4FA4-A1E0-E1A26A359C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{853E12E4-073C-4FA4-A1E0-E1A26A359C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8B9FD4-AC07-4E78-90F7-422608CC1051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8B9FD4-AC07-4E78-90F7-422608CC1051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8B9FD4-AC07-4E78-90F7-422608CC1051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8B9FD4-AC07-4E78-90F7-422608CC1051}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -319,6 +327,7 @@ Global
 		{19B5A8CE-D169-48D5-86C0-CBB91705160B} = {797720B2-7A04-4110-A615-0C27B7CF2DDB}
 		{F92EB2C3-2A95-4CE4-895E-739E0BAFD73B} = {797720B2-7A04-4110-A615-0C27B7CF2DDB}
 		{853E12E4-073C-4FA4-A1E0-E1A26A359C6C} = {F92EB2C3-2A95-4CE4-895E-739E0BAFD73B}
+		{1B8B9FD4-AC07-4E78-90F7-422608CC1051} = {2DE8483E-AE7A-4F2A-8EEB-45CFBD6684EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF05D0DF-D04A-46E8-A71F-775870189F62}

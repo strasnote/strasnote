@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Data\Clients\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj" />
+  </ItemGroup>
+
+</Project>

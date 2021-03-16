@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Data;
+using Microsoft.Extensions.Logging;
 
 namespace Strasnote.Data.Abstracts
 {
@@ -19,6 +20,8 @@ namespace Strasnote.Data.Abstracts
 		/// <summary>
 		/// Perform database migration
 		/// </summary>
+		/// <param name="version">The version to migrate the database to</param>
+		/// <param name="connectionString">Database connection string</param>
 		bool MigrateTo(long version, string connectionString);
 	}
 }
