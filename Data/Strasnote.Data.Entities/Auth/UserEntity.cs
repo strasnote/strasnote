@@ -4,12 +4,13 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Notes;
 
 namespace Strasnote.Data.Entities.Auth
 {
 	/// <inheritdoc cref="IdentityUser{TKey}"/>
-	public class UserEntity : IdentityUser<long>
+	public class UserEntity : IdentityUser<long>, IEntity
 	{
 		/// <summary>
 		/// User ID (alias for <see cref="IdentityUser{TKey}.Id"/>)
