@@ -72,7 +72,7 @@ namespace Strasnote.Auth
 
 			var accessToken = await GenerateTokenAsync(user);
 
-			return new(accessToken, refreshToken.Token);
+			return new(accessToken, refreshToken.RefreshTokenValue);
 		}
 
 		/// <inheritdoc/>
@@ -108,7 +108,7 @@ namespace Strasnote.Auth
 				return new("Refresh token invalid", false);
 			}
 
-			if (existingRefreshToken.Expires <= DateTimeOffset.Now)
+			if (existingRefreshToken.RefreshTokenExpires <= DateTimeOffset.Now)
 			{
 				return new("Refresh token has expired", false);
 			}
@@ -121,7 +121,7 @@ namespace Strasnote.Auth
 
 			var newAccessToken = await GenerateTokenAsync(user);
 
-			return new(newAccessToken, newRefreshToken.Token);
+			return new(newAccessToken, newRefreshToken.RefreshTokenValue);
 		}
 
 		private async Task<string> GenerateTokenAsync(UserEntity user)

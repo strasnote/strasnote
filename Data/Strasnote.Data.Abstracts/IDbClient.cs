@@ -19,6 +19,6 @@ namespace Strasnote.Data.Abstracts
 		/// <summary>
 		/// Perform database migration
 		/// </summary>
-		bool MigrateToLatestVersion();
+		bool MigrateTo(long version, string connectionString);
 	}
 }

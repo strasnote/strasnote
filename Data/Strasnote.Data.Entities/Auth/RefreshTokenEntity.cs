@@ -2,23 +2,54 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
+using Strasnote.Data.Abstracts;
 
 namespace Strasnote.Data.Entities.Auth
 {
-	public record RefreshTokenEntity
+	/// <summary>
+	/// Refresh Token
+	/// </summary>
+	public record RefreshTokenEntity : IEntity
 	{
-		public int Id { get; init; }
+		/// <inheritdoc/>
+		public long Id =>
+			RefreshTokenId;
 
-		public DateTimeOffset Expires { get; private init; }
+		/// <summary>
+		/// Token ID
+		/// </summary>
+		public long RefreshTokenId { get; init; }
 
-		public string Token { get; private init; }
+		/// <summary>
+		/// Token expiry date
+		/// </summary>
+		public DateTimeOffset RefreshTokenExpires { get; init; }
 
-		public long UserId { get; private init; }
+		/// <summary>
+		/// Token value
+		/// </summary>
+		public string RefreshTokenValue { get; init; } = string.Empty;
 
+		/// <summary>
+		/// User ID this Token belongs to
+		/// </summary>
+		public long UserId { get; init; }
+
+		/// <summary>
+		/// Create default object
+		/// </summary>
+		public RefreshTokenEntity() { }
+
+		/// <summary>
+		/// Create object with values
+		/// </summary>
+		/// <param name="token">Token value</param>
+		/// <param name="expires">Token expiry date</param>
+		/// <param name="userId">User ID this Token belongs to</param>
 		public RefreshTokenEntity(string token, DateTimeOffset expires, long userId)
 		{
-			Token = token;
-			Expires = expires;
+			RefreshTokenValue = token;
+			RefreshTokenExpires = expires;
 			UserId = userId;
 		}
 	}
