@@ -5,8 +5,8 @@ using SimpleMigrations;
 
 namespace Strasnote.Data.Clients.MySql.Migrations
 {
-	[Migration(1, "Create auth tables")]
-	public sealed class CreateAuthTables_0001 : Migration
+	[Migration(1, "Create tables: auth.user, auth.role, and auth.user_role")]
+	public sealed class CreateTables_Auth_0001 : Migration
 	{
 		protected override void Up()
 		{
