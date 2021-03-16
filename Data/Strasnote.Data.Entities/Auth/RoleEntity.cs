@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using Microsoft.AspNetCore.Identity;
+using Strasnote.Data.Abstracts;
 
 namespace Strasnote.Data.Entities.Auth
 {
