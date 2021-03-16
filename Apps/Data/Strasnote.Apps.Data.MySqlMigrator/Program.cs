@@ -10,22 +10,24 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 	{
 		static private void Main(string[] args)
 		{
-			Console.WriteLine("Strasnote: MySQL Migrator");
+			Console.WriteLine("= Strasnote: MySQL Migrator =");
 
 			bool loop = true;
 			while (loop)
 			{
+				// Get the action
 				Console.WriteLine("Please enter the action you would like to take:");
 				Console.WriteLine("[up] [down] [exit]");
-
 				switch (Console.ReadLine())
 				{
+					// Both up and down require a version number
 					case "up":
 					case "down":
 						var version = GetVersion();
 						MigrateTo(version);
 						break;
 
+					// Setting loop to false will stop the next iteration
 					case "exit":
 						loop = false;
 						break;
@@ -35,8 +37,12 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 			Console.WriteLine("Goodbye!");
 		}
 
+		/// <summary>
+		/// Get migration version
+		/// </summary>
 		static private long GetVersion()
 		{
+			// Ask for the version and attempt to parse
 			Console.WriteLine("Please enter the migration version:");
 			var typed = Console.ReadLine();
 
@@ -45,13 +51,18 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 				return version;
 			}
 
+			// Loop until we get a valid number
 			Console.WriteLine("'{0}' is not a valid number.", typed);
 			return GetVersion();
 		}
 
+		/// <summary>
+		/// Migrate to the specified version
+		/// </summary>
+		/// <param name="version">Database version</param>
 		static private void MigrateTo(long version)
 		{
-			Console.WriteLine("Migrating to database version {0}.", version);
+			Console.WriteLine("== Migrating to database version {0} == ", version);
 
 			// Get connection string
 			Console.WriteLine("Please paste your database connection string:");
@@ -67,7 +78,7 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 				// Create migrator
 				var client = new MySqlDbClient();
 
-				// Migrate to specified version
+				// Migrate to specified version and log to console
 				client.MigrateTo(version, connectionString, new SimpleMigrations.Console.ConsoleLogger());
 
 				// Finished

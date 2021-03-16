@@ -82,10 +82,10 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 
 		protected override void Down()
 		{
-			Execute("DROP TABLE auth.user;");
-			Execute("DROP TABLE auth.role;");
-			Execute("DROP TABLE auth.user_role;");
-			Execute("DROP TABLE auth.refresh_token;");
+			Execute("DROP TABLE `auth.user`;");
+			Execute("DROP TABLE `auth.role`;");
+			Execute("DROP TABLE `auth.user_role`;");
+			Execute("DROP TABLE `auth.refresh_token`;");
 		}
 	}
 }
