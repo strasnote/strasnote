@@ -38,7 +38,7 @@ namespace Strasnote.Data
 		/// </summary>
 		/// <param name="operation">CRUD operation</param>
 		private string GetStoredProcedure(Operation operation) =>
-			string.Format("{0}_{1}", operation, typeof(TEntity).Name);
+			string.Format("{0}_{1}", typeof(TEntity).Name.Replace("Entity", string.Empty), operation);
 
 		/// <summary>
 		/// Log an operation using Log.Trace
