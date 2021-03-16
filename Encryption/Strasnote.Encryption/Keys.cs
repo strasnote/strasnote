@@ -18,7 +18,7 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="password">User's password</param>
 		public static Option<EncryptedKeyPair> Generate(string password) =>
-			Map(
+			Return(
 				PublicKeyBox.GenerateKeyPair,
 				e => new Msg.UnableToGenerateNewKeyPairExceptionMsg(e)
 			)
@@ -34,11 +34,10 @@ namespace Strasnote.Encryption
 		/// <param name="keyPair">Key Pair</param>
 		/// <param name="password">The User's password</param>
 		static internal Option<EncryptedKeyPair> WithEncryptedPrivateKey(KeyPair keyPair, string password) =>
-			Bind(
-				() => Encrypt.PrivateKey(keyPair.PrivateKey, password)
-			)
+			Encrypt.PrivateKey(keyPair.PrivateKey, password)
 			.Map(
-				p => new EncryptedKeyPair(keyPair.PublicKey, p.key, p.nonce)
+				p => new EncryptedKeyPair(keyPair.PublicKey, p.key, p.nonce),
+				DefaultHandler
 			);
 
 		/// <summary>Messages</summary>
