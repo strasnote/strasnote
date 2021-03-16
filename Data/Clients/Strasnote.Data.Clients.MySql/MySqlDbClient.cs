@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using SimpleMigrations;
 using SimpleMigrations.DatabaseProvider;

@@ -1,7 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+<<<<<<< HEAD
+=======
 using System.Threading;
+>>>>>>> parent of 6a1f088 (- Creating new Fake.DbContext and implementing)
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;

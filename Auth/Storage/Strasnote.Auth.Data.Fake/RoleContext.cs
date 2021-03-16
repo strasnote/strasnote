@@ -2,7 +2,10 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Collections.Generic;
+<<<<<<< HEAD
+=======
 using System.Threading;
+>>>>>>> parent of 6a1f088 (- Creating new Fake.DbContext and implementing)
 using System.Threading.Tasks;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
