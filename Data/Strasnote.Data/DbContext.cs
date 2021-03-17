@@ -33,25 +33,61 @@ namespace Strasnote.Data
 		protected DbContext(IDbClient client, ILog log) =>
 			(Connection, Log) = (client.Connect(), log);
 
+		#region Stored Procedures
+
 		/// <summary>
 		/// Get the name of the stored procedure for the specified operation
 		/// </summary>
-		/// <param name="operation">CRUD operation</param>
-		private string GetStoredProcedure(Operation operation) =>
-			string.Format("{0}_{1}", typeof(TEntity).Name.Replace("Entity", string.Empty), operation);
+		/// <param name="method">The name of the method (will have 'Async' suffix removed)</param>
+		protected string GetStoredProcedureName(string method) =>
+			string.Format(
+				"{0}_{1}",
+				typeof(TEntity).Name.Replace("Entity", string.Empty),
+				method.Replace("Async", string.Empty)
+			);
+
+		/// <inheritdoc cref="GetStoredProcedureName(string)"/>
+		protected string GetStoredProcedureName(Operation operation) =>
+			GetStoredProcedureName(operation.ToString());
+
+		#endregion
+
+		#region Logging
 
 		/// <summary>
-		/// Log an operation using Log.Trace
+		/// Override with your own Log method if you want the messages to be logged somewhere other
+		/// than the standard trace
 		/// </summary>
-		/// <param name="operation">CRUD operation</param>
+		/// <param name="message">Log message</param>
+		/// <param name="args">Log message arguments</param>
+		protected virtual void LogTrace(string message, params object[] args) =>
+			Log.Trace(message, args);
+
+		/// <summary>
+		/// Log an operation using <see cref="LogTrace(string, object[])"/>
+		/// </summary>
+		/// <param name="method">The name of the method (will have 'Async' suffix removed)</param>
 		/// <param name="detail">Log message detail</param>
 		/// <param name="args">Log message args (should correspond to <paramref name="detail"/>)</param>
-		protected virtual void LogOperation(string operation, string detail, params object[] args) =>
-			Log.Trace($"{operation} {typeof(TEntity)} {detail}", args);
+		protected void LogOperation(string method, string detail, params object[] args) =>
+			LogTrace(
+				$"{method.Replace("Async", string.Empty)} " +
+				$"{typeof(TEntity)} " +
+				$"{detail}",
+				args
+			);
 
 		/// <inheritdoc cref="LogOperation(string, string, object[])"/>
 		protected void LogOperation(Operation operation, string detail, params object[] args) =>
-			LogOperation(operation.ToString(), detail, args);
+			LogOperation(
+				operation.ToString(),
+				detail,
+				args
+			);
+
+		#endregion
+
+		#region Standard CRUD Operations
 
 		/// <inheritdoc/>
 		public virtual Task<TModel> CreateAsync<TModel>(TEntity entity)
@@ -61,7 +97,7 @@ namespace Strasnote.Data
 
 			// Perform create and return created entity
 			return Connection.QuerySingleOrDefaultAsync<TModel>(
-				sql: GetStoredProcedure(Operation.Create),
+				sql: GetStoredProcedureName(Operation.Create),
 				param: entity,
 				commandType: CommandType.StoredProcedure
 			);
@@ -89,7 +125,7 @@ namespace Strasnote.Data
 
 			// Perform retrieve and map to model
 			return Connection.QuerySingleOrDefaultAsync<TModel>(
-				sql: GetStoredProcedure(Operation.RetrieveById),
+				sql: GetStoredProcedureName(Operation.RetrieveById),
 				param: new { id },
 				commandType: CommandType.StoredProcedure
 			);
@@ -103,7 +139,7 @@ namespace Strasnote.Data
 
 			// Perform update and return updated entity
 			return Connection.QuerySingleOrDefaultAsync<TModel>(
-				sql: GetStoredProcedure(Operation.Update),
+				sql: GetStoredProcedureName(Operation.Update),
 				param: entity,
 				commandType: CommandType.StoredProcedure
 			);
@@ -117,11 +153,13 @@ namespace Strasnote.Data
 
 			// Perform retrieve and map to model
 			return Connection.ExecuteScalarAsync<bool>(
-				sql: GetStoredProcedure(Operation.Delete),
+				sql: GetStoredProcedureName(Operation.Delete),
 				param: new { id },
 				commandType: CommandType.StoredProcedure
 			);
 		}
+
+		#endregion
 
 		#region Dispose
 

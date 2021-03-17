@@ -11,7 +11,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		protected override void Up()
 		{
 			Execute(@"
-				CREATE PROCEDURE `User_RetrieveById`(
+				CREATE DEFINER=`ben`@`%` PROCEDURE `User_RetrieveById`(
 					IN `Id` BIGINT
 				)
 				LANGUAGE SQL
@@ -21,7 +21,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 				COMMENT 'Retrieve User by ID'
 				BEGIN
 
-				SELECT * FROM `auth.user` WHERE `Id` = Id;
+				SELECT * FROM `auth.user` WHERE `auth.user`.`Id` = Id;
 
 				END
 			");
@@ -37,7 +37,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 				COMMENT 'Retrieve User by Email Address'
 				BEGIN
 
-				SELECT * FROM `auth.user` WHERE `Email` = Email;
+				SELECT * FROM `auth.user` WHERE `auth.user`.`Email` LIKE Email;
 
 				END
 			");

@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
+using System.Data;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using Strasnote.Auth.Config;
+using Dapper;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;
@@ -23,7 +24,18 @@ namespace Strasnote.Auth.Data
 			: base(client, log) { }
 
 		/// <inheritdoc/>
-		public Task<TModel> RetrieveByEmailAsync<TModel>(string email) => throw new System.NotImplementedException();
+		public Task<TModel> RetrieveByEmailAsync<TModel>(string email)
+		{
+			// Log retrieve
+			LogOperation(nameof(RetrieveByEmailAsync), "{Email}", email);
+
+			// Perform retrieve and map to model
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
+				sql: GetStoredProcedureName(nameof(RetrieveByEmailAsync)),
+				param: new { email },
+				commandType: CommandType.StoredProcedure
+			);
+		}
 
 		/// <inheritdoc/>
 		public Task<TModel> RetrieveByUsernameAsync<TModel>(string name) =>

@@ -10,8 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Strasnote.Auth.Config;
+using Strasnote.Auth.Data;
+using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Auth.Data.Fake.Extensions;
 using Strasnote.Auth.Extensions;
+using Strasnote.Data.Abstracts;
+using Strasnote.Data.Clients.MySql;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
@@ -53,19 +57,19 @@ namespace Strasnote.Auth.Api
 
 			services.AddControllers();
 
-			//services.AddTransient<IDbClient, MySqlDbClient>();
+			services.AddTransient<IDbClient, MySqlDbClient>();
 
-			//services.AddTransient<UserStore>();
-			//services.AddTransient<IUserContext, UserContext>();
-			//services.AddTransient<IUserStore<UserEntity>, UserStore>();
+			services.AddTransient<UserStore>();
+			services.AddTransient<IUserContext, UserContext>();
+			services.AddTransient<IUserStore<UserEntity>, UserStore>();
 
-			//services.AddTransient<RoleStore>();
-			//services.AddTransient<IRoleContext, RoleContext>();
-			//services.AddTransient<IRoleStore<RoleEntity>, RoleStore>();
+			services.AddTransient<RoleStore>();
+			services.AddTransient<IRoleContext, RoleContext>();
+			services.AddTransient<IRoleStore<RoleEntity>, RoleStore>();
 
-			//services.AddTransient<IRefreshTokenContext, RefreshTokenContext>();
+			services.AddTransient<IRefreshTokenContext, RefreshTokenContext>();
 
-			services.AddAuthDataFakeServices();
+			//services.AddAuthDataFakeServices();
 			services.AddAuthServices(Configuration);
 
 			services.Configure<AuthConfig>(Configuration.GetSection(AuthConfig.AppSettingsSectionName));

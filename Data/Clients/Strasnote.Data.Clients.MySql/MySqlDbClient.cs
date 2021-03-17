@@ -13,7 +13,7 @@ using Strasnote.Data.Exceptions;
 namespace Strasnote.Data.Clients.MySql
 {
 	/// <summary>
-	/// MySQL-compatible database client
+	/// MySQL database client
 	/// </summary>
 	public sealed class MySqlDbClient : IDbClient
 	{
@@ -62,10 +62,15 @@ namespace Strasnote.Data.Clients.MySql
 			new MySqlConnection(ConnectionString);
 
 		/// <inheritdoc/>
-		public bool MigrateTo(long version) =>
+		public bool MigrateTo(long? version) =>
 			MigrateTo(version, null);
 
-		public bool MigrateTo(long version, ILogger? logger)
+		/// <summary>
+		/// Perform database migration
+		/// </summary>
+		/// <param name="version">[Optional] The version to migrate the database to - if not set the latest version will be used</param>
+		/// <param name="logger">[Optional] Log output</param>
+		public bool MigrateTo(long? version, ILogger? logger)
 		{
 			// Connection to database
 			using var db = new MySqlConnection(ConnectionString);
@@ -74,9 +79,18 @@ namespace Strasnote.Data.Clients.MySql
 			var provider = new MysqlDatabaseProvider(db);
 			var migrator = new SimpleMigrator(typeof(MySqlDbClient).Assembly, provider, logger);
 
-			// Perform the migration
+			// Get all the migrations
 			migrator.Load();
-			migrator.MigrateTo(version);
+
+			// Migrate to specific version, or the latest version
+			if (version is long specificVersion)
+			{
+				migrator.MigrateTo(specificVersion);
+			}
+			else
+			{
+				migrator.MigrateToLatest();
+			}
 
 			// Ensure the migration succeeded
 			return migrator.LatestMigration.Version == version;

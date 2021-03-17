@@ -4,7 +4,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;

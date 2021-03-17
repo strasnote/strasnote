@@ -21,10 +21,9 @@ namespace Strasnote.Data.Abstracts
 		IDbConnection Connect();
 
 		/// <summary>
-		/// Perform database migration
+		/// Perform database migration to specified <paramref name="version"/>, or the latest available version
 		/// </summary>
-		/// <param name="version">The version to migrate the database to</param>
-		/// <param name="connectionString">Database connection string</param>
-		bool MigrateTo(long version);
+		/// <param name="version">[Optional] The version to migrate the database to - if not set the latest version will be used</param>
+		bool MigrateTo(long? version);
 	}
 }

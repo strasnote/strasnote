@@ -19,7 +19,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 					`Email` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
 					`NormalizedEmail` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
 					`EmailConfirmed` BIT(1) NOT NULL DEFAULT b'0',
-					`PhoneNumber` VARCHAR(20) NOT NULL COLLATE 'utf8_general_ci',
+					`PhoneNumber` VARCHAR(20) NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
 					`PhoneNumberConfirmed` BIT(1) NOT NULL DEFAULT b'0',
 					`TwoFactorEnabled` BIT(1) NOT NULL DEFAULT b'0',
 					`UserPublicKey` BLOB NOT NULL,

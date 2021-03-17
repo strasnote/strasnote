@@ -10,6 +10,10 @@ using Strasnote.Logging;
 
 namespace Strasnote.Data.Fake
 {
+	/// <summary>
+	/// Fake DbContext
+	/// </summary>
+	/// <typeparam name="TEntity"></typeparam>
 	public abstract class DbContext<TEntity> : Data.DbContext<TEntity>
 		where TEntity : IEntity
 	{
@@ -36,13 +40,12 @@ namespace Strasnote.Data.Fake
 		}
 
 		/// <summary>
-		/// Override base to log as Information (not Trace)
+		/// Override to send logs to Information log not Trace
 		/// </summary>
-		/// <param name="operation"></param>
-		/// <param name="detail"></param>
+		/// <param name="message"></param>
 		/// <param name="args"></param>
-		protected override void LogOperation(string operation, string detail, params object[] args) =>
-		   Log.Information($"Fake {operation} {typeof(TEntity)} {detail}", args);
+		protected override void LogTrace(string message, params object[] args) =>
+			Log.Information(message, args);
 
 		/// <summary>
 		/// Return a fake model to use in <see cref="CreateAsync{TModel}(TEntity)"/>

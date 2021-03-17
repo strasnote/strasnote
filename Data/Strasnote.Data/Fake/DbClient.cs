@@ -14,7 +14,7 @@ namespace Strasnote.Data.Fake
 		public IDbConnection Connect() =>
 			new DbConnection();
 
-		public bool MigrateTo(long version) =>
+		public bool MigrateTo(long? version) =>
 			true;
 	}
 }
