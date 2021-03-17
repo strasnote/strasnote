@@ -29,10 +29,9 @@ namespace Strasnote.Data
 		/// Inject connection details
 		/// </summary>
 		/// <param name="client">IDbClient object</param>
-		/// <param name="connectionString">Database connection string</param>
 		/// <param name="log">ILog (should be created with the context as the class implementing this abstract)</param>
-		protected DbContext(IDbClient client, string connectionString, ILog log) =>
-			(Connection, Log) = (client.Connect(connectionString), log);
+		protected DbContext(IDbClient client, ILog log) =>
+			(Connection, Log) = (client.Connect(), log);
 
 		/// <summary>
 		/// Get the name of the stored procedure for the specified operation

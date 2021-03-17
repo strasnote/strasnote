@@ -20,10 +20,9 @@ namespace Strasnote.Auth.Data
 		/// Inject dependencies
 		/// </summary>
 		/// <param name="client">IDbClient</param>
-		/// <param name="config">AuthConfig</param>
 		/// <param name="log">ILog with context</param>
-		public RoleContext(IDbClient client, IOptions<AuthConfig> config, ILog<UserContext> log)
-			: base(client, config.Value.Db.ConnectionString, log) { }
+		public RoleContext(IDbClient client, ILog<UserContext> log)
+			: base(client, log) { }
 
 		/// <inheritdoc/>
 		public Task<TModel> RetrieveByNameAsync<TModel>(string roleName) => throw new NotImplementedException();

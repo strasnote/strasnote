@@ -13,12 +13,6 @@ namespace Strasnote.Auth.Config
 		public const string AppSettingsSectionName = "Auth";
 
 		/// <summary>
-		/// The Database configuration.
-		/// </summary>
-		[Required]
-		public DbConfig Db { get; set; } = new();
-
-		/// <summary>
 		/// The JWT configuration.
 		/// </summary>
 		[Required]

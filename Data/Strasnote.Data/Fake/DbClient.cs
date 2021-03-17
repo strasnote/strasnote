@@ -8,10 +8,13 @@ namespace Strasnote.Data.Fake
 {
 	public sealed class DbClient : IDbClient
 	{
-		public IDbConnection Connect(string connectionString) =>
+		public string ConnectionString =>
+			string.Empty;
+
+		public IDbConnection Connect() =>
 			new DbConnection();
 
-		public bool MigrateTo(long version, string connectionString) =>
+		public bool MigrateTo(long version) =>
 			true;
 	}
 }

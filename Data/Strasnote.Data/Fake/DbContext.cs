@@ -13,7 +13,7 @@ namespace Strasnote.Data.Fake
 	public abstract class DbContext<TEntity> : Data.DbContext<TEntity>
 		where TEntity : IEntity
 	{
-		protected DbContext(ILog log) : base(new DbClient(), string.Empty, log) { }
+		protected DbContext(ILog log) : base(new DbClient(), log) { }
 
 		/// <summary>
 		/// Force an object to <typeparamref name="TModel"/> - this can only be tested at runtime

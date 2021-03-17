@@ -76,10 +76,10 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 			try
 			{
 				// Create migrator
-				var client = new MySqlDbClient();
+				var client = new MySqlDbClient(connectionString);
 
 				// Migrate to specified version and log to console
-				client.MigrateTo(version, connectionString, new SimpleMigrations.Console.ConsoleLogger());
+				client.MigrateTo(version, new SimpleMigrations.Console.ConsoleLogger());
 
 				// Finished
 				Console.WriteLine("Database successfully migrated to version {0}.", version);

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Fake.Extensions;
 using Strasnote.Auth.Extensions;
+using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
 
@@ -67,7 +68,8 @@ namespace Strasnote.Auth.Api
 			services.AddAuthDataFakeServices();
 			services.AddAuthServices(Configuration);
 
-			services.Configure<AuthConfig>(Configuration.GetSection("Auth"));
+			services.Configure<AuthConfig>(Configuration.GetSection(AuthConfig.AppSettingsSectionName));
+			services.Configure<DbConfig>(Configuration.GetSection(DbConfig.AppSettingsSectionName));
 
 			services.AddTransient<JwtSecurityTokenHandler>();
 		}

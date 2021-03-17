@@ -18,10 +18,9 @@ namespace Strasnote.Auth.Data
 		/// Inject dependencies
 		/// </summary>
 		/// <param name="client">IDbClient</param>
-		/// <param name="config">AuthConfig</param>
 		/// <param name="log">ILog with context</param>
-		public UserContext(IDbClient client, IOptions<AuthConfig> config, ILog<UserContext> log)
-			: base(client, config.Value.Db.ConnectionString, log) { }
+		public UserContext(IDbClient client, ILog<UserContext> log)
+			: base(client, log) { }
 
 		/// <inheritdoc/>
 		public Task<TModel> RetrieveByEmailAsync<TModel>(string email) => throw new System.NotImplementedException();

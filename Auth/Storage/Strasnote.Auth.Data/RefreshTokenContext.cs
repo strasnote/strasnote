@@ -8,6 +8,7 @@ using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;
+using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
 
@@ -21,8 +22,8 @@ namespace Strasnote.Auth.Data
 		/// <param name="client">IDbClient</param>
 		/// <param name="config">AuthConfig</param>
 		/// <param name="log">ILog with context</param>
-		public RefreshTokenContext(IDbClient client, IOptions<AuthConfig> config, ILog log)
-			: base(client, config.Value.Db.ConnectionString, log) { }
+		public RefreshTokenContext(IDbClient client, IOptions<DbConfig> config, ILog log)
+			: base(client, log) { }
 
 		/// <inheritdoc/>
 		public Task CreateAsync(RefreshTokenEntity entity) => throw new NotImplementedException();
