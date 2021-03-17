@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;

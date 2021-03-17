@@ -148,15 +148,15 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 				var connection = new MySqlConnection(connectionString);
 
 				Console.Write("  users..");
-				var userIds = TestData.Users(connection);
+				var userIds = InsertTestData.Users(connection);
 				Console.WriteLine("done");
 
 				Console.Write("  roles..");
-				var roleIds = TestData.Roles(connection);
+				var roleIds = InsertTestData.Roles(connection);
 				Console.WriteLine("done");
 
 				Console.Write("  linking users to roles..");
-				TestData.UserRoles(connection, userIds, roleIds);
+				InsertTestData.UserRoles(connection, userIds, roleIds);
 				Console.WriteLine("done");
 
 				// Done

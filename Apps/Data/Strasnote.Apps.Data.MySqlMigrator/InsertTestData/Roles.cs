@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 using MySql.Data.MySqlClient;
 using Strasnote.Data.Entities.Auth;
@@ -13,7 +10,7 @@ using Strasnote.Util;
 
 namespace Strasnote.Apps.Data.MySqlMigrator
 {
-	public static partial class TestData
+	public static partial class InsertTestData
 	{
 		public static List<int> Roles(MySqlConnection connection)
 		{

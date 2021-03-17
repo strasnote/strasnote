@@ -12,7 +12,6 @@ using Microsoft.Extensions.Hosting;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
-using Strasnote.Auth.Data.Fake.Extensions;
 using Strasnote.Auth.Extensions;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Clients.MySql;
