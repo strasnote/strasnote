@@ -8,7 +8,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Strasnote.Auth.Abstracts;
@@ -23,15 +22,15 @@ namespace Strasnote.Auth
 	/// <inheritdoc cref="IJwtToken"/>
 	public class JwtToken : IJwtToken
 	{
-		private readonly UserManager<UserEntity> userManager;
-		private readonly SignInManager<UserEntity> signInManager;
+		private readonly IUserManager userManager;
+		private readonly ISignInManager signInManager;
 		private readonly AuthConfig authConfig;
 		private readonly JwtSecurityTokenHandler jwtSecurityTokenHandler;
 		private readonly IRefreshTokenContext refreshTokenContext;
 
 		public JwtToken(
-			UserManager<UserEntity> userManager,
-			SignInManager<UserEntity> signInManager,
+			IUserManager userManager,
+			ISignInManager signInManager,
 			IOptions<AuthConfig> authConfig,
 			JwtSecurityTokenHandler jwtSecurityTokenHandler,
 			IRefreshTokenContext refreshTokenContext)
