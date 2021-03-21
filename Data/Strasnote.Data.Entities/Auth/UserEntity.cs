@@ -1,16 +1,19 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Notes;
 
 namespace Strasnote.Data.Entities.Auth
 {
-	public class UserEntity : IdentityUser<long>
+	/// <inheritdoc cref="IdentityUser{TKey}"/>
+	public class UserEntity : IdentityUser<long>, IEntity
 	{
 		/// <summary>
-		/// User ID (alias for <see cref="Microsoft.AspNetCore.Identity.IdentityUser{TKey}.Id"/>)
+		/// User ID (alias for <see cref="IdentityUser{TKey}.Id"/>)
 		/// </summary>
 		public long UserId
 		{
@@ -21,17 +24,18 @@ namespace Strasnote.Data.Entities.Auth
 		/// <summary>
 		/// This User's Public Key (for encryption)
 		/// </summary>
-		public string UserPublicKey { get; set; } = string.Empty;
+		public byte[] UserPublicKey { get; set; } = Array.Empty<byte>();
 
 		/// <summary>
 		/// This User's Private Key (for decryption - encrypted using User's password)
 		/// </summary>
-		public string UserPrivateKey { get; set; } = string.Empty;
+		public byte[] UserPrivateKey { get; set; } = Array.Empty<byte>();
 
 		/// <summary>
 		/// User Profile information (e.g. name)
+		/// TODO: Implement JSON converter to convert from string
 		/// </summary>
-		public Profile UserProfile { get; init; } = new();
+		public string UserProfile { get; init; } = string.Empty;
 
 		#region Lookups
 

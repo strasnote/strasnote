@@ -20,11 +20,11 @@ namespace Strasnote.Encryption.Hash_Tests
 			// Arrange
 
 			// Act
-			var result = Hash.Password(input);
+			var result = Hash.PasswordGeneric(input);
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<NullPasswordExceptionMsg>(none);
+			Assert.IsType<GenericPasswordHashFailedException>(none);
 		}
 
 		[Fact]
@@ -34,7 +34,7 @@ namespace Strasnote.Encryption.Hash_Tests
 			var value = Rnd.Str;
 
 			// Act
-			var result = Hash.Password(value);
+			var result = Hash.PasswordGeneric(value);
 
 			// Assert
 			var some = result.AssertSome();
@@ -48,8 +48,8 @@ namespace Strasnote.Encryption.Hash_Tests
 			var value = Rnd.Str;
 
 			// Act
-			var result = from h0 in Hash.Password(value)
-						 from h1 in Hash.Password(value)
+			var result = from h0 in Hash.PasswordGeneric(value)
+						 from h1 in Hash.PasswordGeneric(value)
 						 select h0.SequenceEqual(h1);
 
 			// Assert

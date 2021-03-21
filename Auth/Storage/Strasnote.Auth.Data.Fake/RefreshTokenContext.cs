@@ -4,38 +4,39 @@
 using System;
 using System.Threading.Tasks;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
+using Strasnote.Data.Fake;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data.Fake
 {
 	/// <inheritdoc cref="IRefreshTokenContext"/>
-	public sealed class RefreshTokenContext : IRefreshTokenContext
+	public sealed class RefreshTokenContext : DbContext<RefreshTokenEntity>, IRefreshTokenContext
 	{
-		private readonly ILog log;
+		public RefreshTokenContext(ILog<RefreshTokenContext> log) : base(log) { }
 
-		public RefreshTokenContext(ILog<RefreshTokenContext> log) =>
-			this.log = log;
-
-		/// <inheritdoc/>
-		public Task<RefreshTokenEntity> CreateAsync(RefreshTokenEntity refreshToken)
+		public Task CreateAsync(RefreshTokenEntity entity)
 		{
-			log.Information("Create refresh token: {@RefreshToken}", refreshToken);
+			LogOperation(Operation.Create, "{Token}", entity);
+			return Task.CompletedTask;
+		}
+
+		public Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken)
+		{
+			LogOperation("RetrieveForUser", "{UserId} {Token}", userId, refreshToken);
 			return Task.FromResult(new RefreshTokenEntity("token", DateTimeOffset.Now.AddDays(1), 1));
 		}
 
-		/// <inheritdoc/>
 		public Task<bool> DeleteByUserIdAsync(long userId)
 		{
-			log.Information("Deleting refresh token for user: {@UserId}", userId);
+			LogOperation(Operation.Delete, "{UserId}", userId);
 			return Task.FromResult(true);
 		}
 
-		/// <inheritdoc/>
-		public Task<RefreshTokenEntity> Retrieve(long userId, string refreshToken)
-		{
-			log.Information("Retrieve refresh token for user: {@UserId}, refresh token: {@ResfreshToken}", userId, refreshToken);
-			return Task.FromResult(new RefreshTokenEntity("token", DateTimeOffset.Now.AddDays(1), 1));
-		}
+		protected override object GetFakeModelForCreate() => throw new NotImplementedException();
+		protected override object GetFakeModelForRetrieve() => throw new NotImplementedException();
+		protected override object GetFakeModelForRetrieveById(long id) => throw new NotImplementedException();
+		protected override object GetFakeModelForUpdate() => throw new NotImplementedException();
 	}
 }

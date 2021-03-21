@@ -72,7 +72,7 @@ namespace Strasnote.Auth
 
 			var accessToken = await GenerateTokenAsync(user);
 
-			return new(accessToken, refreshToken.Token);
+			return new(accessToken, refreshToken.RefreshTokenValue);
 		}
 
 		/// <inheritdoc/>
@@ -101,14 +101,14 @@ namespace Strasnote.Auth
 			var userId = claimsPrincipal.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
 			var user = await userManager.FindByIdAsync(userId);
 
-			var existingRefreshToken = await refreshTokenContext.Retrieve(user.Id, refreshToken);
+			var existingRefreshToken = await refreshTokenContext.RetrieveForUserAsync(user.Id, refreshToken);
 
 			if (existingRefreshToken == null)
 			{
 				return new("Refresh token invalid", false);
 			}
 
-			if (existingRefreshToken.Expires <= DateTimeOffset.Now)
+			if (existingRefreshToken.RefreshTokenExpires <= DateTimeOffset.Now)
 			{
 				return new("Refresh token has expired", false);
 			}
@@ -121,7 +121,7 @@ namespace Strasnote.Auth
 
 			var newAccessToken = await GenerateTokenAsync(user);
 
-			return new(newAccessToken, newRefreshToken.Token);
+			return new(newAccessToken, newRefreshToken.RefreshTokenValue);
 		}
 
 		private async Task<string> GenerateTokenAsync(UserEntity user)

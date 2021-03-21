@@ -26,7 +26,7 @@ namespace Strasnote.Encryption
 				e => new Msg.UnableToGenerateNonceToEncryptPrivateKeyExceptionMsg(e)
 			)
 			.Bind(
-				nonce => from hash in Hash.Password(password) select (nonce, hash)
+				nonce => from hash in Hash.PasswordGeneric(password) select (nonce, hash)
 			)
 			.Map(
 				p => (SecretBox.Create(privateKey, p.nonce, p.hash), p.nonce),

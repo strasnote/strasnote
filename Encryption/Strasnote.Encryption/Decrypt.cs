@@ -25,7 +25,7 @@ namespace Strasnote.Encryption
 				password
 			)
 			.Bind(
-				Hash.Password
+				Hash.PasswordGeneric
 			)
 			.Map(
 				h => SecretBox.Open(keyPair.PrivateKey, keyPair.Nonce, h),

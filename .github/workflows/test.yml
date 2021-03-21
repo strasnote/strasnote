@@ -9,9 +9,12 @@ on:
     paths:
       - '.github/workflows/test.yml'
       - 'Auth/**'
+      - 'Data/**'
       - 'Encryption/**'
+      - 'Logging/**'
       - 'Notes/**'
       - 'Tests/**'
+      - 'Util/**'
 
 jobs:
   restore-build-test:

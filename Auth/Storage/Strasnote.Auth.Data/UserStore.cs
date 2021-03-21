@@ -40,7 +40,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.CreateAsync(user, cancellationToken);
+			return userContext.CreateAsync<IdentityResult>(user);
 		}
 
 		#endregion
@@ -52,7 +52,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.RetrieveAsync(int.Parse(userId), cancellationToken);
+			return userContext.RetrieveByIdAsync<UserEntity>(int.Parse(userId));
 		}
 
 		/// <inheritdoc/>
@@ -60,7 +60,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.RetrieveAsync(normalizedUserName, cancellationToken);
+			return userContext.RetrieveByUsernameAsync<UserEntity>(normalizedUserName);
 		}
 
 		/// <inheritdoc/>
@@ -94,7 +94,7 @@ namespace Strasnote.Auth.Data
 
 			if (user == null)
 			{
-				throw new ArgumentNullException("user");
+				throw new ArgumentNullException(nameof(user));
 			}
 
 			return Task.FromResult(user.Email);
@@ -107,7 +107,7 @@ namespace Strasnote.Auth.Data
 
 			if (user == null)
 			{
-				throw new ArgumentNullException("user");
+				throw new ArgumentNullException(nameof(user));
 			}
 
 			return Task.FromResult(user.EmailConfirmed);
@@ -118,7 +118,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return await userContext.RetrieveByEmail(normalizedEmail, cancellationToken).ConfigureAwait(false);
+			return await userContext.RetrieveByEmailAsync<UserEntity>(normalizedEmail).ConfigureAwait(false);
 		}
 
 		/// <inheritdoc/>
@@ -136,7 +136,7 @@ namespace Strasnote.Auth.Data
 
 			if (user == null)
 			{
-				throw new ArgumentNullException("user");
+				throw new ArgumentNullException(nameof(user));
 			}
 
 			return Task.FromResult(user.PasswordHash);
@@ -158,7 +158,7 @@ namespace Strasnote.Auth.Data
 				throw new ArgumentNullException(nameof(user));
 			}
 
-			var userRoles = await roleContext.RetrieveForUserAsync(user.Id);
+			var userRoles = await roleContext.RetrieveForUserAsync<RoleEntity>(user.Id).ConfigureAwait(false);
 
 			return userRoles.Select(x => x.Name).ToList();
 		}
@@ -178,7 +178,7 @@ namespace Strasnote.Auth.Data
 				throw new ArgumentNullException(nameof(roleName));
 			}
 
-			var userRoles = await GetRolesAsync(user, cancellationToken);
+			var userRoles = await GetRolesAsync(user, new()).ConfigureAwait(false);
 
 			return userRoles.Any(r => r == roleName);
 		}
@@ -195,7 +195,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.UpdateAsync(user, cancellationToken);
+			return userContext.UpdateAsync<IdentityResult>(user);
 		}
 
 		/// <inheritdoc/>
@@ -225,12 +225,12 @@ namespace Strasnote.Auth.Data
 
 			if (user == null)
 			{
-				throw new ArgumentNullException("user");
+				throw new ArgumentNullException(nameof(user));
 			}
 
 			user.Email = email;
 
-			return Task.FromResult(0);
+			return Task.CompletedTask;
 		}
 
 		/// <inheritdoc/>
@@ -240,12 +240,12 @@ namespace Strasnote.Auth.Data
 
 			if (user == null)
 			{
-				throw new ArgumentNullException("user");
+				throw new ArgumentNullException(nameof(user));
 			}
 
 			user.EmailConfirmed = confirmed;
 
-			return Task.FromResult(0);
+			return Task.CompletedTask;
 		}
 
 		/// <inheritdoc/>
@@ -265,12 +265,12 @@ namespace Strasnote.Auth.Data
 
 			if (user == null)
 			{
-				throw new ArgumentNullException("user");
+				throw new ArgumentNullException(nameof(user));
 			}
 
 			user.PasswordHash = passwordHash;
 
-			return Task.FromResult(0);
+			return Task.CompletedTask;
 		}
 
 		/// <inheritdoc/>
@@ -284,11 +284,18 @@ namespace Strasnote.Auth.Data
 		#region Delete
 
 		/// <inheritdoc/>
-		public Task<IdentityResult> DeleteAsync(UserEntity user, CancellationToken cancellationToken)
+		public async Task<IdentityResult> DeleteAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return userContext.DeleteAsync(user, cancellationToken);
+			return await userContext.DeleteAsync(user.Id).ConfigureAwait(false) switch
+			{
+				true =>
+					IdentityResult.Success,
+
+				false =>
+					IdentityResult.Failed()
+			};
 		}
 
 		#endregion
