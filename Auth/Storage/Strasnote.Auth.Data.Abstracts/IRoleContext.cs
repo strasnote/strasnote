@@ -11,7 +11,7 @@ namespace Strasnote.Auth.Data.Abstracts
 	/// <summary>
 	/// Abstraction for interacting with the user role database.
 	/// </summary>
-	public interface IRoleContext : IDbContext<RoleEntity>
+	public interface IRoleContext : IDbContextWIthQueries<RoleEntity>
 	{
 		/// <summary>
 		/// Retrieve a role by <paramref name="roleName"/>

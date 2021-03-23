@@ -9,6 +9,10 @@ namespace Strasnote.Data.Clients.MySql
 	public sealed class MySqlDbTables : IDbTables
 	{
 		/// <inheritdoc/>
+		public string RefreshToken =>
+			"auth.refresh_token";
+
+		/// <inheritdoc/>
 		public string Role =>
 			"auth.role";
 

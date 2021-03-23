@@ -10,7 +10,7 @@ namespace Strasnote.Auth.Data.Abstracts
 	/// <summary>
 	/// Abstraction for interacting with the user / authentication / identity database
 	/// </summary>
-	public interface IUserContext : IDbContext<UserEntity>
+	public interface IUserContext : IDbContextWIthQueries<UserEntity>
 	{
 		/// <summary>
 		/// Retrieve a User by email

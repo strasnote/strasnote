@@ -9,6 +9,11 @@ namespace Strasnote.Data.Abstracts
 	public interface IDbTables
 	{
 		/// <summary>
+		/// Refresh Token table name
+		/// </summary>
+		string RefreshToken { get; }
+
+		/// <summary>
 		/// Role table name
 		/// </summary>
 		string Role { get; }
