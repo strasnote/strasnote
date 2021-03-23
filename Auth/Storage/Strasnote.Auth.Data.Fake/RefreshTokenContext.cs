@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Abstracts;
@@ -38,5 +39,7 @@ namespace Strasnote.Auth.Data.Fake
 		protected override object GetFakeModelForRetrieve() => throw new NotImplementedException();
 		protected override object GetFakeModelForRetrieveById(long id) => throw new NotImplementedException();
 		protected override object GetFakeModelForUpdate() => throw new NotImplementedException();
+		public Task<System.Collections.Generic.IEnumerable<TModel>> QueryAsync<TModel>(params (Expression<Func<RefreshTokenEntity, object>> property, SearchOperator op, object value)[] predicates) => throw new NotImplementedException();
+		public Task<TModel> QuerySingleAsync<TModel>(params (Expression<Func<RefreshTokenEntity, object>> property, SearchOperator op, object value)[] predicates) => throw new NotImplementedException();
 	}
 }

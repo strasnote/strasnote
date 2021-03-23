@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Data.Fake;
 using Strasnote.Logging;
@@ -15,6 +18,9 @@ namespace Strasnote.Auth.Data.Fake
 	public sealed class RoleContext : DbContext<RoleEntity>, IRoleContext
 	{
 		public RoleContext(ILog<RoleContext> log) : base(log) { }
+
+		public Task<IEnumerable<TModel>> QueryAsync<TModel>(params (Expression<Func<RoleEntity, object>> property, SearchOperator op, object value)[] predicates) => throw new NotImplementedException();
+		public Task<TModel> QuerySingleAsync<TModel>(params (Expression<Func<RoleEntity, object>> property, SearchOperator op, object value)[] predicates) => throw new NotImplementedException();
 
 		/// <inheritdoc/>
 		public Task<TModel> RetrieveByNameAsync<TModel>(string roleName)
