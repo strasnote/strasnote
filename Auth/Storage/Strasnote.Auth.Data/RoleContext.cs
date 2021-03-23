@@ -12,15 +12,15 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data
 {
-	public sealed class RoleContext : DbContext<RoleEntity>, IRoleContext
+	public sealed class RoleContext : DbContextWithQueries<RoleEntity>, IRoleContext
 	{
 		/// <summary>
 		/// Inject dependencies
 		/// </summary>
 		/// <param name="client">IDbClient</param>
 		/// <param name="log">ILog with context</param>
-		public RoleContext(IDbClient client, ILog<UserContext> log)
-			: base(client, log) { }
+		public RoleContext(IDbClientWithQueries client, ILog<UserContext> log)
+			: base(client, log, client.Tables.Role) { }
 
 		/// <inheritdoc/>
 		public Task<TModel> RetrieveByNameAsync<TModel>(string roleName) => throw new NotImplementedException();

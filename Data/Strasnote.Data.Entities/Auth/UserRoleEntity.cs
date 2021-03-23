@@ -10,8 +10,12 @@ namespace Strasnote.Data.Entities.Auth
 	public class UserRoleEntity : IdentityUserRole<long>, IEntity
 	{
 		/// <inheritdoc/>
-		public long Id =>
-			UserRoleId;
+		[Ignore]
+		public long Id
+		{
+			get => UserRoleId;
+			init => UserRoleId = value;
+		}
 
 		/// <summary>
 		/// User Role ID

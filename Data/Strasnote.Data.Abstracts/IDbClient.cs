@@ -26,4 +26,19 @@ namespace Strasnote.Data.Abstracts
 		/// <param name="version">[Optional] The version to migrate the database to - if not set the latest version will be used</param>
 		bool MigrateTo(long? version);
 	}
+
+	/// <inheritdoc cref="IDbClient"/>
+	/// <typeparam name="TDbQueries">Db Queries type</typeparam>
+	public interface IDbClientWithQueries : IDbClient
+	{
+		/// <summary>
+		/// Retrieves database-specific queries
+		/// </summary>
+		IDbQueries Queries { get; }
+
+		/// <summary>
+		/// Database-specific table names
+		/// </summary>
+		IDbTables Tables { get; }
+	}
 }

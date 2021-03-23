@@ -12,8 +12,12 @@ namespace Strasnote.Data.Entities.Notes
 	public sealed record NoteUserEntity : IEntity
 	{
 		/// <inheritdoc/>
-		public long Id =>
-			NoteUserId;
+		[Ignore]
+		public long Id
+		{
+			get => NoteUserId;
+			init => NoteUserId = value;
+		}
 
 		/// <summary>
 		/// Note User ID

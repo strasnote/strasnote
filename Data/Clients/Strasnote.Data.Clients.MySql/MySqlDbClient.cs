@@ -15,10 +15,16 @@ namespace Strasnote.Data.Clients.MySql
 	/// <summary>
 	/// MySQL database client
 	/// </summary>
-	public sealed class MySqlDbClient : IDbClient
+	public sealed class MySqlDbClient : IDbClientWithQueries
 	{
 		/// <inheritdoc/>
 		public string ConnectionString { get; }
+
+		/// <inheritdoc/>
+		public IDbQueries Queries { get; } = new MySqlDbQueries();
+
+		/// <inheritdoc/>
+		public IDbTables Tables { get; } = new MySqlDbTables();
 
 		/// <summary>
 		/// Inject and verify database configuration

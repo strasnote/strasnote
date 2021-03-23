@@ -57,6 +57,7 @@ namespace Strasnote.Auth.Api
 			services.AddControllers();
 
 			services.AddTransient<IDbClient, MySqlDbClient>();
+			services.AddTransient<IDbClientWithQueries, MySqlDbClient>();
 
 			services.AddTransient<UserStore>();
 			services.AddTransient<IUserContext, UserContext>();

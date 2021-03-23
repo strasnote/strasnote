@@ -14,8 +14,12 @@ namespace Strasnote.Data.Entities.Notes
 	public sealed record TagEntity : IEntity
 	{
 		/// <inheritdoc/>
-		public long Id =>
-			TagId;
+		[Ignore]
+		public long Id
+		{
+			get => TagId;
+			init => TagId = value;
+		}
 
 		/// <summary>
 		/// Tag ID
@@ -56,11 +60,13 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// The User this Tag belongs to
 		/// </summary>
+		[Ignore]
 		public UserEntity? User { get; set; }
 
 		/// <summary>
 		/// List of notes with this Tag
 		/// </summary>
+		[Ignore]
 		public List<NoteEntity>? Notes { get; set; }
 
 		#endregion
