@@ -1,15 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <Compile Remove="Extensions\**" />
-    <EmbeddedResource Remove="Extensions\**" />
-    <None Remove="Extensions\**" />
-  </ItemGroup>
+  <PropertyGroup>
+    <RootNamespace>Strasnote.Data</RootNamespace>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="NSubstitute" Version="4.2.2" />
-    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.14" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
-    <ProjectReference Include="..\..\..\Util\Strasnote.Util.csproj" />
+    <ProjectReference Include="..\..\..\Data\Strasnote.Data\Strasnote.Data.csproj" />
   </ItemGroup>
 
 </Project>
