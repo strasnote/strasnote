@@ -35,7 +35,7 @@ namespace Strasnote.Data.DbContext_Tests
 			var result = new TestDbContext(client, log);
 
 			// Assert
-			Assert.Same(log, result.Log);
+			Assert.Same(log, result.LogTest);
 		}
 
 		public sealed class TestDbContext : DbContext<TestEntity>

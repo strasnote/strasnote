@@ -23,7 +23,10 @@ namespace Strasnote.Data
 		/// <summary>
 		/// Logger
 		/// </summary>
-		internal ILog Log { get; private init; }
+		protected ILog Log { get; private init; }
+
+		internal ILog LogTest =>
+			Log;
 
 		/// <summary>
 		/// Inject connection details

@@ -31,7 +31,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 			var result = new TestDbContext(client, log, table);
 
 			// Assert
-			Assert.Same(log, result.Log);
+			Assert.Same(log, result.LogTest);
 		}
 
 		[Fact]
