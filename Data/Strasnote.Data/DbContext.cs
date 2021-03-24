@@ -23,7 +23,7 @@ namespace Strasnote.Data
 		/// <summary>
 		/// Logger
 		/// </summary>
-		protected ILog Log { get; private init; }
+		internal ILog Log { get; private init; }
 
 		/// <summary>
 		/// Inject connection details
@@ -33,6 +33,19 @@ namespace Strasnote.Data
 		protected DbContext(IDbClient client, ILog log) =>
 			(Connection, Log) = (client.Connect(), log);
 
+		/// <summary>
+		/// Return the name of <typeparamref name="TEntity"/> with 'Entity' suffix removed
+		/// </summary>
+		private string GetEntity() =>
+			typeof(TEntity).Name.Replace("Entity", string.Empty);
+
+		/// <summary>
+		/// Return the name of <paramref name="method"/> with 'Async' suffix removed
+		/// </summary>
+		/// <param name="method">Method name</param>
+		private string GetMethod(string method) =>
+			method.Replace("Async", string.Empty);
+
 		#region Stored Procedures
 
 		/// <summary>
@@ -40,15 +53,17 @@ namespace Strasnote.Data
 		/// </summary>
 		/// <param name="method">The name of the method (will have 'Async' suffix removed)</param>
 		protected string GetStoredProcedureName(string method) =>
-			string.Format(
-				"{0}_{1}",
-				typeof(TEntity).Name.Replace("Entity", string.Empty),
-				method.Replace("Async", string.Empty)
-			);
+			string.Format("{0}_{1}", GetEntity(), GetMethod(method));
+
+		internal string GetStoredProcedureNameTest(string method) =>
+			GetStoredProcedureName(method);
 
 		/// <inheritdoc cref="GetStoredProcedureName(string)"/>
 		protected string GetStoredProcedureName(Operation operation) =>
 			GetStoredProcedureName(operation.ToString());
+
+		internal string GetStoredProcedureNameTest(Operation operation) =>
+			GetStoredProcedureName(operation);
 
 		#endregion
 
@@ -63,6 +78,9 @@ namespace Strasnote.Data
 		protected virtual void LogTrace(string message, params object[] args) =>
 			Log.Trace(message, args);
 
+		internal void LogTraceTest(string message, params object[] args) =>
+			LogTrace(message, args);
+
 		/// <summary>
 		/// Log an operation using <see cref="LogTrace(string, object[])"/>
 		/// </summary>
@@ -70,20 +88,11 @@ namespace Strasnote.Data
 		/// <param name="detail">Log message detail</param>
 		/// <param name="args">Log message args (should correspond to <paramref name="detail"/>)</param>
 		protected void LogOperation(string method, string detail, params object[] args) =>
-			LogTrace(
-				$"{method.Replace("Async", string.Empty)} " +
-				$"{typeof(TEntity)} " +
-				$"{detail}",
-				args
-			);
+			LogTrace($"{GetMethod(method)} {GetEntity()} {detail}", args);
 
 		/// <inheritdoc cref="LogOperation(string, string, object[])"/>
 		protected void LogOperation(Operation operation, string detail, params object[] args) =>
-			LogOperation(
-				operation.ToString(),
-				detail,
-				args
-			);
+			LogOperation(operation.ToString(), detail, args);
 
 		#endregion
 

@@ -47,11 +47,11 @@ namespace Strasnote.Data.Clients.MySql.MySqlDbQueries_Tests
 			var columns = new List<string>(new[] { c0, c1, c2 });
 
 			var p0Column = Rnd.Str;
-			var p0Operator = SearchOperator.Like;
+			const SearchOperator p0Operator = SearchOperator.Like;
 			var p0Value = Rnd.Str;
 
 			var p1Column = Rnd.Str;
-			var p1Operator = SearchOperator.MoreThanOrEqual;
+			const SearchOperator p1Operator = SearchOperator.MoreThanOrEqual;
 			var p1Value = Rnd.Int;
 
 			var predicates = new List<(string, SearchOperator, object)>

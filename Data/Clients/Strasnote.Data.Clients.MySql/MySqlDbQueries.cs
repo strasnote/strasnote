@@ -23,6 +23,11 @@ namespace Strasnote.Data.Clients.MySql
 			var par = new List<string>();
 			foreach (var column in columns)
 			{
+				if (column == nameof(IEntity.Id))
+				{
+					continue;
+				}
+
 				col.Add($"`{column}`");
 				par.Add($"@{column}");
 			}
@@ -80,6 +85,11 @@ namespace Strasnote.Data.Clients.MySql
 			var col = new List<string>();
 			foreach (var column in columns)
 			{
+				if (column == nameof(IEntity.Id))
+				{
+					continue;
+				}
+
 				col.Add($"`{column}` = @{column}");
 			}
 

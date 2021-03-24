@@ -24,10 +24,16 @@ namespace Strasnote.Data
 		/// </summary>
 		protected IDbQueries Queries { get; private init; }
 
+		internal IDbQueries QueriesTest =>
+			Queries;
+
 		/// <summary>
 		/// Table name
 		/// </summary>
 		protected string Table { get; private init; }
+
+		internal string TableTest =>
+			Table;
 
 		/// <summary>
 		/// Inject connection details
@@ -38,24 +44,32 @@ namespace Strasnote.Data
 		protected DbContextWithQueries(IDbClientWithQueries client, ILog log, string table) : base(client, log) =>
 			(Queries, Table) = (client.Queries, table);
 
-		#region Queries
+		#region Property Matching
 
 		/// <summary>
-		/// Cache matching model columns so expensive reflection isn't done more than once
+		/// Cache matching model properties so expensive reflection isn't done more than once
 		/// </summary>
-		static private readonly ConcurrentDictionary<Type, List<string>> modelColumnCache = new();
+		static private readonly ConcurrentDictionary<Type, List<string>> modelPropertyCache = new();
+
+		internal int CacheTest;
 
 		/// <summary>
-		/// Get columns that match between the current entity and <typeparamref name="TModel"/>
+		/// Get properties that match between the current entity and <typeparamref name="TModel"/>
 		/// </summary>
 		/// <typeparam name="TModel">Model type</typeparam>
-		private List<string> GetColumns<TModel>() =>
-			modelColumnCache.GetOrAdd(typeof(TModel), _ =>
+		internal List<string> GetProperties<TModel>() =>
+			modelPropertyCache.GetOrAdd(typeof(TModel), _ =>
 			{
+				// Increase CacheTest
+				CacheTest++;
+
 				// Join on property name so only shared properties are returned
 				var shared = from e in typeof(TEntity).GetProperties()
 							 join m in typeof(TModel).GetProperties() on e.Name equals m.Name
-							 where e.GetCustomAttribute<IgnoreAttribute>() == null
+							 where e.PropertyType == m.PropertyType
+							 && e.GetCustomAttribute<IgnoreAttribute>() == null
+							 && m.GetCustomAttribute<IgnoreAttribute>() == null
+							 orderby e.Name
 							 select e.Name;
 
 				// If any are shared, return as list
@@ -81,14 +95,26 @@ namespace Strasnote.Data
 			var where = new List<(string, SearchOperator, object)>();
 			foreach (var (property, op, value) in predicates)
 			{
-				if (((MemberExpression)property.Body).Member.Name is string name)
+				string? name = property.Body switch
+				{
+					MemberExpression member =>
+						member.Member.Name,
+
+					UnaryExpression unary =>
+						((MemberExpression)unary.Operand).Member.Name,
+
+					_ =>
+						null
+				};
+
+				if (name is not null)
 				{
 					where.Add((name, op, value));
 				}
 			}
 
 			// Log retrieve
-			var (query, param) = Queries.GetRetrieveQuery(Table, GetColumns<TModel>(), where);
+			var (query, param) = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where);
 			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, param);
 
 			// Perform retrieve and map to TModel
@@ -110,14 +136,14 @@ namespace Strasnote.Data
 		#region Standard CRUD Operations
 
 		/// <inheritdoc/>
-		public override Task<TModel> CreateAsync<TModel>(TEntity entity)
+		public override Task<TId> CreateAsync<TId>(TEntity entity)
 		{
 			// Log create
-			var query = Queries.GetCreateQuery(Table, GetColumns<TModel>());
-			LogOperation(Operation.Create, "{Query} {@Entity}", entity, query);
+			var query = Queries.GetCreateQuery(Table, GetProperties<TEntity>());
+			LogOperation(Operation.Create, "{Query} {@Entity}", query, entity);
 
 			// Perform create and return created entity
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
+			return Connection.ExecuteScalarAsync<TId>(
 				sql: query,
 				param: entity,
 				commandType: CommandType.Text
@@ -142,7 +168,7 @@ namespace Strasnote.Data
 		public override Task<TModel> RetrieveByIdAsync<TModel>(long id)
 		{
 			// Log retrieve
-			var query = Queries.GetRetrieveQuery(Table, GetColumns<TModel>(), nameof(IEntity.Id), id);
+			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
 			LogOperation(Operation.RetrieveById, "{Query} {Id}", query, id);
 
 			// Perform retrieve and map to model
@@ -157,7 +183,7 @@ namespace Strasnote.Data
 		public override Task<TModel> UpdateAsync<TModel>(TEntity entity)
 		{
 			// Log update
-			var query = Queries.GetUpdateQuery(Table, GetColumns<TModel>(), nameof(IEntity.Id), entity.Id);
+			var query = Queries.GetUpdateQuery(Table, GetProperties<TEntity>(), nameof(IEntity.Id), entity.Id);
 			LogOperation(Operation.Update, "{Query} {@Entity}", query, entity);
 
 			// Perform update and return updated entity
