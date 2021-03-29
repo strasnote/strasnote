@@ -211,7 +211,7 @@ namespace Tests.Strasnote.Auth
 		}
 
 		[Fact]
-		public async Task RefreshTokenContext_DeleteByUserIdAsync_Is_Called_When_Issuing_Token()
+		public async Task RefreshTokenContext_DeleteByUserIdAsync_Is_Called()
 		{
 			// Act
 			var jwtTokenService = new JwtTokenIssuer(
@@ -226,6 +226,24 @@ namespace Tests.Strasnote.Auth
 
 			// Assert
 			await refreshTokenContext.Received().DeleteByUserIdAsync(Arg.Any<long>());
+		}
+
+		[Fact]
+		public async Task RefreshTokenContext_CreateAsync_Is_Called()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
+
+			// Assert
+			await refreshTokenContext.Received().CreateAsync(Arg.Any<RefreshTokenEntity>());
 		}
 
 		[Fact]
@@ -304,6 +322,42 @@ namespace Tests.Strasnote.Auth
 			// Assert
 			Assert.False(result.Success);
 			Assert.False(string.IsNullOrWhiteSpace(result.Message));
+		}
+
+		[Fact]
+		public async Task JwtTokenGenerator_GenerateRefreshToken_Is_Called()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
+
+			// Assert
+			jwtTokenGenerator.Received().GenerateRefreshToken(Arg.Any<UserEntity>());
+		}
+
+		[Fact]
+		public async Task JwtTokenGenerator_GenerateAccessTokenAsync_Is_Called()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
+
+			// Assert
+			await jwtTokenGenerator.Received().GenerateAccessTokenAsync(Arg.Any<UserEntity>());
 		}
 	}
 }
