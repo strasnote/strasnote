@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using Strasnote.Auth;
 using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
