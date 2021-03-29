@@ -100,6 +100,44 @@ namespace Tests.Strasnote.Auth
 		}
 
 		[Fact]
+		public async Task Invalid_Email_With_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync("test", Rnd.Str);
+
+			// Assert
+			Assert.NotNull(result.AccessToken);
+			Assert.NotNull(result.RefreshToken);
+		}
+
+		[Fact]
+		public async Task Invalid_Email_With_Special_Characters_With_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync("\"!£$%^&*(-=😁", Rnd.Str);
+
+			// Assert
+			Assert.NotNull(result.AccessToken);
+			Assert.NotNull(result.RefreshToken);
+		}
+
+		[Fact]
 		public async Task Non_Existing_User_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
 			// Arrange
