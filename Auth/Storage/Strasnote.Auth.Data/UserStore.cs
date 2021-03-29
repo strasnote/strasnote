@@ -52,7 +52,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.RetrieveByIdAsync<UserEntity>(int.Parse(userId));
+			return userContext.RetrieveByIdAsync<UserEntity>(long.Parse(userId));
 		}
 
 		/// <inheritdoc/>
