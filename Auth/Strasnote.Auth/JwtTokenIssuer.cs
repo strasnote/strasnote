@@ -19,8 +19,8 @@ using Strasnote.Util;
 
 namespace Strasnote.Auth
 {
-	/// <inheritdoc cref="IJwtToken"/>
-	public class JwtToken : IJwtToken
+	/// <inheritdoc cref="IJwtTokenIssuer"/>
+	public class JwtTokenIssuer : IJwtTokenIssuer
 	{
 		private readonly IUserManager userManager;
 		private readonly ISignInManager signInManager;
@@ -28,7 +28,7 @@ namespace Strasnote.Auth
 		private readonly JwtSecurityTokenHandler jwtSecurityTokenHandler;
 		private readonly IRefreshTokenContext refreshTokenContext;
 
-		public JwtToken(
+		public JwtTokenIssuer(
 			IUserManager userManager,
 			ISignInManager signInManager,
 			IOptions<AuthConfig> authConfig,

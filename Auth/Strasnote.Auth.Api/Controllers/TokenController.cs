@@ -16,20 +16,20 @@ namespace Strasnote.Auth.Api.Controllers
 	[Route("[controller]")]
 	public class TokenController : Controller
 	{
-		private readonly IJwtToken jwtToken;
+		private readonly IJwtTokenIssuer jwtTokenIssuer;
 		private readonly ILog<TokenController> log;
 
 		public record TokenRequest([Required] string Email, [Required] string Password);
 		record TokenResponse(string AccessToken, string RefreshToken, string? Message, bool Success);
 
-		public TokenController(IJwtToken jwtToken, ILog<TokenController> log) =>
-			(this.jwtToken, this.log) = (jwtToken, log);
+		public TokenController(IJwtTokenIssuer jwtToken, ILog<TokenController> log) =>
+			(this.jwtTokenIssuer, this.log) = (jwtToken, log);
 
 		[HttpPost]
 		public async Task<IActionResult> GetToken(TokenRequest tokenRequest)
 		{
 			log.Trace("User {@User} logging in", tokenRequest.Email);
-			var token = await jwtToken.GetTokenAsync(tokenRequest.Email, tokenRequest.Password);
+			var token = await jwtTokenIssuer.GetTokenAsync(tokenRequest.Email, tokenRequest.Password);
 
 			var tokenResponse = new TokenResponse(token.AccessToken, token.RefreshToken, token.Message, token.Success);
 

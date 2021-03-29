@@ -9,7 +9,7 @@ namespace Strasnote.Auth.Abstracts
 	/// <summary>
 	/// JSON Web Token
 	/// </summary>
-	public interface IJwtToken
+	public interface IJwtTokenIssuer
 	{
 		/// <summary>
 		/// Get token content

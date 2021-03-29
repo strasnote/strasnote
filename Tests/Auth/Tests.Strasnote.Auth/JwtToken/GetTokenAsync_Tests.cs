@@ -61,7 +61,7 @@ namespace Tests.Strasnote.Auth
 			// Arrange
 
 			// Act
-			var jwtTokenService = new JwtToken(
+			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
@@ -81,7 +81,7 @@ namespace Tests.Strasnote.Auth
 			// Arrange
 
 			// Act
-			var jwtTokenService = new JwtToken(
+			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
@@ -113,7 +113,7 @@ namespace Tests.Strasnote.Auth
 				.ReturnsNull();
 
 			// Act
-			var jwtTokenService = new JwtToken(
+			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
@@ -137,7 +137,7 @@ namespace Tests.Strasnote.Auth
 				.Returns(signInResult);
 
 			// Act
-			var jwtTokenService = new JwtToken(
+			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
@@ -161,7 +161,7 @@ namespace Tests.Strasnote.Auth
 				.Returns(signInResult);
 
 			// Act
-			var jwtTokenService = new JwtToken(
+			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
@@ -181,7 +181,7 @@ namespace Tests.Strasnote.Auth
 			// Arrange
 
 			// Act
-			var jwtTokenService = new JwtToken(
+			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
