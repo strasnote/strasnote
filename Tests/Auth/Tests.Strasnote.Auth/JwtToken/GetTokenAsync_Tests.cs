@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
+using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Strasnote.Auth;
@@ -25,6 +24,7 @@ namespace Tests.Strasnote.Auth
 		private readonly ISignInManager signInManager = Substitute.For<ISignInManager>();
 		private readonly JwtSecurityTokenHandler jwtSecurityTokenHandler = Substitute.For<JwtSecurityTokenHandler>();
 		private readonly IRefreshTokenContext refreshTokenContext = Substitute.For<IRefreshTokenContext>();
+		private readonly IJwtTokenGenerator jwtTokenGenerator = Substitute.For<IJwtTokenGenerator>();
 
 		private readonly IOptions<AuthConfig> authConfig = Options.Create(new AuthConfig
 		{
@@ -53,22 +53,27 @@ namespace Tests.Strasnote.Auth
 
 			signInManager.CheckPasswordSignInAsync(Arg.Any<UserEntity>(), Arg.Any<string>(), Arg.Any<bool>())
 				.Returns(signInResult);
+
+			jwtTokenGenerator.GenerateRefreshToken(Arg.Any<UserEntity>())
+				.Returns(new RefreshTokenEntity("token", DateTimeOffset.Now.AddDays(1), userEntity.Id));
+
+			jwtTokenGenerator.GenerateAccessTokenAsync(Arg.Any<UserEntity>())
+				.Returns("accessToken");
 		}
 
 		[Fact]
 		public async Task Valid_Email_And_Password_Returns_Access_Token_And_Refresh_Token()
 		{
-			// Arrange
-
 			// Act
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext);
+				refreshTokenContext,
+				jwtTokenGenerator);
 
-			var result = await jwtTokenService.GetTokenAsync("test@email.com", "password");
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
 			Assert.NotNull(result.AccessToken);
@@ -76,33 +81,22 @@ namespace Tests.Strasnote.Auth
 		}
 
 		[Fact]
-		public async Task Returned_Access_Token_Is_Valid()
+		public async Task Valid_Email_And_Password_With_Special_Characters_Returns_Access_Token_And_Refresh_Token()
 		{
-			// Arrange
-
 			// Act
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext);
+				refreshTokenContext,
+				jwtTokenGenerator);
 
-			var result = await jwtTokenService.GetTokenAsync("test@email.com", "password");
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", "\"!£$%^&*(-=😁");
 
 			// Assert
-			var tokenHandler = new JwtSecurityTokenHandler();
-			var claimsPrincipal = tokenHandler.ValidateToken(result.AccessToken, new TokenValidationParameters
-			{
-				ValidateLifetime = false,
-				ValidateAudience = false,
-				ValidateIssuer = false,
-				ValidIssuer = authConfig.Value.Jwt.Issuer,
-				ValidAudience = authConfig.Value.Jwt.Issuer,
-				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authConfig.Value.Jwt.Secret))
-			}, out _);
-
-			Assert.NotNull(claimsPrincipal);
+			Assert.NotNull(result.AccessToken);
+			Assert.NotNull(result.RefreshToken);
 		}
 
 		[Fact]
@@ -118,9 +112,10 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext);
+				refreshTokenContext,
+				jwtTokenGenerator);
 
-			var result = await jwtTokenService.GetTokenAsync("test@email.com", "password");
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
 			Assert.False(result.Success);
@@ -142,9 +137,10 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext);
+				refreshTokenContext,
+				jwtTokenGenerator);
 
-			var result = await jwtTokenService.GetTokenAsync("test@email.com", "password");
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
 			Assert.False(result.Success);
@@ -166,9 +162,10 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext);
+				refreshTokenContext,
+				jwtTokenGenerator);
 
-			var result = await jwtTokenService.GetTokenAsync("test@email.com", "password");
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
 			Assert.False(result.Success);
@@ -178,6 +175,43 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task RefreshTokenContext_DeleteByUserIdAsync_Is_Called_When_Issuing_Token()
 		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
+
+			// Assert
+			await refreshTokenContext.Received().DeleteByUserIdAsync(Arg.Any<long>());
+		}
+
+		[Fact]
+		public async Task Null_Email_Returns_TokenResponse_With_Success_False_And_Error_Message()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync(null!, Rnd.Str);
+
+			// Assert
+			Assert.False(result.Success);
+			Assert.False(string.IsNullOrWhiteSpace(result.Message));
+		}
+
+		[Fact]
+		public async Task Null_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
+		{
 			// Arrange
 
 			// Act
@@ -186,12 +220,52 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext);
+				refreshTokenContext,
+				jwtTokenGenerator);
 
-			var result = await jwtTokenService.GetTokenAsync("test@email.com", "password");
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", null!);
 
 			// Assert
-			await refreshTokenContext.Received().DeleteByUserIdAsync(Arg.Any<long>());
+			Assert.False(result.Success);
+			Assert.False(string.IsNullOrWhiteSpace(result.Message));
+		}
+
+		[Fact]
+		public async Task Blank_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync(string.Empty, Rnd.Str);
+
+			// Assert
+			Assert.False(result.Success);
+			Assert.False(string.IsNullOrWhiteSpace(result.Message));
+		}
+
+		[Fact]
+		public async Task Blank_Email_Returns_TokenResponse_With_Success_False_And_Error_Message()
+		{
+			// Act
+			var jwtTokenService = new JwtTokenIssuer(
+				userManager,
+				signInManager,
+				authConfig,
+				jwtSecurityTokenHandler,
+				refreshTokenContext,
+				jwtTokenGenerator);
+
+			var result = await jwtTokenService.GetTokenAsync("test@email.com", string.Empty);
+
+			// Assert
+			Assert.False(result.Success);
+			Assert.False(string.IsNullOrWhiteSpace(result.Message));
 		}
 	}
 }
