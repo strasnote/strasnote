@@ -55,10 +55,10 @@ namespace Tests.Strasnote.Auth
 				.Returns(signInResult);
 
 			jwtTokenGenerator.GenerateRefreshToken(Arg.Any<UserEntity>())
-				.Returns(new RefreshTokenEntity("token", DateTimeOffset.Now.AddDays(1), userEntity.Id));
+				.Returns(new RefreshTokenEntity(Rnd.Str, DateTimeOffset.Now.AddDays(1), userEntity.Id));
 
 			jwtTokenGenerator.GenerateAccessTokenAsync(Arg.Any<UserEntity>())
-				.Returns("accessToken");
+				.Returns(Rnd.Str);
 		}
 
 		[Fact]
