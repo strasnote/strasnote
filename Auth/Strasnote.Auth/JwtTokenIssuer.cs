@@ -2,7 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -14,8 +13,6 @@ using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Auth.Models;
-using Strasnote.Data.Entities.Auth;
-using Strasnote.Util;
 
 namespace Strasnote.Auth
 {
@@ -27,24 +24,32 @@ namespace Strasnote.Auth
 		private readonly AuthConfig authConfig;
 		private readonly JwtSecurityTokenHandler jwtSecurityTokenHandler;
 		private readonly IRefreshTokenContext refreshTokenContext;
+		private readonly IJwtTokenGenerator jwtTokenGenerator;
 
 		public JwtTokenIssuer(
 			IUserManager userManager,
 			ISignInManager signInManager,
 			IOptions<AuthConfig> authConfig,
 			JwtSecurityTokenHandler jwtSecurityTokenHandler,
-			IRefreshTokenContext refreshTokenContext)
+			IRefreshTokenContext refreshTokenContext,
+			IJwtTokenGenerator jwtTokenGenerator)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 			this.authConfig = authConfig.Value;
 			this.jwtSecurityTokenHandler = jwtSecurityTokenHandler;
 			this.refreshTokenContext = refreshTokenContext;
+			this.jwtTokenGenerator = jwtTokenGenerator;
 		}
 
 		/// <inheritdoc/>
 		public async Task<TokenResponse> GetTokenAsync(string email, string password)
 		{
+			if(string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+			{
+				return new TokenResponse("Email/password not supplied", false);
+			}
+
 			var user = await userManager.FindByEmailAsync(email);
 
 			if (user == null)
@@ -64,12 +69,12 @@ namespace Strasnote.Auth
 				return new TokenResponse("User login failed", false);
 			}
 
-			var refreshToken = GenerateRefreshTokenAsync(user);
+			var refreshToken = jwtTokenGenerator.GenerateRefreshToken(user);
 
 			await refreshTokenContext.DeleteByUserIdAsync(user.Id);
 			await refreshTokenContext.CreateAsync(refreshToken);
 
-			var accessToken = await GenerateTokenAsync(user);
+			var accessToken = await jwtTokenGenerator.GenerateAccessTokenAsync(user);
 
 			return new(accessToken, refreshToken.RefreshTokenValue);
 		}
@@ -85,7 +90,7 @@ namespace Strasnote.Auth
 				ValidateIssuer = true,
 				ValidateIssuerSigningKey = true,
 				IssuerSigningKey = securityKey,
-				ValidateLifetime = false, // ToDo: review this
+				ValidateLifetime = true,
 				ValidAudience = authConfig.Jwt.Audience,
 				ValidIssuer = authConfig.Jwt.Issuer,
 				ClockSkew = TimeSpan.Zero
@@ -114,58 +119,13 @@ namespace Strasnote.Auth
 
 			await refreshTokenContext.DeleteByUserIdAsync(user.Id);
 
-			var newRefreshToken = GenerateRefreshTokenAsync(user);
+			var newRefreshToken = jwtTokenGenerator.GenerateRefreshToken(user);
 
 			await refreshTokenContext.CreateAsync(newRefreshToken);
 
-			var newAccessToken = await GenerateTokenAsync(user);
+			var newAccessToken = await jwtTokenGenerator.GenerateAccessTokenAsync(user);
 
 			return new(newAccessToken, newRefreshToken.RefreshTokenValue);
-		}
-
-		private async Task<string> GenerateTokenAsync(UserEntity user)
-		{
-			var tokenHandler = new JwtSecurityTokenHandler();
-			var secret = Encoding.ASCII.GetBytes(authConfig.Jwt.Secret);
-
-			var claims = new List<Claim>
-			{
-				new Claim(ClaimTypes.Name, user.UserName),
-				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-			};
-
-			var tokenDescriptor = new SecurityTokenDescriptor
-			{
-				Subject = new ClaimsIdentity(),
-				Expires = DateTime.UtcNow.AddMinutes(authConfig.Jwt.TokenExpiryMinutes),
-				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature),
-				Issuer = authConfig.Jwt.Issuer,
-				Audience = authConfig.Jwt.Audience
-			};
-
-			// Get the user's roles and add them as claims
-			var roles = await userManager.GetRolesAsync(user);
-			foreach (var role in roles)
-			{
-				claims.Add(new Claim(ClaimTypes.Role, role));
-			}
-
-			// Add all the claims to the token descriptor
-			tokenDescriptor.Subject.AddClaims(claims);
-
-			var token = tokenHandler.CreateToken(tokenDescriptor);
-
-			return await Task.FromResult(tokenHandler.WriteToken(token));
-		}
-
-		private RefreshTokenEntity GenerateRefreshTokenAsync(UserEntity userEntity)
-		{
-			var token = Rnd.RndString.Get(50, numbers: true, special: true);
-			var hashedToken = userManager.PasswordHasher.HashPassword(userEntity, token);
-
-			var tokenExpiry = DateTimeOffset.Now.AddMinutes(authConfig.Jwt.RefreshTokenExpiryMinutes);
-
-			return new(hashedToken, tokenExpiry, userEntity.Id);
 		}
 	}
 }

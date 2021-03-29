@@ -7,7 +7,7 @@ using Strasnote.Auth.Models;
 namespace Strasnote.Auth.Abstracts
 {
 	/// <summary>
-	/// JSON Web Token
+	/// Used to issue a JWT token to the user
 	/// </summary>
 	public interface IJwtTokenIssuer
 	{
