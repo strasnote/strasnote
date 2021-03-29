@@ -102,7 +102,13 @@ namespace Strasnote.Auth
 			}
 
 			// Get the user's ID from their claims
-			var userId = claimsPrincipal.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+			var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+			if(userId == null)
+			{
+				return new("Could not find user from access token", false);
+			}
+
 			var user = await userManager.FindByIdAsync(userId);
 
 			var existingRefreshToken = await refreshTokenContext.RetrieveForUserAsync(user.Id, refreshToken);
