@@ -20,7 +20,7 @@ namespace Strasnote.Auth.Api.Controllers
 		private readonly ILog<TokenController> log;
 
 		public sealed record TokenRequest([Required] string Email, [Required] string Password);
-		public sealed record TokenResponse(string AccessToken, string RefreshToken, string? Message, bool Success);
+		sealed record TokenResponse(string AccessToken, string RefreshToken, string? Message, bool Success);
 
 		public TokenController(IJwtTokenIssuer jwtToken, ILog<TokenController> log) =>
 			(this.jwtTokenIssuer, this.log) = (jwtToken, log);
