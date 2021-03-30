@@ -64,7 +64,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Valid_Email_And_Password_Returns_Access_Token_And_Refresh_Token()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -73,6 +73,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
@@ -83,7 +84,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Valid_Email_And_Password_With_Special_Characters_Returns_Access_Token_And_Refresh_Token()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -92,6 +93,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", "\"!£$%^&*(-=😁");
 
 			// Assert
@@ -102,7 +104,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Invalid_Email_With_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -111,6 +113,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test", Rnd.Str);
 
 			// Assert
@@ -121,7 +124,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Invalid_Email_With_Special_Characters_With_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -130,6 +133,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("\"!£$%^&*(-=😁", Rnd.Str);
 
 			// Assert
@@ -144,7 +148,6 @@ namespace Tests.Strasnote.Auth
 			userManager.FindByEmailAsync(Arg.Any<string>())
 				.ReturnsNull();
 
-			// Act
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -153,6 +156,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
@@ -169,7 +173,6 @@ namespace Tests.Strasnote.Auth
 			signInManager.CheckPasswordSignInAsync(Arg.Any<UserEntity>(), Arg.Any<string>(), Arg.Any<bool>())
 				.Returns(signInResult);
 
-			// Act
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -178,6 +181,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
@@ -194,7 +198,6 @@ namespace Tests.Strasnote.Auth
 			signInManager.CheckPasswordSignInAsync(Arg.Any<UserEntity>(), Arg.Any<string>(), Arg.Any<bool>())
 				.Returns(signInResult);
 
-			// Act
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -203,6 +206,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
@@ -213,7 +217,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task RefreshTokenContext_DeleteByUserIdAsync_Is_Called()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -222,6 +226,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
@@ -231,7 +236,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task RefreshTokenContext_CreateAsync_Is_Called()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -240,6 +245,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
@@ -249,7 +255,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Null_Email_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -258,6 +264,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync(null!, Rnd.Str);
 
 			// Assert
@@ -269,9 +276,7 @@ namespace Tests.Strasnote.Auth
 		public async Task Null_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
 			// Arrange
-
-			// Act
-			var jwtTokenService = new JwtTokenIssuer(
+						var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
@@ -279,6 +284,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", null!);
 
 			// Assert
@@ -289,7 +295,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Blank_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -298,6 +304,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync(string.Empty, Rnd.Str);
 
 			// Assert
@@ -308,7 +315,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Blank_Email_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -317,6 +324,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", string.Empty);
 
 			// Assert
@@ -327,7 +335,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task JwtTokenGenerator_GenerateRefreshToken_Is_Called()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -336,6 +344,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
@@ -345,7 +354,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task JwtTokenGenerator_GenerateAccessTokenAsync_Is_Called()
 		{
-			// Act
+			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -354,6 +363,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
