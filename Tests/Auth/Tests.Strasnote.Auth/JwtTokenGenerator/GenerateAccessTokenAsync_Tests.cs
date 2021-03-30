@@ -1,10 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -52,7 +50,7 @@ namespace Tests.Strasnote.Auth
 		{
 			// Arrange
 			var jwtTokenGenerator = new JwtTokenGenerator(
-				authConfig, 
+				authConfig,
 				userManager);
 
 			// Act
