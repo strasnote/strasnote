@@ -66,7 +66,7 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task Valid_Access_Token_And_Refresh_Token_Returns_New_Access_Token_And_New_Refresh_Token()
 		{
-			// Act
+			// Arrange
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -75,6 +75,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -89,7 +90,6 @@ namespace Tests.Strasnote.Auth
 			jwtSecurityTokenHandler.ValidateToken(Arg.Any<string>(), Arg.Any<TokenValidationParameters>(), out _)
 				.ReturnsNull();
 
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -98,6 +98,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -112,7 +113,6 @@ namespace Tests.Strasnote.Auth
 			jwtSecurityTokenHandler.ValidateToken(Arg.Any<string>(), Arg.Any<TokenValidationParameters>(), out _)
 				.Returns(new TestPrincipal());
 
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -121,6 +121,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -135,7 +136,6 @@ namespace Tests.Strasnote.Auth
 			refreshTokenContext.RetrieveForUserAsync(Arg.Any<long>(), Arg.Any<string>())
 				.ReturnsNull();
 
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -144,6 +144,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -161,7 +162,6 @@ namespace Tests.Strasnote.Auth
 					RefreshTokenExpires = DateTime.Now.AddDays(-1)
 				});
 
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -170,6 +170,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -180,7 +181,6 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task RefreshTokenContext_DeleteByUserIdAsync_Is_Called()
 		{
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -189,6 +189,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -198,7 +199,6 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task RefreshTokenContext_CreateAsync_Is_Called()
 		{
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -207,6 +207,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -216,7 +217,6 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task JwtTokenGenerator_GenerateRefreshToken_Is_Called()
 		{
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -225,6 +225,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
@@ -234,7 +235,6 @@ namespace Tests.Strasnote.Auth
 		[Fact]
 		public async Task JwtTokenGenerator_GenerateAccessTokenAsync_Is_Called()
 		{
-			// Act
 			var jwtTokenIssuer = new JwtTokenIssuer(
 				userManager,
 				signInManager,
@@ -243,6 +243,7 @@ namespace Tests.Strasnote.Auth
 				refreshTokenContext,
 				jwtTokenGenerator);
 
+			// Act
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
