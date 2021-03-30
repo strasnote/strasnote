@@ -36,6 +36,8 @@ namespace Strasnote.Auth
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var secret = Encoding.ASCII.GetBytes(authConfig.Jwt.Secret);
 
+			// ToDo: split this into at least two methods - GetSecurityTokenDescriptor() and WriteToken().
+
 			var claims = new List<Claim>
 			{
 				new Claim(ClaimTypes.Name, user.UserName),
