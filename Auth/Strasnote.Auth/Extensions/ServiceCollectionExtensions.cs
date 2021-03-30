@@ -18,8 +18,13 @@ namespace Strasnote.Auth.Extensions
 		/// <returns>The <paramref name="services"/> object with the added services.</returns>
 		public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
 		{
-			// Services
-			services.AddTransient<IJwtToken, JwtToken>();
+			// JWT Tokens
+			services.AddTransient<IJwtTokenIssuer, JwtTokenIssuer>();
+			services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
+
+			// Identity
+			services.AddTransient<IUserManager, UserManager>();
+			services.AddTransient<ISignInManager, SignInManager>();
 
 			// Config options
 			services.AddOptions<AuthConfig>()
