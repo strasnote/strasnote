@@ -2,9 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -21,20 +19,6 @@ using Xunit;
 
 namespace Tests.Strasnote.Auth
 {
-	public class TestPrincipal : ClaimsPrincipal
-	{
-		public TestPrincipal(params Claim[] claims) : base(new TestIdentity(claims))
-		{
-		}
-	}
-
-	public class TestIdentity : ClaimsIdentity
-	{
-		public TestIdentity(params Claim[] claims) : base(claims)
-		{
-		}
-	}
-
 	public sealed class GetRefreshTokenAsync_Tests
 	{
 		private readonly IUserManager userManager = Substitute.For<IUserManager>();
@@ -172,9 +156,9 @@ namespace Tests.Strasnote.Auth
 		{
 			// Arrange
 			refreshTokenContext.RetrieveForUserAsync(Arg.Any<long>(), Arg.Any<string>())
-				.Returns(new RefreshTokenEntity() 
-				{ 
-					RefreshTokenExpires = DateTime.Now.AddDays(-1) 
+				.Returns(new RefreshTokenEntity()
+				{
+					RefreshTokenExpires = DateTime.Now.AddDays(-1)
 				});
 
 			// Act
