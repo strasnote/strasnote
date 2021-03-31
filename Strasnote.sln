@@ -80,7 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Util", "Util\Stra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.Fake", "Auth\Storage\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj", "{036F2DE0-765B-4E01-B132-FBE345643F4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{2804BDEA-03E7-418B-8FD9-B5018FC0CFC8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{2804BDEA-03E7-418B-8FD9-B5018FC0CFC8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Api", "Tests\Auth\Tests.Strasnote.Auth.Api\Tests.Strasnote.Auth.Api.csproj", "{BFB6F49C-3EDC-4341-BC48-5810D465A89C}"
 EndProject
@@ -94,7 +94,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Util", "Tests\Tests.Strasnote.Util\Tests.Strasnote.Util.csproj", "{4AAFFBC2-0E15-4FAC-AD03-C005745B1016}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{239B0D8C-4CF4-42E5-8806-ACE6FFD2AFE6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{239B0D8C-4CF4-42E5-8806-ACE6FFD2AFE6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Data", "Tests\Auth\Storage\Tests.Strasnote.Auth.Data\Tests.Strasnote.Auth.Data.csproj", "{85D94BCF-8277-4A9A-869E-F457E5A1E779}"
 EndProject
@@ -123,14 +123,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{2DE8483E-AE7A-4F2A-8EEB-45CFBD6684EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Apps.Data.MySqlMigrator", "Apps\Data\Strasnote.Apps.Data.MySqlMigrator\Strasnote.Apps.Data.MySqlMigrator.csproj", "{1B8B9FD4-AC07-4E78-90F7-422608CC1051}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{F4D0DB7D-FA67-4F49-A3DB-9EFAF9593BC3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{86FB25BF-604C-4BBF-8424-A990452945A7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Strasnote.Data", "Tests\Data\Tests.Strasnote.Data\Tests.Strasnote.Data.csproj", "{7A68DEC3-7370-4765-A6A3-9CB149335459}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Strasnote.Data.Clients.MySql", "Tests\Data\Clients\Tests.Strasnote.Data.Clients.MySql\Tests.Strasnote.Data.Clients.MySql.csproj", "{C7EDB859-CF33-4F91-8B15-558E8DEEFBC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -286,14 +278,6 @@ Global
 		{1B8B9FD4-AC07-4E78-90F7-422608CC1051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B8B9FD4-AC07-4E78-90F7-422608CC1051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B8B9FD4-AC07-4E78-90F7-422608CC1051}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A68DEC3-7370-4765-A6A3-9CB149335459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A68DEC3-7370-4765-A6A3-9CB149335459}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A68DEC3-7370-4765-A6A3-9CB149335459}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A68DEC3-7370-4765-A6A3-9CB149335459}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C7EDB859-CF33-4F91-8B15-558E8DEEFBC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7EDB859-CF33-4F91-8B15-558E8DEEFBC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7EDB859-CF33-4F91-8B15-558E8DEEFBC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7EDB859-CF33-4F91-8B15-558E8DEEFBC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -344,10 +328,6 @@ Global
 		{F92EB2C3-2A95-4CE4-895E-739E0BAFD73B} = {797720B2-7A04-4110-A615-0C27B7CF2DDB}
 		{853E12E4-073C-4FA4-A1E0-E1A26A359C6C} = {F92EB2C3-2A95-4CE4-895E-739E0BAFD73B}
 		{1B8B9FD4-AC07-4E78-90F7-422608CC1051} = {2DE8483E-AE7A-4F2A-8EEB-45CFBD6684EB}
-		{F4D0DB7D-FA67-4F49-A3DB-9EFAF9593BC3} = {0155C170-BF68-4217-BFC6-B35A82291B42}
-		{86FB25BF-604C-4BBF-8424-A990452945A7} = {F4D0DB7D-FA67-4F49-A3DB-9EFAF9593BC3}
-		{7A68DEC3-7370-4765-A6A3-9CB149335459} = {F4D0DB7D-FA67-4F49-A3DB-9EFAF9593BC3}
-		{C7EDB859-CF33-4F91-8B15-558E8DEEFBC3} = {86FB25BF-604C-4BBF-8424-A990452945A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF05D0DF-D04A-46E8-A71F-775870189F62}
