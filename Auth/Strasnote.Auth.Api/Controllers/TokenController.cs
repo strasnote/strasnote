@@ -20,7 +20,7 @@ namespace Strasnote.Auth.Api.Controllers
 		private readonly ILog<TokenController> log;
 
 		public sealed record TokenRequest([Required] string Email, [Required] string Password);
-		sealed record TokenResponse(string AccessToken, string RefreshToken, string? Message, bool Success);
+		public sealed record TokenResponseViewModel(string AccessToken, string RefreshToken, string? Message, bool Success);
 
 		public TokenController(IJwtTokenIssuer jwtToken, ILog<TokenController> log) =>
 			(this.jwtTokenIssuer, this.log) = (jwtToken, log);
@@ -31,7 +31,7 @@ namespace Strasnote.Auth.Api.Controllers
 			log.Trace("User {@User} logging in", tokenRequest.Email);
 			var token = await jwtTokenIssuer.GetTokenAsync(tokenRequest.Email, tokenRequest.Password);
 
-			var tokenResponse = new TokenResponse(token.AccessToken, token.RefreshToken, token.Message, token.Success);
+			var tokenResponse = new TokenResponseViewModel(token.AccessToken, token.RefreshToken, token.Message, token.Success);
 
 			if (!token.Success)
 			{
