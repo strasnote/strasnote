@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
+
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -17,8 +15,8 @@ using static Strasnote.Auth.Api.Controllers.TokenController;
 
 namespace Tests.Strasnote.Auth.Api
 {
-    public sealed class GetToken_Tests
-    {
+	public sealed class GetToken_Tests
+	{
 		private readonly IJwtTokenIssuer jwtTokenIssuer = Substitute.For<IJwtTokenIssuer>();
 		private readonly ILog<TokenController> log = Substitute.For<ILog<TokenController>>();
 
@@ -59,7 +57,7 @@ namespace Tests.Strasnote.Auth.Api
 				Rnd.Str);
 
 			var tokenResponse = new TokenResponse(
-				Rnd.Str, 
+				Rnd.Str,
 				Rnd.Str);
 
 			jwtTokenIssuer.GetTokenAsync(Arg.Any<string>(), Arg.Any<string>())
@@ -152,5 +150,5 @@ namespace Tests.Strasnote.Auth.Api
 			Assert.True(string.IsNullOrWhiteSpace(tokenResponseViewModel.AccessToken));
 			Assert.True(string.IsNullOrWhiteSpace(tokenResponseViewModel.RefreshToken));
 		}
-    }
+	}
 }
