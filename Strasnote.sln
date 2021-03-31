@@ -80,7 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Util", "Util\Stra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.Fake", "Auth\Storage\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj", "{036F2DE0-765B-4E01-B132-FBE345643F4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{2804BDEA-03E7-418B-8FD9-B5018FC0CFC8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{2804BDEA-03E7-418B-8FD9-B5018FC0CFC8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Api", "Tests\Auth\Tests.Strasnote.Auth.Api\Tests.Strasnote.Auth.Api.csproj", "{BFB6F49C-3EDC-4341-BC48-5810D465A89C}"
 EndProject
@@ -122,7 +122,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data.Clients.MySq
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{2DE8483E-AE7A-4F2A-8EEB-45CFBD6684EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strasnote.Apps.Data.MySqlMigrator", "Apps\Data\Strasnote.Apps.Data.MySqlMigrator\Strasnote.Apps.Data.MySqlMigrator.csproj", "{1B8B9FD4-AC07-4E78-90F7-422608CC1051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Apps.Data.MySqlMigrator", "Apps\Data\Strasnote.Apps.Data.MySqlMigrator\Strasnote.Apps.Data.MySqlMigrator.csproj", "{1B8B9FD4-AC07-4E78-90F7-422608CC1051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
