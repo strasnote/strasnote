@@ -3,7 +3,6 @@
 
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace Strasnote.Auth
 		private readonly ISignInManager signInManager;
 		private readonly AuthConfig authConfig;
 		private readonly JwtSecurityTokenHandler jwtSecurityTokenHandler;
-		private readonly IRefreshTokenContext refreshTokenContext;
+		private readonly IRefreshTokenRepository refreshTokenRepository;
 		private readonly IJwtTokenGenerator jwtTokenGenerator;
 
 		public JwtTokenIssuer(
@@ -31,21 +30,21 @@ namespace Strasnote.Auth
 			ISignInManager signInManager,
 			IOptions<AuthConfig> authConfig,
 			JwtSecurityTokenHandler jwtSecurityTokenHandler,
-			IRefreshTokenContext refreshTokenContext,
+			IRefreshTokenRepository refreshTokenRepository,
 			IJwtTokenGenerator jwtTokenGenerator)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 			this.authConfig = authConfig.Value;
 			this.jwtSecurityTokenHandler = jwtSecurityTokenHandler;
-			this.refreshTokenContext = refreshTokenContext;
+			this.refreshTokenRepository = refreshTokenRepository;
 			this.jwtTokenGenerator = jwtTokenGenerator;
 		}
 
 		/// <inheritdoc/>
 		public async Task<TokenResponse> GetTokenAsync(string email, string password)
 		{
-			if(string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+			if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
 			{
 				return new TokenResponse("Email/password not supplied", false);
 			}
@@ -71,8 +70,8 @@ namespace Strasnote.Auth
 
 			var refreshToken = jwtTokenGenerator.GenerateRefreshToken(user);
 
-			await refreshTokenContext.DeleteByUserIdAsync(user.Id);
-			await refreshTokenContext.CreateAsync(refreshToken);
+			await refreshTokenRepository.DeleteByUserIdAsync(user.Id);
+			await refreshTokenRepository.CreateAsync(refreshToken);
 
 			var accessToken = await jwtTokenGenerator.GenerateAccessTokenAsync(user);
 
@@ -104,14 +103,14 @@ namespace Strasnote.Auth
 			// Get the user's ID from their claims
 			var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-			if(userId == null)
+			if (userId == null)
 			{
 				return new("Could not find user from access token", false);
 			}
 
 			var user = await userManager.FindByIdAsync(userId);
 
-			var existingRefreshToken = await refreshTokenContext.RetrieveForUserAsync(user.Id, refreshToken);
+			var existingRefreshToken = await refreshTokenRepository.RetrieveForUserAsync(user.Id, refreshToken);
 
 			if (existingRefreshToken == null)
 			{
@@ -123,11 +122,11 @@ namespace Strasnote.Auth
 				return new("Refresh token has expired", false);
 			}
 
-			await refreshTokenContext.DeleteByUserIdAsync(user.Id);
+			await refreshTokenRepository.DeleteByUserIdAsync(user.Id);
 
 			var newRefreshToken = jwtTokenGenerator.GenerateRefreshToken(user);
 
-			await refreshTokenContext.CreateAsync(newRefreshToken);
+			await refreshTokenRepository.CreateAsync(newRefreshToken);
 
 			var newAccessToken = await jwtTokenGenerator.GenerateAccessTokenAsync(user);
 

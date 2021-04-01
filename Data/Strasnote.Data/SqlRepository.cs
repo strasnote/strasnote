@@ -33,7 +33,7 @@ namespace Strasnote.Data
 	/// SQL Database Repository base class
 	/// </summary>
 	/// <typeparam name="TEntity">Entity type</typeparam>
-	public abstract class SqlRepository<TEntity> : SqlRepository, IRepository<TEntity>, IDisposable
+	public abstract class SqlRepository<TEntity> : SqlRepository, ISqlRepository<TEntity>, IDisposable
 		where TEntity : IEntity
 	{
 		/// <summary>

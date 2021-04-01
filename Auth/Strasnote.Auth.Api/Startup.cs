@@ -60,10 +60,10 @@ namespace Strasnote.Auth.Api
 			services.AddTransient<ISqlClient, MySqlClient>();
 
 			services.AddTransient<UserStore>();
-			services.AddTransient<IUserContext, UserSqlRepository>();
+			services.AddTransient<IUserRepository, UserSqlRepository>();
 			services.AddTransient<IUserStore<UserEntity>, UserStore>();
 
-			services.AddTransient<IRefreshTokenContext, RefreshTokenSqlRepository>();
+			services.AddTransient<IRefreshTokenRepository, RefreshTokenSqlRepository>();
 
 			//services.AddAuthDataFakeServices();
 			services.AddAuthServices(Configuration);

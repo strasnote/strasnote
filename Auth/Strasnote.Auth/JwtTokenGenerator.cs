@@ -56,13 +56,13 @@ namespace Strasnote.Auth
 			// Get the user's roles and add them as claims
 			var roles = await userManager.GetRolesAsync(user);
 
-			if(roles != null)
+			if (roles != null)
 			{
 				foreach (var role in roles)
 				{
 					claims.Add(new Claim(ClaimTypes.Role, role));
 				}
-			}			
+			}
 
 			// Add all the claims to the token descriptor
 			tokenDescriptor.Subject.AddClaims(claims);

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Collections.Generic;
-using NSubstitute;
 using Strasnote.Util;
 using Xunit;
 

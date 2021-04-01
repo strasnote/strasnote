@@ -23,7 +23,7 @@ namespace Tests.Strasnote.Auth
 		private readonly IUserManager userManager = Substitute.For<IUserManager>();
 		private readonly ISignInManager signInManager = Substitute.For<ISignInManager>();
 		private readonly JwtSecurityTokenHandler jwtSecurityTokenHandler = Substitute.For<JwtSecurityTokenHandler>();
-		private readonly IRefreshTokenContext refreshTokenContext = Substitute.For<IRefreshTokenContext>();
+		private readonly IRefreshTokenRepository refreshTokenRepository = Substitute.For<IRefreshTokenRepository>();
 		private readonly IJwtTokenGenerator jwtTokenGenerator = Substitute.For<IJwtTokenGenerator>();
 
 		private readonly IOptions<AuthConfig> authConfig = Options.Create(new AuthConfig
@@ -70,7 +70,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -90,7 +90,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -110,7 +110,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -130,7 +130,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -153,7 +153,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -178,7 +178,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -203,7 +203,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -215,7 +215,7 @@ namespace Tests.Strasnote.Auth
 		}
 
 		[Fact]
-		public async Task RefreshTokenContext_DeleteByUserIdAsync_Is_Called()
+		public async Task RefreshTokenRepository_DeleteByUserIdAsync_Is_Called()
 		{
 			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
@@ -223,18 +223,18 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
-			await refreshTokenContext.Received().DeleteByUserIdAsync(Arg.Any<long>());
+			await refreshTokenRepository.Received().DeleteByUserIdAsync(Arg.Any<long>());
 		}
 
 		[Fact]
-		public async Task RefreshTokenContext_CreateAsync_Is_Called()
+		public async Task RefreshTokenRepository_CreateAsync_Is_Called()
 		{
 			// Arrange
 			var jwtTokenService = new JwtTokenIssuer(
@@ -242,14 +242,14 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
-			await refreshTokenContext.Received().CreateAsync(Arg.Any<RefreshTokenEntity>());
+			await refreshTokenRepository.Received().CreateAsync(Arg.Any<RefreshTokenEntity>());
 		}
 
 		[Fact]
@@ -261,7 +261,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -276,12 +276,12 @@ namespace Tests.Strasnote.Auth
 		public async Task Null_Password_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
 			// Arrange
-						var jwtTokenService = new JwtTokenIssuer(
+			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -301,7 +301,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -321,7 +321,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -341,7 +341,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
@@ -360,7 +360,7 @@ namespace Tests.Strasnote.Auth
 				signInManager,
 				authConfig,
 				jwtSecurityTokenHandler,
-				refreshTokenContext,
+				refreshTokenRepository,
 				jwtTokenGenerator);
 
 			// Act
