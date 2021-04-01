@@ -13,8 +13,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Auth\Data\Strasnote.Auth.Data.MySql\Strasnote.Auth.Data.MySql.csproj" />
-  </ItemGroup>
-
 </Project>
