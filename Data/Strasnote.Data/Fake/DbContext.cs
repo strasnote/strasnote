@@ -15,7 +15,7 @@ namespace Strasnote.Data.Fake
 	/// Fake DbContext
 	/// </summary>
 	/// <typeparam name="TEntity"></typeparam>
-	public abstract class DbContext<TEntity> : Data.DbContext<TEntity>
+	public abstract class DbContext<TEntity> : Data.SqlRepository<TEntity>
 		where TEntity : IEntity
 	{
 		protected DbContext(ILog log) : base(new DbClient(), log, Rnd.Str) { }
@@ -64,34 +64,19 @@ namespace Strasnote.Data.Fake
 		}
 
 		/// <summary>
-		/// Return a fake model to use in <see cref="GetFakeModelForRetrieve"/>
-		/// </summary>
-		protected abstract object GetFakeModelForRetrieve();
-
-		/// <inheritdoc/>
-		public override Task<IEnumerable<TModel>> RetrieveAsync<TModel>(string query, object parameters, CommandType commandType)
-		{
-			// Log retrieve
-			LogOperation(Operation.Retrieve, "{CommandType} {Query} - {@Parameters}", commandType, query, parameters);
-
-			// Perform retrieve and map to TModel
-			return ConvertToModel<IEnumerable<TModel>>(GetFakeModelForRetrieve());
-		}
-
-		/// <summary>
-		/// Return a fake model to use in <see cref="GetFakeModelForRetrieveById(long)"/>
+		/// Return a fake model to use in <see cref="GetFakeModelForRetrieve(long)"/>
 		/// </summary>
 		/// <param name="id">Entity ID</param>
-		protected abstract object GetFakeModelForRetrieveById(long id);
+		protected abstract object GetFakeModelForRetrieve(long id);
 
 		/// <inheritdoc/>
-		public override Task<TModel> RetrieveByIdAsync<TModel>(long id)
+		public override Task<TModel> RetrieveAsync<TModel>(long id)
 		{
 			// Log retrieve
 			LogOperation(Operation.RetrieveById, "{Id}", id);
 
 			// Perform retrieve and map to model
-			return ConvertToModel<TModel>(GetFakeModelForRetrieveById(id));
+			return ConvertToModel<TModel>(GetFakeModelForRetrieve(id));
 		}
 
 		/// <summary>

@@ -6,12 +6,12 @@ using Strasnote.Data.Abstracts;
 
 namespace Strasnote.Data.Fake
 {
-	public sealed class DbClient : IDbClient
+	public sealed class DbClient : ISqlClient
 	{
 		public string ConnectionString =>
 			string.Empty;
 
-		public IDbQueries Queries =>
+		public ISqlQueries Queries =>
 			throw new System.NotImplementedException();
 
 		public IDbTables Tables =>
