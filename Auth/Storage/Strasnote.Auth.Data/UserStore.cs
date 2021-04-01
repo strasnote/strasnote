@@ -114,11 +114,11 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public async Task<UserEntity> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+		public Task<UserEntity> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return await userContext.RetrieveByEmailAsync<UserEntity>(normalizedEmail).ConfigureAwait(false);
+			return userContext.RetrieveByEmailAsync<UserEntity>(normalizedEmail);
 		}
 
 		/// <inheritdoc/>
@@ -126,7 +126,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return Task.FromResult(user.NormalizedUserName);
+			return Task.FromResult(user.NormalizedEmail);
 		}
 
 		/// <inheritdoc/>
@@ -159,6 +159,11 @@ namespace Strasnote.Auth.Data
 			}
 
 			var userRoles = await roleContext.RetrieveForUserAsync<RoleEntity>(user.Id).ConfigureAwait(false);
+
+			if(userRoles == null)
+			{
+				return new List<string>();
+			}
 
 			return userRoles.Select(x => x.Name).ToList();
 		}
