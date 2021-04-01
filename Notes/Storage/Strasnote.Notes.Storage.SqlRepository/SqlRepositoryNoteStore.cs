@@ -13,14 +13,14 @@ namespace Strasnote.Notes.Storage.DbContext
 	/// <summary>
 	/// Note Storage in a database
 	/// </summary>
-	public sealed class DbContextNoteStore : NoteStore
+	public sealed class SqlRepositoryNoteStore : NoteStore
 	{
-		private readonly IDbContext<NoteEntity> dbContext;
+		private readonly ISqlRepository<NoteEntity> repository;
 
 		private readonly ILog log;
 
-		public DbContextNoteStore(IDbContext<NoteEntity> dbContext, ILog<DbContextNoteStore> log) =>
-			(this.dbContext, this.log) = (dbContext, log);
+		public SqlRepositoryNoteStore(ISqlRepository<NoteEntity> dbContext, ILog<SqlRepositoryNoteStore> log) =>
+			(this.repository, this.log) = (dbContext, log);
 
 		protected override Task<bool> DoCreateAsync(Note note) => throw new System.NotImplementedException();
 		protected override Task<Note> DoGetAsync(string path) => throw new System.NotImplementedException();

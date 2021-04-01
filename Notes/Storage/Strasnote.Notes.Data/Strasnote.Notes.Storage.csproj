@@ -1,5 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\Strasnote.Notes.Data.Abstracts\Strasnote.Notes.Storage.Abstracts.csproj" />
-  </ItemGroup>
-</Project>

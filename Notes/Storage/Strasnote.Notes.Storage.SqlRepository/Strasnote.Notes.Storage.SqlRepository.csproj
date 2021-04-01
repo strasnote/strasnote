@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\Strasnote.Data\Strasnote.Data.csproj" />
-    <ProjectReference Include="..\Strasnote.Notes.Data\Strasnote.Notes.Storage.csproj" />
+    <ProjectReference Include="..\Strasnote.Notes.Storage\Strasnote.Notes.Storage.csproj" />
   </ItemGroup>
 </Project>
