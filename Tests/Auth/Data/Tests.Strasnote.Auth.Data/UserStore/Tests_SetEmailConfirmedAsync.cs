@@ -8,7 +8,6 @@ using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
-using Strasnote.Util;
 using Xunit;
 
 namespace Tests.Strasnote.Auth.Data

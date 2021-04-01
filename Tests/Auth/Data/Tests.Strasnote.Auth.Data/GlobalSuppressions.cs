@@ -1,17 +1,11 @@
-﻿// This file is used by Code Analysis to maintain SuppressMessage
-// attributes that are applied to this project.
-// Project-level suppressions either have no target or are given
-// a specific target and scoped to a namespace, type, member, etc.
+﻿// Copyright (c) Strasnote
+// Licensed under https://strasnote.com/licence
 
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_CreateAsync.IdentityResult_Returned_On_Successful_Call~System.Threading.Tasks.Task")]
-[assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_CreateAsync.UserContext_CreateAsync_Is_Called_Once~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_DeleteAsync.IdentityResult_Success_Returned_When_Delete_Success~System.Threading.Tasks.Task")]
-[assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_DeleteAsync.UserContext_DeleteAsync_Is_Called_Once~System.Threading.Tasks.Task")]
-[assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_FindByEmailAsync.UserContext_RetrieveByEmailAsync_Is_Called_Once~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_FindByEmailAsync.UserEntity_Returned_On_Successful_Call~System.Threading.Tasks.Task")]
-[assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_FindByIdAsync.UserContext_RetrieveByIdAsync_Is_Called_Once~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_FindByIdAsync.UserEntity_Returned_On_Successful_Call~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_FindByNameAsync.RetrieveByUsernameAsync_CreateAsync_Is_Called_Once~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_FindByNameAsync.UserEntity_Returned_On_Successful_Call~System.Threading.Tasks.Task")]
@@ -36,4 +30,3 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_SetPasswordHashAsync.ArgumentNullException_Thrown_When_UserEntity_Null~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_SetPasswordHashAsync.PasswordHash_On_UserEntity_Is_Set_To_PasswordHash_Arg~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_SetUserNameAsync.UserName_On_UserEntity_Is_Set_To_UserName_Arg~System.Threading.Tasks.Task")]
-[assembly: SuppressMessage("Design", "RCS1090:Add call to 'ConfigureAwait' (or vice versa).", Justification = "<Pending>", Scope = "member", Target = "~M:Tests.Strasnote.Auth.Data.Tests_UpdateAsync.UserContext_UpdateAsync_Is_Called_Once~System.Threading.Tasks.Task")]

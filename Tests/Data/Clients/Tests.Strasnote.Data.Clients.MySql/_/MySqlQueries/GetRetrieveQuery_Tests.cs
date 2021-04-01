@@ -66,7 +66,7 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 				$"FROM `{table}` WHERE `{p0Column}` LIKE @P0 AND `{p1Column}` >= @P1;";
 
 			// Act
-			var (query,param) = queries.GetRetrieveQuery(table, columns, predicates);
+			var (query, param) = queries.GetRetrieveQuery(table, columns, predicates);
 
 			// Assert
 			Assert.Equal(expected, query);

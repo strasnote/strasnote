@@ -3,7 +3,6 @@
 
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +44,7 @@ namespace Strasnote.Auth
 		/// <inheritdoc/>
 		public async Task<TokenResponse> GetTokenAsync(string email, string password)
 		{
-			if(string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+			if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
 			{
 				return new TokenResponse("Email/password not supplied", false);
 			}
@@ -104,7 +103,7 @@ namespace Strasnote.Auth
 			// Get the user's ID from their claims
 			var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-			if(userId == null)
+			if (userId == null)
 			{
 				return new("Could not find user from access token", false);
 			}

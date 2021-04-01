@@ -2,8 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using Strasnote.Data.Abstracts;
 using Strasnote.Logging;
@@ -12,7 +10,7 @@ using Strasnote.Util;
 namespace Strasnote.Data.Fake
 {
 	/// <summary>
-	/// Fake DbContext
+	/// Fake SqlRepository
 	/// </summary>
 	/// <typeparam name="TEntity"></typeparam>
 	public abstract class SqlRepository<TEntity> : Data.SqlRepository<TEntity>
