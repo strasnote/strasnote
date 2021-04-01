@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Notes\Storage\Strasnote.Notes.Data.FileSystem\Strasnote.Notes.Storage.FileSystem.csproj" />
+    <ProjectReference Include="..\..\..\..\Notes\Storage\Strasnote.Notes.Storage.SqlRepository\Strasnote.Notes.Storage.SqlRepository.csproj" />
   </ItemGroup>
 
 </Project>

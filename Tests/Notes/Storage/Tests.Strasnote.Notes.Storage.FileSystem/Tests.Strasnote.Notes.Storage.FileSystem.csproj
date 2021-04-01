@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Auth\Storage\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj" />
+    <ProjectReference Include="..\..\..\..\Notes\Storage\Strasnote.Notes.Storage.FileSystem\Strasnote.Notes.Storage.FileSystem.csproj" />
   </ItemGroup>
 
 </Project>

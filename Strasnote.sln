@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encryption", "Encryption", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{2DF69DFB-61FD-431D-9BEC-082C9D6B4514}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data", "Auth\Storage\Strasnote.Auth.Data\Strasnote.Auth.Data.csproj", "{92B72F17-4B10-40FC-9181-38EA9E460D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data", "Auth\Data\Strasnote.Auth.Data\Strasnote.Auth.Data.csproj", "{92B72F17-4B10-40FC-9181-38EA9E460D79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.MySql", "Auth\Storage\Strasnote.Auth.Data.MySql\Strasnote.Auth.Data.MySql.csproj", "{6A5849BE-E567-4694-823A-0E6777F8D338}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.MySql", "Auth\Data\Strasnote.Auth.Data.MySql\Strasnote.Auth.Data.MySql.csproj", "{6A5849BE-E567-4694-823A-0E6777F8D338}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Services", "Auth\Strasnote.Auth.Services\Strasnote.Auth.Services.csproj", "{C3C28491-0EF7-452D-9907-551385128223}"
 EndProject
@@ -21,11 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Encryption", "Enc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Api", "Notes\Strasnote.Notes.Api\Strasnote.Notes.Api.csproj", "{DA94B67A-0AD3-4189-AC82-9EE6577ED89D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage", "Notes\Storage\Strasnote.Notes.Data\Strasnote.Notes.Storage.csproj", "{EA2D9608-C38B-4D19-969A-933577AED349}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage", "Notes\Storage\Strasnote.Notes.Storage\Strasnote.Notes.Storage.csproj", "{EA2D9608-C38B-4D19-969A-933577AED349}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage.FileSystem", "Notes\Storage\Strasnote.Notes.Data.FileSystem\Strasnote.Notes.Storage.FileSystem.csproj", "{14517A00-C11B-4657-AB7B-7B4CB29C5E84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage.FileSystem", "Notes\Storage\Strasnote.Notes.Storage.FileSystem\Strasnote.Notes.Storage.FileSystem.csproj", "{14517A00-C11B-4657-AB7B-7B4CB29C5E84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage.DbContext", "Notes\Storage\Strasnote.Notes.Data.MySql\Strasnote.Notes.Storage.DbContext.csproj", "{89B62B35-8C31-42D9-B38F-9306A5A7F8DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage.SqlRepository", "Notes\Storage\Strasnote.Notes.Storage.SqlRepository\Strasnote.Notes.Storage.SqlRepository.csproj", "{89B62B35-8C31-42D9-B38F-9306A5A7F8DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Services", "Notes\Strasnote.Notes.Services\Strasnote.Notes.Services.csproj", "{92BE968E-9E31-465B-A652-FE3334EEDC46}"
 EndProject
@@ -48,7 +48,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Abstracts", "Auth\Strasnote.Auth.Abstracts\Strasnote.Auth.Abstracts.csproj", "{2151C8C3-C77A-4A6B-82F8-B1F0C1A713F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.Abstracts", "Auth\Storage\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj", "{469F0C87-9960-4B57-9AFC-3936769F2614}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.Abstracts", "Auth\Data\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj", "{469F0C87-9960-4B57-9AFC-3936769F2614}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth", "Auth\Strasnote.Auth\Strasnote.Auth.csproj", "{0CF32F4D-9A7D-49C2-961A-46DA4E852203}"
 EndProject
@@ -78,7 +78,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{4294A824
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Util", "Util\Strasnote.Util.csproj", "{5D83B265-C7B7-459A-AEB8-A6933A5A58AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.Fake", "Auth\Storage\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj", "{036F2DE0-765B-4E01-B132-FBE345643F4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Data.Fake", "Auth\Data\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj", "{036F2DE0-765B-4E01-B132-FBE345643F4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{2804BDEA-03E7-418B-8FD9-B5018FC0CFC8}"
 EndProject
@@ -86,23 +86,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Api", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Services", "Tests\Auth\Tests.Strasnote.Auth.Services\Tests.Strasnote.Auth.Services.csproj", "{755AED91-26CF-490B-B010-094CD8531CFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Data.FileSystem", "Tests\Notes\Storage\Tests.Strasnote.Notes.Data.FileSystem\Tests.Strasnote.Notes.Data.FileSystem.csproj", "{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Storage.FileSystem", "Tests\Notes\Storage\Tests.Strasnote.Notes.Storage.FileSystem\Tests.Strasnote.Notes.Storage.FileSystem.csproj", "{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Data.MySql", "Tests\Notes\Storage\Tests.Strasnote.Notes.Data.MySql\Tests.Strasnote.Notes.Data.MySql.csproj", "{74BBA08D-EDA1-4680-A895-84254AADAB9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Storage.SqlRepository", "Tests\Notes\Storage\Tests.Strasnote.Notes.Storage.SqlRepository\Tests.Strasnote.Notes.Storage.SqlRepository.csproj", "{74BBA08D-EDA1-4680-A895-84254AADAB9E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Services", "Tests\Notes\Tests.Strasnote.Notes.Services\Tests.Strasnote.Notes.Services.csproj", "{90CE64C9-49A9-4B7F-889A-C6B721BFFF3A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Util", "Tests\Tests.Strasnote.Util\Tests.Strasnote.Util.csproj", "{4AAFFBC2-0E15-4FAC-AD03-C005745B1016}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{239B0D8C-4CF4-42E5-8806-ACE6FFD2AFE6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{239B0D8C-4CF4-42E5-8806-ACE6FFD2AFE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Data", "Tests\Auth\Storage\Tests.Strasnote.Auth.Data\Tests.Strasnote.Auth.Data.csproj", "{85D94BCF-8277-4A9A-869E-F457E5A1E779}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Data", "Tests\Auth\Data\Tests.Strasnote.Auth.Data\Tests.Strasnote.Auth.Data.csproj", "{85D94BCF-8277-4A9A-869E-F457E5A1E779}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Data.Fake", "Tests\Auth\Storage\Tests.Strasnote.Auth.Data.Fake\Tests.Strasnote.Auth.Data.Fake.csproj", "{9C4E5DA4-757F-485C-A6B2-599681083161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Data.Fake", "Tests\Auth\Data\Tests.Strasnote.Auth.Data.Fake\Tests.Strasnote.Auth.Data.Fake.csproj", "{9C4E5DA4-757F-485C-A6B2-599681083161}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Data.MySql", "Tests\Auth\Storage\Tests.Strasnote.Auth.Data.MySql\Tests.Strasnote.Auth.Data.MySql.csproj", "{74FB1656-3D81-4A21-82C1-5138908AF36E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Data.MySql", "Tests\Auth\Data\Tests.Strasnote.Auth.Data.MySql\Tests.Strasnote.Auth.Data.MySql.csproj", "{74FB1656-3D81-4A21-82C1-5138908AF36E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage.Abstracts", "Notes\Storage\Strasnote.Notes.Data.Abstracts\Strasnote.Notes.Storage.Abstracts.csproj", "{8D483071-ED0E-4E9C-B911-D0B65D7DCABF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Storage.Abstracts", "Notes\Storage\Strasnote.Notes.Storage.Abstracts\Strasnote.Notes.Storage.Abstracts.csproj", "{8D483071-ED0E-4E9C-B911-D0B65D7DCABF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{1BF2901E-6F6F-4B63-AD79-C5D2E0E47BBB}"
 EndProject
