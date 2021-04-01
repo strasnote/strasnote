@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Notes\Storage\Strasnote.Notes.Data.MySql\Strasnote.Notes.Data.MySql.csproj" />
+    <ProjectReference Include="..\..\..\..\Notes\Storage\Strasnote.Notes.Data.MySql\Strasnote.Notes.Storage.DbContext.csproj" />
   </ItemGroup>
 
 </Project>
