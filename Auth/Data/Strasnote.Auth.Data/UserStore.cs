@@ -20,16 +20,16 @@ namespace Strasnote.Auth.Data
 		IUserEmailStore<UserEntity>,
 		IUserPasswordStore<UserEntity>
 	{
-		private readonly IUserContext userContext;
+		private readonly IUserRepository userRepository;
 
 		private bool _disposed;
 
 		/// <summary>
 		/// Inject dependencies
 		/// </summary>
-		/// <param name="userContext">IUserContext</param>
-		public UserStore(IUserContext userContext) =>
-			this.userContext = userContext;
+		/// <param name="userRepository">IUserRepository</param>
+		public UserStore(IUserRepository userRepository) =>
+			this.userRepository = userRepository;
 
 		#region Create
 
@@ -38,7 +38,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.CreateAsync<IdentityResult>(user);
+			return userRepository.CreateAsync<IdentityResult>(user);
 		}
 
 		#endregion
@@ -50,7 +50,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.RetrieveAsync<UserEntity>(long.Parse(userId));
+			return userRepository.RetrieveAsync<UserEntity>(long.Parse(userId));
 		}
 
 		/// <inheritdoc/>
@@ -58,7 +58,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.RetrieveByUsernameAsync<UserEntity>(normalizedUserName);
+			return userRepository.RetrieveByUsernameAsync<UserEntity>(normalizedUserName);
 		}
 
 		/// <inheritdoc/>
@@ -116,7 +116,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.RetrieveByEmailAsync<UserEntity>(normalizedEmail);
+			return userRepository.RetrieveByEmailAsync<UserEntity>(normalizedEmail);
 		}
 
 		/// <inheritdoc/>
@@ -155,7 +155,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return userContext.UpdateAsync<IdentityResult>(user);
+			return userRepository.UpdateAsync<IdentityResult>(user);
 		}
 
 		/// <inheritdoc/>
@@ -242,7 +242,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return await userContext.DeleteAsync(user.Id).ConfigureAwait(false) switch
+			return await userRepository.DeleteAsync(user.Id).ConfigureAwait(false) switch
 			{
 				true =>
 					IdentityResult.Success,

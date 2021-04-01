@@ -11,10 +11,10 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data.Fake
 {
-	/// <inheritdoc cref="IRefreshTokenContext"/>
-	public sealed class RefreshTokenContext : DbContext<RefreshTokenEntity>, IRefreshTokenContext
+	/// <inheritdoc cref="IRefreshTokenRepository"/>
+	public sealed class RefreshTokenRepository : SqlRepository<RefreshTokenEntity>, IRefreshTokenRepository
 	{
-		public RefreshTokenContext(ILog<RefreshTokenContext> log) : base(log) { }
+		public RefreshTokenRepository(ILog<RefreshTokenRepository> log) : base(log) { }
 
 		public Task CreateAsync(RefreshTokenEntity entity)
 		{

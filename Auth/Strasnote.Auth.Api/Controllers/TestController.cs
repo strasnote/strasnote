@@ -12,11 +12,11 @@ namespace Strasnote.Auth.Api.Controllers
 	[Route("[controller]")]
 	public class TestController : Controller
 	{
-		private readonly IUserContext users;
+		private readonly IUserRepository users;
 
 		private readonly ILog<TestController> log;
 
-		public TestController(IUserContext users, ILog<TestController> log) =>
+		public TestController(IUserRepository users, ILog<TestController> log) =>
 			(this.users, this.log) = (users, log);
 
 		[HttpGet]

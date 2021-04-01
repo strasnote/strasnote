@@ -14,13 +14,13 @@ namespace Tests.Strasnote.Auth.Data
 {
 	public sealed class Tests_CreateAsync
 	{
-		private readonly IUserContext userContext = Substitute.For<IUserContext>();
+		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 
 		private readonly IdentityResult identityResult = IdentityResult.Success;
 
 		public Tests_CreateAsync()
 		{
-			userContext.CreateAsync<IdentityResult>(Arg.Any<UserEntity>())
+			userRepository.CreateAsync<IdentityResult>(Arg.Any<UserEntity>())
 				.Returns(identityResult);
 		}
 
@@ -28,7 +28,7 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task IdentityResult_Returned_On_Successful_Call()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			// Act
 			var result = await userStore.CreateAsync(new UserEntity(), new CancellationToken());
@@ -38,16 +38,16 @@ namespace Tests.Strasnote.Auth.Data
 		}
 
 		[Fact]
-		public async Task UserContext_CreateAsync_Is_Called_Once()
+		public async Task UserRepository_CreateAsync_Is_Called_Once()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			// Act
 			await userStore.CreateAsync(new UserEntity(), new CancellationToken());
 
 			// Assert
-			await userContext.Received(1).CreateAsync<IdentityResult>(Arg.Any<UserEntity>());
+			await userRepository.Received(1).CreateAsync<IdentityResult>(Arg.Any<UserEntity>());
 		}
 	}
 }

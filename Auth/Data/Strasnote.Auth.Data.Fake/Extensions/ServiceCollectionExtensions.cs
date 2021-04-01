@@ -15,8 +15,8 @@ namespace Strasnote.Auth.Data.Fake.Extensions
 		/// <returns>The <paramref name="services"/> object with the added services.</returns>
 		public static IServiceCollection AddAuthDataFakeServices(this IServiceCollection services)
 		{
-			services.AddTransient<IRefreshTokenContext, RefreshTokenContext>();
-			services.AddTransient<IUserContext, UserContext>();
+			services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+			services.AddTransient<IUserRepository, UserRepository>();
 
 			return services;
 		}

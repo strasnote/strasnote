@@ -14,13 +14,13 @@ namespace Tests.Strasnote.Auth.Data
 {
 	public sealed class Tests_SetNormalizedUserNameAsync
 	{
-		private readonly IUserContext userContext = Substitute.For<IUserContext>();
+		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 
 		[Fact]
 		public async Task NormalizedUserName_On_UserEntity_Is_Set_To_NormalizedName_Arg()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			var userEntity = new UserEntity();
 

@@ -14,13 +14,13 @@ namespace Tests.Strasnote.Auth.Data
 {
 	public sealed class Tests_GetUserNameAsync
 	{
-		private readonly IUserContext userContext = Substitute.For<IUserContext>();
+		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 
 		[Fact]
 		public async Task UserName_String_Returned_On_Successful_Call()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			var userEntity = new UserEntity
 			{

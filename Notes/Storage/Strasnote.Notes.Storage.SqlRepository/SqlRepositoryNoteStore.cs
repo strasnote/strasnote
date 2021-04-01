@@ -8,7 +8,7 @@ using Strasnote.Data.Entities.Notes;
 using Strasnote.Logging;
 using Strasnote.Notes.Storage.Abstracts;
 
-namespace Strasnote.Notes.Storage.DbContext
+namespace Strasnote.Notes.Storage.SqlRepository
 {
 	/// <summary>
 	/// Note Storage in a database
@@ -19,8 +19,8 @@ namespace Strasnote.Notes.Storage.DbContext
 
 		private readonly ILog log;
 
-		public SqlRepositoryNoteStore(ISqlRepository<NoteEntity> dbContext, ILog<SqlRepositoryNoteStore> log) =>
-			(this.repository, this.log) = (dbContext, log);
+		public SqlRepositoryNoteStore(ISqlRepository<NoteEntity> repository, ILog<SqlRepositoryNoteStore> log) =>
+			(this.repository, this.log) = (repository, log);
 
 		protected override Task<bool> DoCreateAsync(Note note) => throw new System.NotImplementedException();
 		protected override Task<Note> DoGetAsync(string path) => throw new System.NotImplementedException();

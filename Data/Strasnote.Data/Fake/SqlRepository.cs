@@ -15,10 +15,10 @@ namespace Strasnote.Data.Fake
 	/// Fake DbContext
 	/// </summary>
 	/// <typeparam name="TEntity"></typeparam>
-	public abstract class DbContext<TEntity> : Data.SqlRepository<TEntity>
+	public abstract class SqlRepository<TEntity> : Data.SqlRepository<TEntity>
 		where TEntity : IEntity
 	{
-		protected DbContext(ILog log) : base(new DbClient(), log, Rnd.Str) { }
+		protected SqlRepository(ILog log) : base(new SqlClient(), log, Rnd.Str) { }
 
 		/// <summary>
 		/// Force an object to <typeparamref name="TModel"/> - this can only be tested at runtime

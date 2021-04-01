@@ -10,10 +10,10 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data.Fake
 {
-	/// <inheritdoc cref="IUserContext"/>
-	public sealed class UserContext : DbContext<UserEntity>, IUserContext
+	/// <inheritdoc cref="IUserRepository"/>
+	public sealed class UserRepository : SqlRepository<UserEntity>, IUserRepository
 	{
-		public UserContext(ILog<UserContext> Log) : base(Log) { }
+		public UserRepository(ILog<UserRepository> Log) : base(Log) { }
 
 		protected override object GetFakeModelForCreate() =>
 			IdentityResult.Success;

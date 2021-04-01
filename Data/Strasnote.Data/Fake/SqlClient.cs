@@ -6,7 +6,7 @@ using Strasnote.Data.Abstracts;
 
 namespace Strasnote.Data.Fake
 {
-	public sealed class DbClient : ISqlClient
+	public sealed class SqlClient : ISqlClient
 	{
 		public string ConnectionString =>
 			string.Empty;

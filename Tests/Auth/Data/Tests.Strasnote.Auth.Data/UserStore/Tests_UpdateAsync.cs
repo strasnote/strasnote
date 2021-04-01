@@ -14,13 +14,13 @@ namespace Tests.Strasnote.Auth.Data
 {
 	public sealed class Tests_UpdateAsync
 	{
-		private readonly IUserContext userContext = Substitute.For<IUserContext>();
+		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 
 		[Fact]
-		public async Task UserContext_UpdateAsync_Is_Called_Once()
+		public async Task UserRepository_UpdateAsync_Is_Called_Once()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			var userEntity = new UserEntity();
 
@@ -28,7 +28,7 @@ namespace Tests.Strasnote.Auth.Data
 			await userStore.UpdateAsync(userEntity, new CancellationToken());
 
 			// Assert
-			await userContext.Received(1).UpdateAsync<IdentityResult>(userEntity);
+			await userRepository.Received(1).UpdateAsync<IdentityResult>(userEntity);
 		}
 	}
 }

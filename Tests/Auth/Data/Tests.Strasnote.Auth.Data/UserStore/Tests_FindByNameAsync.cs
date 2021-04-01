@@ -14,10 +14,10 @@ namespace Tests.Strasnote.Auth.Data
 {
 	public sealed class Tests_FindByNameAsync
 	{
-		private readonly IUserContext userContext = Substitute.For<IUserContext>();
+		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 		public Tests_FindByNameAsync()
 		{
-			userContext.RetrieveByUsernameAsync<UserEntity>(Arg.Any<string>())
+			userRepository.RetrieveByUsernameAsync<UserEntity>(Arg.Any<string>())
 				.Returns(new UserEntity());
 		}
 
@@ -25,7 +25,7 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task UserEntity_Returned_On_Successful_Call()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			// Act
 			var result = await userStore.FindByNameAsync(Rnd.Str, new CancellationToken());
@@ -38,13 +38,13 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task RetrieveByUsernameAsync_CreateAsync_Is_Called_Once()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			// Act
 			await userStore.FindByNameAsync(Rnd.Str, new CancellationToken());
 
 			// Assert
-			await userContext.Received(1).RetrieveByUsernameAsync<UserEntity>(Arg.Any<string>());
+			await userRepository.Received(1).RetrieveByUsernameAsync<UserEntity>(Arg.Any<string>());
 		}
 	}
 }

@@ -14,13 +14,13 @@ namespace Tests.Strasnote.Auth.Data
 {
 	public sealed class Tests_GetEmailConfirmedAsync
 	{
-		private readonly IUserContext userContext = Substitute.For<IUserContext>();
+		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 
 		[Fact]
 		public async Task EmailConfirmed_bool_Returned_On_Successful_Call()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			var userEntity = new UserEntity
 			{
@@ -38,7 +38,7 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task ArgumentNullException_Thrown_When_UserEntity_Null()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			// Act
 			Task action() => userStore.GetEmailConfirmedAsync(null!, new CancellationToken());

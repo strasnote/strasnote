@@ -15,13 +15,13 @@ namespace Tests.Strasnote.Auth.Data
 {
 	public sealed class Tests_DeleteAsync
 	{
-		private readonly IUserContext userContext = Substitute.For<IUserContext>();
+		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 
 		[Fact]
-		public async Task UserContext_DeleteAsync_Is_Called_Once()
+		public async Task UserRepository_DeleteAsync_Is_Called_Once()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			var userEntity = new UserEntity();
 
@@ -29,18 +29,18 @@ namespace Tests.Strasnote.Auth.Data
 			await userStore.DeleteAsync(userEntity, new CancellationToken());
 
 			// Assert
-			await userContext.Received(1).DeleteAsync(Arg.Any<long>());
+			await userRepository.Received(1).DeleteAsync(Arg.Any<long>());
 		}
 
 		[Fact]
 		public async Task IdentityResult_Success_Returned_When_Delete_Success()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext);
+			var userStore = new UserStore(userRepository);
 
 			var userEntity = new UserEntity();
 
-			userContext.DeleteAsync(Arg.Any<long>()).Returns(true);
+			userRepository.DeleteAsync(Arg.Any<long>()).Returns(true);
 
 			// Act
 			var result = await userStore.DeleteAsync(userEntity, new CancellationToken());

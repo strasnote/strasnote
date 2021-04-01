@@ -11,7 +11,7 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data
 {
-	public sealed class RefreshTokenSqlRepository : SqlRepository<RefreshTokenEntity>, IRefreshTokenContext
+	public sealed class RefreshTokenSqlRepository : SqlRepository<RefreshTokenEntity>, IRefreshTokenRepository
 	{
 		/// <summary>
 		/// Inject dependencies

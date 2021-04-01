@@ -10,7 +10,7 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data
 {
-	public sealed class UserSqlRepository : SqlRepository<UserEntity>, IUserContext
+	public sealed class UserSqlRepository : SqlRepository<UserEntity>, IUserRepository
 	{
 		/// <summary>
 		/// Inject dependencies

@@ -20,7 +20,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var client = Substitute.For<ISqlClient>();
 			client.Connect().Returns(connection);
 			var log = Substitute.For<ILog>();
-			var repo = new TestDbContext(client, log);
+			var repo = new TestSqlRepository(client, log);
 
 			// Act
 			repo.Dispose();
@@ -37,7 +37,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var client = Substitute.For<ISqlClient>();
 			client.Connect().Returns(connection);
 			var log = Substitute.For<ILog>();
-			var repo = new TestDbContext(client, log);
+			var repo = new TestSqlRepository(client, log);
 
 			// Act
 			repo.Dispose();
@@ -47,9 +47,9 @@ namespace Strasnote.Data.SqlRepository_Tests
 			connection.Received(1).Dispose();
 		}
 
-		public sealed class TestDbContext : SqlRepository<TestEntity>
+		public sealed class TestSqlRepository : SqlRepository<TestEntity>
 		{
-			public TestDbContext(ISqlClient client, ILog log) : base(client, log, Rnd.Str) { }
+			public TestSqlRepository(ISqlClient client, ILog log) : base(client, log, Rnd.Str) { }
 		}
 
 		public sealed record TestEntity(long Id) : IEntity;
