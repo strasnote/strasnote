@@ -18,7 +18,7 @@ namespace Tests.Strasnote.Auth.Data
 		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
-		public async Task User_Id_String_Returned_On_Successful_Call()
+		public async Task Normalized_UserName_String_Returned_On_Successful_Call()
 		{
 			// Arrange
 			var userStore = new UserStore(userContext, roleContext);
