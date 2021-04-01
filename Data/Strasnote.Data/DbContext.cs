@@ -2,17 +2,36 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.Extensions.Caching.Memory;
 using Strasnote.Data.Abstracts;
 using Strasnote.Logging;
 
 namespace Strasnote.Data
 {
+	/// <summary>
+	/// Holds model property cache for all types of entity
+	/// </summary>
+	public abstract class DbContext
+	{
+		/// <summary>
+		/// Cache matching model properties so expensive reflection isn't done more than once
+		/// </summary>
+		protected private ConcurrentDictionary<Type, List<string>> ModelPropertyCache { get; private set; } = new();
+
+		internal void SetCache(ConcurrentDictionary<Type, List<string>>? cache) =>
+			ModelPropertyCache = cache ?? new();
+	}
+
 	/// <inheritdoc cref="IDbContext{TEntity}"/>
-	public abstract class DbContext<TEntity> : IDbContext<TEntity>, IDisposable
+	public abstract class DbContext<TEntity> : DbContext, IDbContext<TEntity>, IDisposable
 		where TEntity : IEntity
 	{
 		/// <summary>
@@ -29,46 +48,29 @@ namespace Strasnote.Data
 			Log;
 
 		/// <summary>
+		/// Database queries
+		/// </summary>
+		protected IDbQueries Queries { get; private init; }
+
+		internal IDbQueries QueriesTest =>
+			Queries;
+
+		/// <summary>
+		/// Table name
+		/// </summary>
+		protected string Table { get; private init; }
+
+		internal string TableTest =>
+			Table;
+
+		/// <summary>
 		/// Inject connection details
 		/// </summary>
 		/// <param name="client">IDbClient object</param>
 		/// <param name="log">ILog (should be created with the context as the class implementing this abstract)</param>
-		protected DbContext(IDbClient client, ILog log) =>
-			(Connection, Log) = (client.Connect(), log);
-
-		/// <summary>
-		/// Return the name of <typeparamref name="TEntity"/> with 'Entity' suffix removed
-		/// </summary>
-		private string GetEntity() =>
-			typeof(TEntity).Name.Replace("Entity", string.Empty);
-
-		/// <summary>
-		/// Return the name of <paramref name="method"/> with 'Async' suffix removed
-		/// </summary>
-		/// <param name="method">Method name</param>
-		private string GetMethod(string method) =>
-			method.Replace("Async", string.Empty);
-
-		#region Stored Procedures
-
-		/// <summary>
-		/// Get the name of the stored procedure for the specified operation
-		/// </summary>
-		/// <param name="method">The name of the method (will have 'Async' suffix removed)</param>
-		protected string GetStoredProcedureName(string method) =>
-			string.Format("{0}_{1}", GetEntity(), GetMethod(method));
-
-		internal string GetStoredProcedureNameTest(string method) =>
-			GetStoredProcedureName(method);
-
-		/// <inheritdoc cref="GetStoredProcedureName(string)"/>
-		protected string GetStoredProcedureName(Operation operation) =>
-			GetStoredProcedureName(operation.ToString());
-
-		internal string GetStoredProcedureNameTest(Operation operation) =>
-			GetStoredProcedureName(operation);
-
-		#endregion
+		/// <param name="table">The table name for this entity</param>
+		protected DbContext(IDbClient client, ILog log, string table) =>
+			(Connection, Log, Queries, Table) = (client.Connect(), log, client.Queries, table);
 
 		#region Logging
 
@@ -85,6 +87,19 @@ namespace Strasnote.Data
 			LogTrace(message, args);
 
 		/// <summary>
+		/// Return the name of <paramref name="method"/> with 'Async' suffix removed
+		/// </summary>
+		/// <param name="method">Method name</param>
+		private string GetMethod(string method) =>
+			method.Replace("Async", string.Empty);
+
+		/// <summary>
+		/// Return the name of <typeparamref name="TEntity"/> with 'Entity' suffix removed
+		/// </summary>
+		private string GetEntity() =>
+			typeof(TEntity).Name.Replace("Entity", string.Empty);
+
+		/// <summary>
 		/// Log an operation using <see cref="LogTrace(string, object[])"/>
 		/// </summary>
 		/// <param name="method">The name of the method (will have 'Async' suffix removed)</param>
@@ -99,19 +114,127 @@ namespace Strasnote.Data
 
 		#endregion
 
-		#region Standard CRUD Operations
+		#region Property Matching
+
+		/// <summary>
+		/// Get properties that match between the current entity and <typeparamref name="TModel"/>
+		/// </summary>
+		/// <typeparam name="TModel">Model type</typeparam>
+		internal List<string> GetProperties<TModel>() =>
+			ModelPropertyCache.GetOrAdd(typeof(TModel), _ =>
+			{
+				// Join on property name so only shared properties are returned
+				var shared = from e in typeof(TEntity).GetProperties()
+							 join m in typeof(TModel).GetProperties() on e.Name equals m.Name
+							 where e.PropertyType == m.PropertyType
+							 && e.GetCustomAttribute<IgnoreAttribute>() == null
+							 && m.GetCustomAttribute<IgnoreAttribute>() == null
+							 orderby e.Name
+							 select e.Name;
+
+				// If any are shared, return as list
+				if (shared.Any())
+				{
+					return shared.ToList();
+				}
+
+				// Otherwise select all
+				return new() { { Queries.SelectAll } };
+			});
+
+		#endregion
+
+		#region Custom Queries
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> CreateAsync<TModel>(TEntity entity)
+		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(string query, object param, CommandType type)
+		{
+			// Log query
+			LogOperation(Operation.Query, "{Type}: {Query} - {@Parameters}", type, query, param);
+
+			// Perform retrieve and map to TModel
+			return Connection.QueryAsync<TModel>(
+				sql: query,
+				param: param,
+				commandType: type
+			);
+		}
+
+		/// <inheritdoc/>
+		public virtual Task<TModel> QuerySingleAsync<TModel>(string query, object param, CommandType type)
+		{
+			// Log query single
+			LogOperation(Operation.QuerySingle, "{Type}: {Query} - {@Parameters}", type, query, param);
+
+			// Perform retrieve and map to TModel
+			return Connection.QuerySingleAsync<TModel>(
+				sql: query,
+				param: param,
+				commandType: type
+			);
+		}
+
+		/// <inheritdoc/>
+		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(
+			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		)
+		{
+			// Convert the expressions to column names
+			var where = new List<(string, SearchOperator, object)>();
+			foreach (var (property, op, value) in predicates)
+			{
+				string? name = property.Body switch
+				{
+					MemberExpression member =>
+						member.Member.Name,
+
+					UnaryExpression unary =>
+						((MemberExpression)unary.Operand).Member.Name,
+
+					_ =>
+						null
+				};
+
+				if (name is not null)
+				{
+					where.Add((name, op, value));
+				}
+			}
+
+			// Log retrieve
+			var (query, param) = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where);
+			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, param);
+
+			// Perform retrieve and map to TModel
+			return Connection.QueryAsync<TModel>(
+				sql: query,
+				param: param,
+				commandType: CommandType.Text
+			);
+		}
+
+		/// <inheritdoc/>
+		public async virtual Task<TModel> QuerySingleAsync<TModel>(
+			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		) =>
+			(await QueryAsync<TModel>(predicates).ConfigureAwait(false)).Single();
+
+		#endregion
+
+		#region CRUD Queries
+
+		/// <inheritdoc/>
+		public virtual Task<TId> CreateAsync<TId>(TEntity entity)
 		{
 			// Log create
-			LogOperation(Operation.Create, "{Entity}", entity);
+			var query = Queries.GetCreateQuery(Table, GetProperties<TEntity>());
+			LogOperation(Operation.Create, "{Query} {@Entity}", query, entity);
 
 			// Perform create and return created entity
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
-				sql: GetStoredProcedureName(Operation.Create),
+			return Connection.ExecuteScalarAsync<TId>(
+				sql: query,
 				param: entity,
-				commandType: CommandType.StoredProcedure
+				commandType: CommandType.Text
 			);
 		}
 
@@ -133,13 +256,14 @@ namespace Strasnote.Data
 		public virtual Task<TModel> RetrieveByIdAsync<TModel>(long id)
 		{
 			// Log retrieve
-			LogOperation(Operation.RetrieveById, "{Id}", id);
+			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
+			LogOperation(Operation.RetrieveById, "{Query} {Id}", query, id);
 
 			// Perform retrieve and map to model
 			return Connection.QuerySingleOrDefaultAsync<TModel>(
-				sql: GetStoredProcedureName(Operation.RetrieveById),
+				sql: query,
 				param: new { id },
-				commandType: CommandType.StoredProcedure
+				commandType: CommandType.Text
 			);
 		}
 
@@ -147,13 +271,14 @@ namespace Strasnote.Data
 		public virtual Task<TModel> UpdateAsync<TModel>(TEntity entity)
 		{
 			// Log update
-			LogOperation(Operation.Update, "{Entity}", entity);
+			var query = Queries.GetUpdateQuery(Table, GetProperties<TEntity>(), nameof(IEntity.Id), entity.Id);
+			LogOperation(Operation.Update, "{Query} {@Entity}", query, entity);
 
 			// Perform update and return updated entity
 			return Connection.QuerySingleOrDefaultAsync<TModel>(
-				sql: GetStoredProcedureName(Operation.Update),
+				sql: query,
 				param: entity,
-				commandType: CommandType.StoredProcedure
+				commandType: CommandType.Text
 			);
 		}
 
@@ -161,13 +286,14 @@ namespace Strasnote.Data
 		public virtual Task<bool> DeleteAsync(long id)
 		{
 			// Log delete
-			LogOperation(Operation.Delete, "{Id}", id);
+			var query = Queries.GetDeleteQuery(Table, nameof(IEntity.Id), id);
+			LogOperation(Operation.Delete, "{Query} {Id}", query, id);
 
 			// Perform retrieve and map to model
 			return Connection.ExecuteScalarAsync<bool>(
-				sql: GetStoredProcedureName(Operation.Delete),
+				sql: query,
 				param: new { id },
-				commandType: CommandType.StoredProcedure
+				commandType: CommandType.Text
 			);
 		}
 
@@ -178,7 +304,7 @@ namespace Strasnote.Data
 		/// <summary>
 		/// Set to true if the object has been disposed
 		/// </summary>
-		private bool disposed = false;
+		private bool disposed;
 
 		/// <summary>
 		/// Suppress garbage collection and call <see cref="Dispose(bool)"/>

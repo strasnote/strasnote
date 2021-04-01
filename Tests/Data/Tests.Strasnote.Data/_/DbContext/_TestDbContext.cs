@@ -6,15 +6,15 @@ using Strasnote.Data.Abstracts;
 using Strasnote.Logging;
 using Strasnote.Util;
 
-namespace Strasnote.Data.DbContextWithQueries_Tests
+namespace Strasnote.Data.DbContext_Tests
 {
-	public static class DbContextWithQueries
+	public static class DbContext_Setup
 	{
-		static internal (TestDbContext, IDbClientWithQueries, IDbQueries, ILog, string) GetContext()
+		static internal (TestDbContext, IDbClient, IDbQueries, ILog, string) GetContext()
 		{
 			var queries = Substitute.For<IDbQueries>();
 			queries.SelectAll.Returns("*");
-			var client = Substitute.For<IDbClientWithQueries>();
+			var client = Substitute.For<IDbClient>();
 			client.Queries.Returns(queries);
 			var log = Substitute.For<ILog>();
 			var table = Rnd.Str;
@@ -22,9 +22,9 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		}
 	}
 
-	public sealed class TestDbContext : DbContextWithQueries<TestEntity>
+	public sealed class TestDbContext : DbContext<TestEntity>
 	{
-		public TestDbContext(IDbClientWithQueries client, ILog log, string table) : base(client, log, table) { }
+		public TestDbContext(IDbClient client, ILog log, string table) : base(client, log, table) { }
 	}
 
 	public sealed record TestEntity(long Id, string Foo, int Bar) : IEntity

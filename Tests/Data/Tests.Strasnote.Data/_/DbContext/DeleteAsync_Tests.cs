@@ -7,7 +7,7 @@ using Strasnote.Data.Abstracts;
 using Strasnote.Util;
 using Xunit;
 
-namespace Strasnote.Data.DbContextWithQueries_Tests
+namespace Strasnote.Data.DbContext_Tests
 {
 	public class DeleteAsync_Tests
 	{
@@ -15,7 +15,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		public void Calls_Get_Delete_Query_With_Correct_Values()
 		{
 			// Arrange
-			var (context, _, queries, _, table) = DbContextWithQueries.GetContext();
+			var (context, _, queries, _, table) = DbContext_Setup.GetContext();
 			var id = Rnd.Lng;
 
 			// Act
@@ -29,7 +29,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		public void Logs_Operation()
 		{
 			// Arrange
-			var (context, _, _, log, _) = DbContextWithQueries.GetContext();
+			var (context, _, _, log, _) = DbContext_Setup.GetContext();
 
 			// Act
 			context.DeleteAsync(Rnd.Lng);

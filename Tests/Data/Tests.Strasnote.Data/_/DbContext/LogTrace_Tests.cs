@@ -35,7 +35,7 @@ namespace Strasnote.Data.DbContext_Tests
 
 		public sealed class TestDbContext : DbContext<TestEntity>
 		{
-			public TestDbContext(IDbClient client, ILog log) : base(client, log) { }
+			public TestDbContext(IDbClient client, ILog log) : base(client, log, Rnd.Str) { }
 		}
 
 		public sealed record TestEntity(long Id) : IEntity;

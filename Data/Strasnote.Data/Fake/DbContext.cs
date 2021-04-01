@@ -7,6 +7,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Strasnote.Data.Abstracts;
 using Strasnote.Logging;
+using Strasnote.Util;
 
 namespace Strasnote.Data.Fake
 {
@@ -17,7 +18,7 @@ namespace Strasnote.Data.Fake
 	public abstract class DbContext<TEntity> : Data.DbContext<TEntity>
 		where TEntity : IEntity
 	{
-		protected DbContext(ILog log) : base(new DbClient(), log) { }
+		protected DbContext(ILog log) : base(new DbClient(), log, Rnd.Str) { }
 
 		/// <summary>
 		/// Force an object to <typeparamref name="TModel"/> - this can only be tested at runtime

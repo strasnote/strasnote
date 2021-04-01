@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Data.Abstracts;
 using Strasnote.Logging;
+using Strasnote.Util;
 using Xunit;
 
 namespace Strasnote.Data.DbContext_Tests
@@ -53,7 +54,7 @@ namespace Strasnote.Data.DbContext_Tests
 
 		public sealed class TestDbContext : DbContext<TestEntity>
 		{
-			public TestDbContext(IDbClient client, ILog log) : base(client, log) { }
+			public TestDbContext(IDbClient client, ILog log) : base(client, log, Rnd.Str) { }
 		}
 
 		public sealed record TestEntity(long Id) : IEntity;

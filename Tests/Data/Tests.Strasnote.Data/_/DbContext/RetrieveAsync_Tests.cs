@@ -5,7 +5,7 @@ using NSubstitute;
 using Strasnote.Util;
 using Xunit;
 
-namespace Strasnote.Data.DbContextWithQueries_Tests
+namespace Strasnote.Data.DbContext_Tests
 {
 	public class RetrieveAsync_Tests
 	{
@@ -13,7 +13,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		public void Logs_Operation()
 		{
 			// Arrange
-			var (context, _, _, log, _) = DbContextWithQueries.GetContext();
+			var (context, _, _, log, _) = DbContext_Setup.GetContext();
 
 			// Act
 			context.RetrieveAsync<long>(Rnd.Str, Rnd.Lng, System.Data.CommandType.Text);

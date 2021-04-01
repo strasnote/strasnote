@@ -15,7 +15,7 @@ namespace Strasnote.Data.Clients.MySql
 	/// <summary>
 	/// MySQL database client
 	/// </summary>
-	public sealed class MySqlDbClient : IDbClientWithQueries
+	public sealed class MySqlDbClient : IDbClient
 	{
 		/// <inheritdoc/>
 		public string ConnectionString { get; }

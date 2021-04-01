@@ -9,7 +9,7 @@ using Strasnote.Data.Abstracts;
 using Strasnote.Util;
 using Xunit;
 
-namespace Strasnote.Data.DbContextWithQueries_Tests
+namespace Strasnote.Data.DbContext_Tests
 {
 	public class QueryAsync_Tests
 	{
@@ -17,7 +17,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		public void Calls_Get_Retrieve_Query_With_Correct_Values()
 		{
 			// Arrange
-			var (context, _, queries, _, table) = DbContextWithQueries.GetContext();
+			var (context, _, queries, _, table) = DbContext_Setup.GetContext();
 
 			const SearchOperator p0Operator = SearchOperator.Like;
 			object p0Value = Rnd.Str;
@@ -47,7 +47,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		public void Logs_Operation()
 		{
 			// Arrange
-			var (context, _, _, log, _) = DbContextWithQueries.GetContext();
+			var (context, _, _, log, _) = DbContext_Setup.GetContext();
 			var predicates = new (Expression<Func<TestEntity, object>>, SearchOperator, object)[]
 			{
 				( e => e.Foo, SearchOperator.Like, Rnd.Str )

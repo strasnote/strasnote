@@ -2,8 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using NSubstitute;
-using Strasnote.Data.Abstracts;
-using Strasnote.Logging;
 using Xunit;
 
 namespace Strasnote.Data.DbContext_Tests
@@ -14,11 +12,10 @@ namespace Strasnote.Data.DbContext_Tests
 		public void Calls_Client_Connect()
 		{
 			// Arrange
-			var client = Substitute.For<IDbClient>();
-			var log = Substitute.For<ILog>();
+			var (_, client, _, log, table) = DbContext_Setup.GetContext();
 
 			// Act
-			var _ = new TestDbContext(client, log);
+			var _ = new TestDbContext(client, log, table);
 
 			// Assert
 			client.Received().Connect();
@@ -28,21 +25,39 @@ namespace Strasnote.Data.DbContext_Tests
 		public void Sets_Log_Property()
 		{
 			// Arrange
-			var client = Substitute.For<IDbClient>();
-			var log = Substitute.For<ILog>();
+			var (_, client, _, log, table) = DbContext_Setup.GetContext();
 
 			// Act
-			var result = new TestDbContext(client, log);
+			var result = new TestDbContext(client, log, table);
 
 			// Assert
 			Assert.Same(log, result.LogTest);
 		}
 
-		public sealed class TestDbContext : DbContext<TestEntity>
+		[Fact]
+		public void Sets_Queries_Property()
 		{
-			public TestDbContext(IDbClient client, ILog log) : base(client, log) { }
+			// Arrange
+			var (_, client, queries, log, table) = DbContext_Setup.GetContext();
+
+			// Act
+			var result = new TestDbContext(client, log, table);
+
+			// Assert
+			Assert.Same(queries, result.QueriesTest);
 		}
 
-		public sealed record TestEntity(long Id) : IEntity;
+		[Fact]
+		public void Sets_Table_Property()
+		{
+			// Arrange
+			var (_, client, _, log, table) = DbContext_Setup.GetContext();
+
+			// Act
+			var result = new TestDbContext(client, log, table);
+
+			// Assert
+			Assert.Same(table, result.TableTest);
+		}
 	}
 }

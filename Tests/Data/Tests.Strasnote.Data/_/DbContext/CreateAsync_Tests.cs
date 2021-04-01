@@ -6,7 +6,7 @@ using NSubstitute;
 using Strasnote.Util;
 using Xunit;
 
-namespace Strasnote.Data.DbContextWithQueries_Tests
+namespace Strasnote.Data.DbContext_Tests
 {
 	public class CreateAsync_Tests
 	{
@@ -14,7 +14,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		public void Calls_Get_Create_Query_With_Correct_Values()
 		{
 			// Arrange
-			var (context, _, queries, _, table) = DbContextWithQueries.GetContext();
+			var (context, _, queries, _, table) = DbContext_Setup.GetContext();
 			var entity = new TestEntity(0, Rnd.Str, Rnd.Int);
 
 			// Act
@@ -30,7 +30,7 @@ namespace Strasnote.Data.DbContextWithQueries_Tests
 		public void Logs_Operation()
 		{
 			// Arrange
-			var (context, _, _, log, _) = DbContextWithQueries.GetContext();
+			var (context, _, _, log, _) = DbContext_Setup.GetContext();
 			var entity = new TestEntity(0, Rnd.Str, Rnd.Int);
 
 			// Act
