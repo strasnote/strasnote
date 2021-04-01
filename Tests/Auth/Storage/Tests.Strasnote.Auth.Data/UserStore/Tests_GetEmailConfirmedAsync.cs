@@ -40,8 +40,11 @@ namespace Tests.Strasnote.Auth.Data
 			// Arrange
 			var userStore = new UserStore(userContext);
 
-			// Act & Assert
-			await Assert.ThrowsAsync<ArgumentNullException>(() => userStore.GetEmailConfirmedAsync(null!, new CancellationToken()));
+			// Act
+			Task action() => userStore.GetEmailConfirmedAsync(null!, new CancellationToken());
+
+			// Assert
+			await Assert.ThrowsAsync<ArgumentNullException>(action);
 		}
 	}
 }

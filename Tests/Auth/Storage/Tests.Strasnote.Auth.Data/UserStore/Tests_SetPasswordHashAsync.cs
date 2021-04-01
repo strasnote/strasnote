@@ -40,9 +40,11 @@ namespace Tests.Strasnote.Auth.Data
 			// Arrange
 			var userStore = new UserStore(userContext);
 
-			// Act & Assert
-			await Assert.ThrowsAsync<ArgumentNullException>(() =>
-				userStore.SetPasswordHashAsync(Arg.Any<UserEntity>(), Arg.Any<string>(), new CancellationToken()));
+			// Act
+			Task action() => userStore.SetPasswordHashAsync(null!, Rnd.Str, new CancellationToken());
+
+			// Assert
+			await Assert.ThrowsAsync<ArgumentNullException>(action);
 		}
 	}
 }

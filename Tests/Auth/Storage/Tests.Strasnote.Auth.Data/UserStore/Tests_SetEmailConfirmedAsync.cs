@@ -8,6 +8,7 @@ using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
+using Strasnote.Util;
 using Xunit;
 
 namespace Tests.Strasnote.Auth.Data
@@ -39,9 +40,11 @@ namespace Tests.Strasnote.Auth.Data
 			// Arrange
 			var userStore = new UserStore(userContext);
 
-			// Act & Assert
-			await Assert.ThrowsAsync<ArgumentNullException>(() =>
-				userStore.SetEmailConfirmedAsync(Arg.Any<UserEntity>(), Arg.Any<bool>(), new CancellationToken()));
+			// Act
+			Task action() => userStore.SetEmailConfirmedAsync(null!, true, new CancellationToken());
+
+			// Assert
+			await Assert.ThrowsAsync<ArgumentNullException>(action);
 		}
 	}
 }
