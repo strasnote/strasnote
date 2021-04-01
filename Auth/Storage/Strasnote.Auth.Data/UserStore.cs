@@ -114,11 +114,11 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public async Task<UserEntity> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+		public Task<UserEntity> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return await userContext.RetrieveByEmailAsync<UserEntity>(normalizedEmail).ConfigureAwait(false);
+			return userContext.RetrieveByEmailAsync<UserEntity>(normalizedEmail);
 		}
 
 		/// <inheritdoc/>
