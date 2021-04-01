@@ -126,7 +126,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return Task.FromResult(user.NormalizedUserName);
+			return Task.FromResult(user.NormalizedEmail);
 		}
 
 		/// <inheritdoc/>
