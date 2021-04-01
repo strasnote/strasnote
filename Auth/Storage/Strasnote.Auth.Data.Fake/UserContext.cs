@@ -1,12 +1,9 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
-using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Data.Fake;
 using Strasnote.Logging;
@@ -53,8 +50,5 @@ namespace Strasnote.Auth.Data.Fake
 		{
 			throw new System.NotImplementedException();
 		}
-
-		public Task<System.Collections.Generic.IEnumerable<TModel>> QueryAsync<TModel>(params (Expression<Func<UserEntity, object>> property, SearchOperator op, object value)[] predicates) => throw new NotImplementedException();
-		public Task<TModel> QuerySingleAsync<TModel>(params (Expression<Func<UserEntity, object>> property, SearchOperator op, object value)[] predicates) => throw new NotImplementedException();
 	}
 }

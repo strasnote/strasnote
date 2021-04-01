@@ -10,14 +10,14 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data
 {
-	public sealed class UserContext : DbContextWithQueries<UserEntity>, IUserContext
+	public sealed class UserContext : DbContext<UserEntity>, IUserContext
 	{
 		/// <summary>
 		/// Inject dependencies
 		/// </summary>
 		/// <param name="client">IDbClient</param>
 		/// <param name="log">ILog with context</param>
-		public UserContext(IDbClientWithQueries client, ILog<UserContext> log)
+		public UserContext(IDbClient client, ILog<UserContext> log)
 			: base(client, log, client.Tables.User) { }
 
 		/// <inheritdoc/>

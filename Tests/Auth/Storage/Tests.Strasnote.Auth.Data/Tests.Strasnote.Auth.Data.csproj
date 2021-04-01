@@ -18,4 +18,8 @@
     <ProjectReference Include="..\..\..\..\Auth\Storage\Strasnote.Auth.Data\Strasnote.Auth.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Q:\src\strasnote\strasnote\.editorconfig" />
+  </ItemGroup>
+
 </Project>

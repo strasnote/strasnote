@@ -18,11 +18,9 @@ namespace Strasnote.Auth.Data
 	/// </summary>
 	public class UserStore :
 		IUserEmailStore<UserEntity>,
-		IUserPasswordStore<UserEntity>,
-		IUserRoleStore<UserEntity>
+		IUserPasswordStore<UserEntity>
 	{
 		private readonly IUserContext userContext;
-		private readonly IRoleContext roleContext;
 
 		private bool _disposed;
 
@@ -30,8 +28,8 @@ namespace Strasnote.Auth.Data
 		/// Inject dependencies
 		/// </summary>
 		/// <param name="userContext">IUserContext</param>
-		public UserStore(IUserContext userContext, IRoleContext roleContext) =>
-			(this.userContext, this.roleContext) = (userContext, roleContext);
+		public UserStore(IUserContext userContext) =>
+			this.userContext = userContext;
 
 		#region Create
 
@@ -148,49 +146,6 @@ namespace Strasnote.Auth.Data
 			return Task.FromResult(user.PasswordHash != null);
 		}
 
-		/// <inheritdoc/>
-		public async Task<IList<string>> GetRolesAsync(UserEntity user, CancellationToken cancellationToken)
-		{
-			ThrowIfDisposed();
-
-			if (user == null)
-			{
-				throw new ArgumentNullException(nameof(user));
-			}
-
-			var userRoles = await roleContext.RetrieveForUserAsync<RoleEntity>(user.Id).ConfigureAwait(false);
-
-			if(userRoles == null)
-			{
-				return new List<string>();
-			}
-
-			return userRoles.Select(x => x.Name).ToList();
-		}
-
-		/// <inheritdoc/>
-		public async Task<bool> IsInRoleAsync(UserEntity user, string roleName, CancellationToken cancellationToken)
-		{
-			ThrowIfDisposed();
-
-			if (user == null)
-			{
-				throw new ArgumentNullException(nameof(user));
-			}
-
-			if (string.IsNullOrWhiteSpace(roleName))
-			{
-				throw new ArgumentNullException(nameof(roleName));
-			}
-
-			var userRoles = await GetRolesAsync(user, new()).ConfigureAwait(false);
-
-			return userRoles.Any(r => r == roleName);
-		}
-
-		/// <inheritdoc/>
-		public Task<IList<UserEntity>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken) => throw new NotImplementedException();
-
 		#endregion
 
 		#region Update
@@ -277,12 +232,6 @@ namespace Strasnote.Auth.Data
 
 			return Task.CompletedTask;
 		}
-
-		/// <inheritdoc/>
-		public Task AddToRoleAsync(UserEntity user, string roleName, CancellationToken cancellationToken) => throw new NotImplementedException();
-
-		/// <inheritdoc/>
-		public Task RemoveFromRoleAsync(UserEntity user, string roleName, CancellationToken cancellationToken) => throw new NotImplementedException();
 
 		#endregion
 

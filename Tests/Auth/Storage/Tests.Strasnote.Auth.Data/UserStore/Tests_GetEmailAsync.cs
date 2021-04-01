@@ -16,13 +16,12 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_GetEmailAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
 		public async Task Email_String_Returned_On_Successful_Call()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			var userEntity = new UserEntity
 			{
@@ -40,7 +39,7 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task ArgumentNullException_Thrown_When_UserEntity_Null()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			// Act & Assert
 			await Assert.ThrowsAsync<ArgumentNullException>(() => userStore.GetEmailAsync(null!, new CancellationToken()));

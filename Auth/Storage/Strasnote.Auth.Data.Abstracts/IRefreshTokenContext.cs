@@ -10,7 +10,7 @@ namespace Strasnote.Auth.Data.Abstracts
 	/// <summary>
 	/// Abstraction for interacting with the refresh token database.
 	/// </summary>
-	public interface IRefreshTokenContext : IDbContextWIthQueries<RefreshTokenEntity>
+	public interface IRefreshTokenContext : IDbContext<RefreshTokenEntity>
 	{
 		/// <summary>
 		/// Create an entity but do not return anything afterwards

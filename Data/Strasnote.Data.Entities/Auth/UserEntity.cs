@@ -41,12 +41,6 @@ namespace Strasnote.Data.Entities.Auth
 		#region Lookups
 
 		/// <summary>
-		/// The list of roles this User has
-		/// </summary>
-		[Ignore]
-		public List<RoleEntity>? Roles { get; set; }
-
-		/// <summary>
 		/// List of folders owned by this User
 		/// </summary>
 		[Ignore]

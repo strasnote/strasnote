@@ -11,14 +11,14 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Data
 {
-	public sealed class RefreshTokenContext : DbContextWithQueries<RefreshTokenEntity>, IRefreshTokenContext
+	public sealed class RefreshTokenContext : DbContext<RefreshTokenEntity>, IRefreshTokenContext
 	{
 		/// <summary>
 		/// Inject dependencies
 		/// </summary>
 		/// <param name="client">IDbClient</param>
 		/// <param name="log">ILog with context</param>
-		public RefreshTokenContext(IDbClientWithQueries client, ILog log)
+		public RefreshTokenContext(IDbClient client, ILog log)
 			: base(client, log, client.Tables.RefreshToken) { }
 
 		/// <inheritdoc/>
