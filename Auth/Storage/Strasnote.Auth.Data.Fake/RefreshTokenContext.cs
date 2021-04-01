@@ -35,8 +35,7 @@ namespace Strasnote.Auth.Data.Fake
 		}
 
 		protected override object GetFakeModelForCreate() => throw new NotImplementedException();
-		protected override object GetFakeModelForRetrieve() => throw new NotImplementedException();
-		protected override object GetFakeModelForRetrieveById(long id) => throw new NotImplementedException();
+		protected override object GetFakeModelForRetrieve(long id) => throw new NotImplementedException();
 		protected override object GetFakeModelForUpdate() => throw new NotImplementedException();
 	}
 }
