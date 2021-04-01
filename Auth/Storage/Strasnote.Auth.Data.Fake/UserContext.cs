@@ -18,7 +18,7 @@ namespace Strasnote.Auth.Data.Fake
 		protected override object GetFakeModelForCreate() =>
 			IdentityResult.Success;
 
-		protected override object GetFakeModelForRetrieveById(long id) =>
+		protected override object GetFakeModelForRetrieve(long id) =>
 			new UserEntity { Id = id };
 
 		public Task<TModel> RetrieveByEmailAsync<TModel>(string email)
@@ -40,11 +40,6 @@ namespace Strasnote.Auth.Data.Fake
 
 		public Task<TModel> RetrieveByUsernameAsync<TModel>(string name) =>
 			RetrieveByEmailAsync<TModel>(name);
-
-		protected override object GetFakeModelForRetrieve()
-		{
-			throw new System.NotImplementedException();
-		}
 
 		protected override object GetFakeModelForUpdate()
 		{

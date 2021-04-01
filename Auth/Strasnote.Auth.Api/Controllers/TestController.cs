@@ -24,7 +24,7 @@ namespace Strasnote.Auth.Api.Controllers
 		public async Task<MiniUser> GetById(long id)
 		{
 			log.Trace("Get user with ID: {Id}", id);
-			return await users.RetrieveByIdAsync<MiniUser>(id);
+			return await users.RetrieveAsync<MiniUser>(id);
 		}
 
 		[HttpGet]

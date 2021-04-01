@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Data;
-
 namespace Strasnote.Data.Abstracts
 {
 	/// <summary>
-	/// Abstracts a database connection client
+	/// Abstracts database client
 	/// </summary>
 	public interface IDbClient
 	{
@@ -16,19 +14,9 @@ namespace Strasnote.Data.Abstracts
 		string ConnectionString { get; }
 
 		/// <summary>
-		/// Retrieves database-specific queries
-		/// </summary>
-		IDbQueries Queries { get; }
-
-		/// <summary>
 		/// Database-specific table names
 		/// </summary>
 		IDbTables Tables { get; }
-
-		/// <summary>
-		/// Connect to the database
-		/// </summary>
-		IDbConnection Connect();
 
 		/// <summary>
 		/// Perform database migration to specified <paramref name="version"/>, or the latest available version

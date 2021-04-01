@@ -57,13 +57,13 @@ namespace Strasnote.Auth.Api
 
 			services.AddControllers();
 
-			services.AddTransient<IDbClient, MySqlDbClient>();
+			services.AddTransient<ISqlClient, MySqlClient>();
 
 			services.AddTransient<UserStore>();
-			services.AddTransient<IUserContext, UserContext>();
+			services.AddTransient<IUserContext, UserSqlRepository>();
 			services.AddTransient<IUserStore<UserEntity>, UserStore>();
 
-			services.AddTransient<IRefreshTokenContext, RefreshTokenContext>();
+			services.AddTransient<IRefreshTokenContext, RefreshTokenSqlRepository>();
 
 			//services.AddAuthDataFakeServices();
 			services.AddAuthServices(Configuration);

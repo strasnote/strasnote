@@ -93,7 +93,7 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 			try
 			{
 				// Create migrator
-				var client = new MySqlDbClient(connectionString);
+				var client = new MySqlClient(connectionString);
 
 				// Migrate to specified version and log to console
 				client.MigrateTo(version, new SimpleMigrations.Console.ConsoleLogger());
@@ -132,7 +132,7 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 			try
 			{
 				// Create database client
-				var client = new MySqlDbClient(connectionString);
+				var client = new MySqlClient(connectionString);
 
 				// Migrate to 0 (i.e. remove everything)
 				Console.WriteLine("Removing all data and tables...");

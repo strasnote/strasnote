@@ -17,7 +17,7 @@ namespace Tests.Strasnote.Auth.Data
 
 		public Tests_FindByIdAsync()
 		{
-			userContext.RetrieveByIdAsync<UserEntity>(Arg.Any<long>())
+			userContext.RetrieveAsync<UserEntity>(Arg.Any<long>())
 				.Returns(new UserEntity());
 		}
 
@@ -44,7 +44,7 @@ namespace Tests.Strasnote.Auth.Data
 			await userStore.FindByIdAsync("1", new CancellationToken());
 
 			// Assert
-			await userContext.Received(1).RetrieveByIdAsync<UserEntity>(Arg.Any<long>());
+			await userContext.Received(1).RetrieveAsync<UserEntity>(Arg.Any<long>());
 		}
 	}
 }
