@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -31,6 +32,17 @@ namespace Tests.Strasnote.Auth.Data
 
 			// Assert
 			Assert.Equal(emailConfirmed, userEntity.EmailConfirmed);
+		}
+
+		[Fact]
+		public async Task ArgumentNullException_Thrown_When_UserEntity_Null()
+		{
+			// Arrange
+			var userStore = new UserStore(userContext, roleContext);
+
+			// Act & Assert
+			await Assert.ThrowsAsync<ArgumentNullException>(() =>
+				userStore.SetEmailConfirmedAsync(Arg.Any<UserEntity>(), Arg.Any<bool>(), new CancellationToken()));
 		}
 	}
 }
