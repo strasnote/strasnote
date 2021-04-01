@@ -8,6 +8,7 @@ using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
+using Strasnote.Util;
 using Xunit;
 
 namespace Tests.Strasnote.Auth.Data
@@ -15,13 +16,12 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_SetEmailConfirmedAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
 		public async Task Email_On_UserEntity_Is_Set_To_Email_Arg()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			var userEntity = new UserEntity();
 
@@ -38,11 +38,13 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task ArgumentNullException_Thrown_When_UserEntity_Null()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
-			// Act & Assert
-			await Assert.ThrowsAsync<ArgumentNullException>(() =>
-				userStore.SetEmailConfirmedAsync(Arg.Any<UserEntity>(), Arg.Any<bool>(), new CancellationToken()));
+			// Act
+			Task action() => userStore.SetEmailConfirmedAsync(null!, true, new CancellationToken());
+
+			// Assert
+			await Assert.ThrowsAsync<ArgumentNullException>(action);
 		}
 	}
 }

@@ -16,13 +16,12 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_SetPasswordHashAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
 		public async Task PasswordHash_On_UserEntity_Is_Set_To_PasswordHash_Arg()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			var userEntity = new UserEntity();
 
@@ -39,11 +38,13 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task ArgumentNullException_Thrown_When_UserEntity_Null()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
-			// Act & Assert
-			await Assert.ThrowsAsync<ArgumentNullException>(() =>
-				userStore.SetPasswordHashAsync(Arg.Any<UserEntity>(), Arg.Any<string>(), new CancellationToken()));
+			// Act
+			Task action() => userStore.SetPasswordHashAsync(null!, Rnd.Str, new CancellationToken());
+
+			// Assert
+			await Assert.ThrowsAsync<ArgumentNullException>(action);
 		}
 	}
 }

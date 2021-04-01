@@ -15,13 +15,12 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_UpdateAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
 		public async Task UserContext_UpdateAsync_Is_Called_Once()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			var userEntity = new UserEntity();
 

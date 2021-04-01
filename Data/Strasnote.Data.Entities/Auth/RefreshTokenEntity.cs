@@ -12,8 +12,12 @@ namespace Strasnote.Data.Entities.Auth
 	public record RefreshTokenEntity : IEntity
 	{
 		/// <inheritdoc/>
-		public long Id =>
-			RefreshTokenId;
+		[Ignore]
+		public long Id
+		{
+			get => RefreshTokenId;
+			init => RefreshTokenId = value;
+		}
 
 		/// <summary>
 		/// Token ID

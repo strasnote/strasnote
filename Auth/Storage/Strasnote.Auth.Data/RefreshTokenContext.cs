@@ -3,11 +3,9 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;
-using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
 
@@ -19,10 +17,9 @@ namespace Strasnote.Auth.Data
 		/// Inject dependencies
 		/// </summary>
 		/// <param name="client">IDbClient</param>
-		/// <param name="config">AuthConfig</param>
 		/// <param name="log">ILog with context</param>
-		public RefreshTokenContext(IDbClient client, IOptions<DbConfig> config, ILog log)
-			: base(client, log) { }
+		public RefreshTokenContext(IDbClient client, ILog log)
+			: base(client, log, client.Tables.RefreshToken) { }
 
 		/// <inheritdoc/>
 		public Task CreateAsync(RefreshTokenEntity entity) => throw new NotImplementedException();

@@ -14,8 +14,12 @@ namespace Strasnote.Data.Entities.Notes
 	public sealed record FolderEntity : IEntity
 	{
 		/// <inheritdoc/>
-		public long Id =>
-			FolderId;
+		[Ignore]
+		public long Id
+		{
+			get => FolderId;
+			init => FolderId = value;
+		}
 
 		/// <summary>
 		/// Folder ID
@@ -56,16 +60,19 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// The User this Folder belongs to
 		/// </summary>
+		[Ignore]
 		public UserEntity? User { get; set; }
 
 		/// <summary>
 		/// The list of Users who have access to this Folder (owner - User ID - has access by default)
 		/// </summary>
+		[Ignore]
 		public List<FolderUserEntity>? FolderUsers { get; set; }
 
 		/// <summary>
 		/// The list of Notes contained in this Folder
 		/// </summary>
+		[Ignore]
 		public List<TagEntity>? Notes { get; set; }
 
 		#endregion

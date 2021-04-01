@@ -11,6 +11,12 @@ namespace Strasnote.Data.Fake
 		public string ConnectionString =>
 			string.Empty;
 
+		public IDbQueries Queries =>
+			throw new System.NotImplementedException();
+
+		public IDbTables Tables =>
+			throw new System.NotImplementedException();
+
 		public IDbConnection Connect() =>
 			new DbConnection();
 

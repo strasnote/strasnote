@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Strasnote.Data.Abstracts
@@ -14,6 +16,48 @@ namespace Strasnote.Data.Abstracts
 	public interface IDbContext<TEntity>
 		where TEntity : IEntity
 	{
+		#region Custom Queries
+
+		/// <summary>
+		/// Retrieve entities using the specified query - can be a typed query or a stored procedure
+		/// </summary>
+		/// <typeparam name="TModel">Return object type</typeparam>
+		/// <param name="query">Query - text or stored procedure</param>
+		/// <param name="param">Query parameters</param>
+		/// <param name="type">Command type</param>
+		Task<IEnumerable<TModel>> QueryAsync<TModel>(string query, object param, CommandType type);
+
+		/// <summary>
+		/// Retrieve a single entity using the specified query - can be a typed query or a stored procedure
+		/// </summary>
+		/// <typeparam name="TModel">Return object type</typeparam>
+		/// <param name="query">Query - text or stored procedure</param>
+		/// <param name="param">Query parameters</param>
+		/// <param name="type">Command type</param>
+		Task<TModel> QuerySingleAsync<TModel>(string query, object param, CommandType type);
+
+		/// <summary>
+		/// Retrieve entities using the specified predicates (uses AND)
+		/// </summary>
+		/// <typeparam name="TModel">Return object type</typeparam>
+		/// <param name="predicates">List of predicates (uses AND)</param>
+		Task<IEnumerable<TModel>> QueryAsync<TModel>(
+			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		);
+
+		/// <summary>
+		/// Retrieve a single entity using the specified predicates (uses AND)
+		/// </summary>
+		/// <typeparam name="TModel">Return object type</typeparam>
+		/// <param name="predicates">List of predicates (uses AND)</param>
+		Task<TModel> QuerySingleAsync<TModel>(
+			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		);
+
+		#endregion
+
+		#region CRUD Queries
+
 		/// <summary>
 		/// Create an entity
 		/// </summary>
@@ -47,5 +91,7 @@ namespace Strasnote.Data.Abstracts
 		/// </summary>
 		/// <param name="id">ID of entity to delete</param>
 		Task<bool> DeleteAsync(long id);
+
+		#endregion
 	}
 }

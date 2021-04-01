@@ -15,6 +15,7 @@ namespace Strasnote.Data.Entities.Auth
 		/// <summary>
 		/// User ID (alias for <see cref="IdentityUser{TKey}.Id"/>)
 		/// </summary>
+		[Ignore]
 		public long UserId
 		{
 			get => Id;
@@ -40,33 +41,33 @@ namespace Strasnote.Data.Entities.Auth
 		#region Lookups
 
 		/// <summary>
-		/// The list of roles this User has
-		/// </summary>
-		public List<RoleEntity>? Roles { get; set; }
-
-		/// <summary>
 		/// List of folders owned by this User
 		/// </summary>
+		[Ignore]
 		public List<FolderEntity>? Folders { get; set; }
 
 		/// <summary>
 		/// List of notes owned by this User
 		/// </summary>
+		[Ignore]
 		public List<NoteEntity>? Notes { get; set; }
 
 		/// <summary>
 		/// List of tags owned by this User
 		/// </summary>
+		[Ignore]
 		public List<TagEntity>? Tags { get; set; }
 
 		/// <summary>
 		/// Folder encryption keys
 		/// </summary>
+		[Ignore]
 		public List<EncryptedEntity>? FolderEncryptionKeys { get; set; }
 
 		/// <summary>
 		/// Note encryption keys
 		/// </summary>
+		[Ignore]
 		public List<EncryptedEntity>? NoteEncryptionKeys { get; set; }
 
 		#endregion

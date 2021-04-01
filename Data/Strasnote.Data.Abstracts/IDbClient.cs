@@ -16,6 +16,16 @@ namespace Strasnote.Data.Abstracts
 		string ConnectionString { get; }
 
 		/// <summary>
+		/// Retrieves database-specific queries
+		/// </summary>
+		IDbQueries Queries { get; }
+
+		/// <summary>
+		/// Database-specific table names
+		/// </summary>
+		IDbTables Tables { get; }
+
+		/// <summary>
 		/// Connect to the database
 		/// </summary>
 		IDbConnection Connect();

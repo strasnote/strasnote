@@ -14,8 +14,12 @@ namespace Strasnote.Data.Entities.Notes
 	public sealed record NoteEntity : IEntity
 	{
 		/// <inheritdoc/>
-		public long Id =>
-			NoteId;
+		[Ignore]
+		public long Id
+		{
+			get => NoteId;
+			init => NoteId = value;
+		}
 
 		/// <summary>
 		/// Note ID
@@ -56,21 +60,25 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// The Folder this Note belongs to
 		/// </summary>
+		[Ignore]
 		public FolderEntity? Folder { get; set; }
 
 		/// <summary>
 		/// The User this Note belongs to
 		/// </summary>
+		[Ignore]
 		public UserEntity? User { get; set; }
 
 		/// <summary>
 		/// The list of Users who have access to this Note
 		/// </summary>
+		[Ignore]
 		public List<NoteUserEntity>? NoteUsers { get; set; }
 
 		/// <summary>
 		/// The list of Tags this Note has
 		/// </summary>
+		[Ignore]
 		public List<TagEntity>? Tags { get; set; }
 
 		#endregion

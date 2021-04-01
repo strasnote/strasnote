@@ -15,7 +15,6 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_CreateAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		private readonly IdentityResult identityResult = IdentityResult.Success;
 
@@ -29,7 +28,7 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task IdentityResult_Returned_On_Successful_Call()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			// Act
 			var result = await userStore.CreateAsync(new UserEntity(), new CancellationToken());
@@ -42,7 +41,7 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task UserContext_CreateAsync_Is_Called_Once()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			// Act
 			await userStore.CreateAsync(new UserEntity(), new CancellationToken());

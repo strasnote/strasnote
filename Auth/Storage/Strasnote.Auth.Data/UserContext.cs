@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Data;
 using System.Threading.Tasks;
-using Dapper;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;
@@ -20,21 +18,13 @@ namespace Strasnote.Auth.Data
 		/// <param name="client">IDbClient</param>
 		/// <param name="log">ILog with context</param>
 		public UserContext(IDbClient client, ILog<UserContext> log)
-			: base(client, log) { }
+			: base(client, log, client.Tables.User) { }
 
 		/// <inheritdoc/>
-		public Task<TModel> RetrieveByEmailAsync<TModel>(string email)
-		{
-			// Log retrieve
-			LogOperation(nameof(RetrieveByEmailAsync), "{Email}", email);
-
-			// Perform retrieve and map to model
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
-				sql: GetStoredProcedureName(nameof(RetrieveByEmailAsync)),
-				param: new { email },
-				commandType: CommandType.StoredProcedure
+		public Task<TModel> RetrieveByEmailAsync<TModel>(string email) =>
+			QuerySingleAsync<TModel>(
+				(u => u.Email, SearchOperator.Equal, email)
 			);
-		}
 
 		/// <inheritdoc/>
 		public Task<TModel> RetrieveByUsernameAsync<TModel>(string name) =>

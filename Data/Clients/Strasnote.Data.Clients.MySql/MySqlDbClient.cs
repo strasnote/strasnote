@@ -20,6 +20,12 @@ namespace Strasnote.Data.Clients.MySql
 		/// <inheritdoc/>
 		public string ConnectionString { get; }
 
+		/// <inheritdoc/>
+		public IDbQueries Queries { get; } = new MySqlDbQueries();
+
+		/// <inheritdoc/>
+		public IDbTables Tables { get; } = new MySqlDbTables();
+
 		/// <summary>
 		/// Inject and verify database configuration
 		/// </summary>

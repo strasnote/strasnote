@@ -15,13 +15,12 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_SetNormalizedEmailAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
 		public async Task NormalizedEmail_On_UserEntity_Is_Set_To_NormalizedEmail_Arg()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			var userEntity = new UserEntity();
 

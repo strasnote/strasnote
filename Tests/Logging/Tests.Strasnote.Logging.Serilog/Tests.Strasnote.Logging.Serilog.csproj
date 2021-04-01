@@ -1,7 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.14" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -18,10 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
     <ProjectReference Include="..\..\..\Util\Strasnote.Util.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

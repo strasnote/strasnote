@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +36,7 @@ namespace Strasnote.Auth.Api
 
 			// ToDo: add some IServiceCollection extensions
 			services
-				.AddIdentity<UserEntity, RoleEntity>(options =>
+				.AddIdentityCore<UserEntity>(options =>
 				{
 					options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
 				})
@@ -62,10 +63,6 @@ namespace Strasnote.Auth.Api
 			services.AddTransient<IUserContext, UserContext>();
 			services.AddTransient<IUserStore<UserEntity>, UserStore>();
 
-			services.AddTransient<RoleStore>();
-			services.AddTransient<IRoleContext, RoleContext>();
-			services.AddTransient<IRoleStore<RoleEntity>, RoleStore>();
-
 			services.AddTransient<IRefreshTokenContext, RefreshTokenContext>();
 
 			//services.AddAuthDataFakeServices();
@@ -75,6 +72,8 @@ namespace Strasnote.Auth.Api
 			services.Configure<DbConfig>(Configuration.GetSection(DbConfig.AppSettingsSectionName));
 
 			services.AddTransient<JwtSecurityTokenHandler>();
+
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

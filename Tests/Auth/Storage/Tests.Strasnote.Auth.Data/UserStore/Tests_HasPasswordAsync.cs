@@ -15,13 +15,12 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_HasPasswordAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
 		public async Task HasPassword_Bool_Returns_True_When_PasswordHash_Has_A_Value()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			var userEntity = new UserEntity
 			{
@@ -39,7 +38,7 @@ namespace Tests.Strasnote.Auth.Data
 		public async Task HasPassword_Bool_Returns_False_When_PasswordHash_Has_A_Value()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			// Act
 			var result = await userStore.HasPasswordAsync(new UserEntity(), new CancellationToken());

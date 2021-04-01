@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -15,13 +16,12 @@ namespace Tests.Strasnote.Auth.Data
 	public sealed class Tests_SetUserNameAsync
 	{
 		private readonly IUserContext userContext = Substitute.For<IUserContext>();
-		private readonly IRoleContext roleContext = Substitute.For<IRoleContext>();
 
 		[Fact]
 		public async Task UserName_On_UserEntity_Is_Set_To_UserName_Arg()
 		{
 			// Arrange
-			var userStore = new UserStore(userContext, roleContext);
+			var userStore = new UserStore(userContext);
 
 			var userEntity = new UserEntity();
 

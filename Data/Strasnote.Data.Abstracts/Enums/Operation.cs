@@ -4,7 +4,7 @@
 namespace Strasnote.Data.Abstracts
 {
 	/// <summary>
-	/// CRUD operation names (for logging queries and stored procedure names)
+	/// Database operation names (for logging queries)
 	/// </summary>
 	public enum Operation
 	{
@@ -31,6 +31,16 @@ namespace Strasnote.Data.Abstracts
 		/// <summary>
 		/// Delete operation
 		/// </summary>
-		Delete
+		Delete,
+
+		/// <summary>
+		/// Query operation
+		/// </summary>
+		Query,
+
+		/// <summary>
+		/// Query Single operation
+		/// </summary>
+		QuerySingle
 	}
 }

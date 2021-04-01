@@ -5,7 +5,7 @@ using SimpleMigrations;
 
 namespace Strasnote.Data.Clients.MySql.Migrations
 {
-	[Migration(1, "Create tables: auth.user, auth.role, and auth.user_role")]
+	[Migration(1, "Create tables: auth.user, auth.refresh_token")]
 	public sealed class CreateTables_Auth_0001 : Migration
 	{
 		protected override void Up()
@@ -41,32 +41,6 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 			");
 
 			Execute(@"
-				CREATE TABLE `auth.role` (
-					`Id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-					`Name` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
-					`NormalizedName` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
-					`ConcurrencyStamp` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
-					PRIMARY KEY (`Id`) USING BTREE
-				)
-				COLLATE='utf8_general_ci'
-				ENGINE=InnoDB
-				;
-			");
-
-			Execute(@"
-				CREATE TABLE `auth.user_role` (
-					`UserRoleId` BIGINT(20) NOT NULL AUTO_INCREMENT,
-					`UserId` BIGINT(20) NOT NULL,
-					`RoleId` BIGINT(20) NOT NULL,
-					PRIMARY KEY (`UserRoleId`) USING BTREE,
-					INDEX `UserId` (`UserId`) USING BTREE
-				)
-				COLLATE='utf8_general_ci'
-				ENGINE=InnoDB
-				;
-			");
-
-			Execute(@"
 				CREATE TABLE `auth.refresh_token` (
 					`RefreshTokenId` BIGINT(20) NOT NULL AUTO_INCREMENT,
 					`RefreshTokenExpires` DATETIME NOT NULL,
@@ -83,8 +57,6 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		protected override void Down()
 		{
 			Execute("DROP TABLE `auth.user`;");
-			Execute("DROP TABLE `auth.role`;");
-			Execute("DROP TABLE `auth.user_role`;");
 			Execute("DROP TABLE `auth.refresh_token`;");
 		}
 	}
