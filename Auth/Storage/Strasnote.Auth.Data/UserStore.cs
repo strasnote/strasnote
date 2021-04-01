@@ -160,6 +160,11 @@ namespace Strasnote.Auth.Data
 
 			var userRoles = await roleContext.RetrieveForUserAsync<RoleEntity>(user.Id).ConfigureAwait(false);
 
+			if(userRoles == null)
+			{
+				return new List<string>();
+			}
+
 			return userRoles.Select(x => x.Name).ToList();
 		}
 
