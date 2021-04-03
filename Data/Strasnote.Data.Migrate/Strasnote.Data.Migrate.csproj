@@ -4,7 +4,4 @@
     <ProjectReference Include="..\..\Encryption\Strasnote.Encryption\Strasnote.Encryption.csproj" />
     <ProjectReference Include="..\Strasnote.Data\Strasnote.Data.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TestData\" />
-  </ItemGroup>
 </Project>

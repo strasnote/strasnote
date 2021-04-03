@@ -5,6 +5,8 @@ services:
         image: strasnote/auth:dev
         container_name: strasnote-auth
         restart: always
+        ports:
+            - "0.0.0.0:5000:5000"
         environment:
             - DB__MYSQL__HOST=db
             - DB__MYSQL__USER=auth

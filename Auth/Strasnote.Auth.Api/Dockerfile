@@ -2,4 +2,8 @@ FROM bcgdesign/aspnet:net5-2.0.7
 
 COPY ./publish /app/live
 
+RUN bcg-echo "Installing libsodium package..." && \
+	apk add --no-cache libsodium && \
+	bcg-done
+
 ENV ASPNET_ASSEMBLY=Strasnote.Auth.Api.dll

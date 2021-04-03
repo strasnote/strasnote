@@ -13,7 +13,6 @@ on:
       - 'Encryption/**'
       - 'Logging/**'
       - 'Notes/**'
-      - 'Tests/**'
       - 'Util/**'
 
 jobs:
@@ -52,9 +51,9 @@ jobs:
     - 
       name: B - Build
       run: dotnet build ./Test.csproj --no-restore -c Release
-    #- 
-    #  name: C - Test
-    #  run: dotnet test Test.csproj --no-restore --no-build -c Release --verbosity normal
+    - 
+      name: C - Test
+      run: dotnet test ./Test.csproj --no-restore --no-build -c Release --verbosity normal
     -
       name: D - Publish
       run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -o ./publish
