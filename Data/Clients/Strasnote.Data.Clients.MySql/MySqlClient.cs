@@ -68,8 +68,16 @@ namespace Strasnote.Data.Clients.MySql
 			new MySqlConnection(ConnectionString);
 
 		/// <inheritdoc/>
-		public bool MigrateTo(long? version) =>
+		public bool MigrateToLatest() =>
+			MigrateTo(null, null);
+
+		/// <inheritdoc/>
+		public bool MigrateTo(long version) =>
 			MigrateTo(version, null);
+
+		/// <inheritdoc/>
+		public void Nuke() =>
+			MigrateTo(0, null);
 
 		/// <summary>
 		/// Perform database migration

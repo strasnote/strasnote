@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\Auth\Data\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
+    <ProjectReference Include="..\..\Encryption\Strasnote.Encryption\Strasnote.Encryption.csproj" />
+    <ProjectReference Include="..\Strasnote.Data\Strasnote.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestData\" />
+  </ItemGroup>
+</Project>

@@ -18,6 +18,7 @@ using Strasnote.Data.Abstracts;
 using Strasnote.Data.Clients.MySql;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
+using Strasnote.Data.Migrate;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api
@@ -58,6 +59,7 @@ namespace Strasnote.Auth.Api
 			services.AddControllers();
 
 			services.AddTransient<ISqlClient, MySqlClient>();
+			services.AddTransient<IDbClient>(s => s.GetRequiredService<ISqlClient>());
 
 			services.AddTransient<UserStore>();
 			services.AddTransient<IUserRepository, UserSqlRepository>();
@@ -70,6 +72,8 @@ namespace Strasnote.Auth.Api
 
 			services.Configure<AuthConfig>(Configuration.GetSection(AuthConfig.AppSettingsSectionName));
 			services.Configure<DbConfig>(Configuration.GetSection(DbConfig.AppSettingsSectionName));
+			services.Configure<MigrateConfig>(Configuration.GetSection(MigrateConfig.AppSettingsSectionName));
+			services.Configure<UserConfig>(Configuration.GetSection(UserConfig.AppSettingsSectionName));
 
 			services.AddTransient<JwtSecurityTokenHandler>();
 
@@ -79,8 +83,6 @@ namespace Strasnote.Auth.Api
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-
-
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
@@ -98,7 +100,7 @@ namespace Strasnote.Auth.Api
 				endpoints.MapControllers();
 			});
 
-			app.ApplicationServices.GetService<ILog<Startup>>()?.Information("Application Configured.");
+			app.ApplicationServices.GetRequiredService<ILog<Startup>>().Information("Application Configured.");
 		}
 	}
 }

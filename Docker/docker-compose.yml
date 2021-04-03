@@ -7,10 +7,12 @@ services:
         restart: always
         environment:
             - DB__MYSQL__HOST=db
-            - DB__MYSQL__PORT=3306
             - DB__MYSQL__USER=auth
             - DB__MYSQL__PASS=auth
             - DB__MYSQL__DATABASE=auth
+            - MIGRATE__NUKEONSTARTUP=true
+            - USER__EMAIL=example@example.com
+            - USER__PASSWORD=example
         networks:
             - strasnote
     db:
