@@ -93,7 +93,7 @@ namespace Strasnote.Data.Migrate
 			log.Information("Inserting test data.");
 
 			// Insert default user
-			await DefaultUser.InsertAsync(user, userConfig).ConfigureAwait(false);
+			DefaultUser.Insert(log, user, userConfig);
 		}
 	}
 }
