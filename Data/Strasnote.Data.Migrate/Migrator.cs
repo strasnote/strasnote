@@ -2,14 +2,12 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;
-using Strasnote.Data.Entities.Auth;
 using Strasnote.Logging;
 
 namespace Strasnote.Data.Migrate

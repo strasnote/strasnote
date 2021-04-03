@@ -3,6 +3,9 @@
 
 namespace Strasnote.Data.Config
 {
+	/// <summary>
+	/// Migrate configuration
+	/// </summary>
 	public sealed class MigrateConfig
 	{
 		/// <summary>

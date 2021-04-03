@@ -1,45 +1,76 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Threading.Tasks;
-using Strasnote.Data.Abstracts;
+using Jeebs;
+using Jeebs.Linq;
+using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Encryption;
+using Strasnote.Logging;
 using Strasnote.Util;
+using static F.OptionF;
 
 namespace Strasnote.Data.Migrate
 {
+	/// <summary>
+	/// Create the default user
+	/// </summary>
 	public static class DefaultUser
 	{
-		public static async Task InsertAsync(ISqlRepository<UserEntity> repo, UserConfig config)
+		/// <summary>
+		/// Insert the default user from configuration values
+		/// </summary>
+		/// <param name="log">ILog</param>
+		/// <param name="repo">IUserRepository</param>
+		/// <param name="config">UserConfig</param>
+		public static void Insert(ILog log, IUserRepository repo, UserConfig config)
+		{
+			var user = from ep in GetEmailAndPassword(config)
+					   from hash in Hash.PasswordArgon(ep.password)
+					   from keys in Keys.Generate(ep.password)
+					   select new UserEntity
+					   {
+						   UserName = ep.email,
+						   NormalizedUserName = ep.email,
+						   Email = ep.email,
+						   NormalizedEmail = ep.email,
+						   EmailConfirmed = true,
+						   PasswordHash = hash,
+						   PhoneNumber = string.Empty,
+						   UserPublicKey = keys.PublicKey,
+						   UserPrivateKey = keys.PrivateKey,
+						   SecurityStamp = Rnd.RndString.Get(16),
+						   ConcurrencyStamp = Rnd.RndString.Get(16)
+					   };
+
+			user.Switch(
+				some: async x => await repo.CreateAsync<long>(x).ConfigureAwait(false),
+				none: r => log.Error("Unable to create user: {Reason}", r)
+			);
+		}
+
+		/// <summary>
+		/// Check email and password are both set before returning them
+		/// </summary>
+		/// <param name="config">UserConfig</param>
+		static private Option<(string email, string password)> GetEmailAndPassword(UserConfig config)
 		{
 			if (config.Email is string email && config.Password is string password)
 			{
-				foreach (var hash in Hash.PasswordArgon(password))
-				{
-					foreach (var keys in Keys.Generate(password))
-					{
-						var user = new UserEntity
-						{
-							UserName = email,
-							NormalizedUserName = email,
-							Email = email,
-							NormalizedEmail = email,
-							EmailConfirmed = true,
-							PasswordHash = hash,
-							PhoneNumber = string.Empty,
-							UserPublicKey = keys.PublicKey,
-							UserPrivateKey = keys.PrivateKey,
-							SecurityStamp = Rnd.RndString.Get(16),
-							ConcurrencyStamp = Rnd.RndString.Get(16),
-							UserProfile = "{}"
-						};
-
-						await repo.CreateAsync<long>(user).ConfigureAwait(false);
-					}
-				}
+				return Return(
+					(email, password)
+				);
 			}
+
+			return None<(string, string), Msg.EmailAndPasswordMustBothBeSetMsg>();
+		}
+
+		/// <summary>Messages</summary>
+		public static class Msg
+		{
+			/// <summary>Email and password must both be set to automatically create a user</summary>
+			public sealed record EmailAndPasswordMustBothBeSetMsg : IMsg { }
 		}
 	}
 }
