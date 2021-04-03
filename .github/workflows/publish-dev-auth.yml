@@ -27,7 +27,7 @@ jobs:
       name: Prepare - Read image version
       uses: bencgreen/read-file-action@v1
       with:
-        path: Version
+        path: ./Version
       id: version
     -
       name: Prepare - Set up QEMU
@@ -57,7 +57,7 @@ jobs:
     #  run: dotnet test Test.csproj --no-restore --no-build -c Release --verbosity normal
     -
       name: D - Publish
-      run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -o /tmp/publish
+      run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -o ./publish
     -
       name: E - Push
       id: docker_build
