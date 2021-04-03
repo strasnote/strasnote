@@ -16,8 +16,12 @@ on:
       - 'Tests/**'
       - 'Util/**'
 
+defaults:
+  run:
+    working-directory: app
+
 jobs:
-  restore-build-test:
+  restore-build-test-publish-push:
     runs-on: ubuntu-latest
     steps:
     - 
@@ -48,23 +52,23 @@ jobs:
         dotnet-version: '5.0.x'
     - 
       name: A - Restore
-      run: dotnet restore Test.csproj
+      run: dotnet restore ./Test.csproj
     - 
       name: B - Build
-      run: dotnet build Test.csproj --no-restore -c Release
+      run: dotnet build ./Test.csproj --no-restore -c Release
     #- 
     #  name: C - Test
     #  run: dotnet test Test.csproj --no-restore --no-build -c Release --verbosity normal
     -
       name: D - Publish
-      run: dotnet publish Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -o /app/publish
+      run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -o ./publish
     -
       name: E - Build and Push
       id: docker_build
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: Auth/Strasnote.Auth.Api/Dockerfile
+        file: ./Auth/Strasnote.Auth.Api/Dockerfile
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
