@@ -57,7 +57,7 @@ jobs:
     #  run: dotnet test Test.csproj --no-restore --no-build -c Release --verbosity normal
     -
       name: D - Publish
-      run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -o ./publish
+      run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -o /tmp/publish
     -
       name: E - Push
       id: docker_build
