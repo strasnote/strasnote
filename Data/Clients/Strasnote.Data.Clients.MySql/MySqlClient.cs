@@ -4,8 +4,6 @@
 using System.Data;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
-using SimpleMigrations;
-using SimpleMigrations.DatabaseProvider;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Exceptions;
@@ -15,7 +13,7 @@ namespace Strasnote.Data.Clients.MySql
 	/// <summary>
 	/// MySQL database client
 	/// </summary>
-	public sealed class MySqlClient : ISqlClient
+	public sealed class MySqlClient : ClientMigrator, ISqlClient
 	{
 		/// <inheritdoc/>
 		public string ConnectionString { get; }
@@ -69,45 +67,24 @@ namespace Strasnote.Data.Clients.MySql
 
 		/// <inheritdoc/>
 		public bool MigrateToLatest() =>
-			MigrateTo(null, null);
+			MigrateTo(null);
 
 		/// <inheritdoc/>
 		public bool MigrateTo(long version) =>
-			MigrateTo(version, null);
+			MigrateTo(version);
 
 		/// <inheritdoc/>
 		public void Nuke() =>
-			MigrateTo(0, null);
+			MigrateTo(0);
 
 		/// <summary>
 		/// Perform database migration
 		/// </summary>
 		/// <param name="version">[Optional] The version to migrate the database to - if not set the latest version will be used</param>
-		/// <param name="logger">[Optional] Log output</param>
-		public bool MigrateTo(long? version, ILogger? logger)
+		private bool MigrateTo(long? version)
 		{
-			// Connection to database
 			using var db = new MySqlConnection(ConnectionString);
-
-			// Get migration objects
-			var provider = new MysqlDatabaseProvider(db);
-			var migrator = new SimpleMigrator(typeof(MySqlClient).Assembly, provider, logger);
-
-			// Get all the migrations
-			migrator.Load();
-
-			// Migrate to specific version, or the latest version
-			if (version is long specificVersion)
-			{
-				migrator.MigrateTo(specificVersion);
-			}
-			else
-			{
-				migrator.MigrateToLatest();
-			}
-
-			// Ensure the migration succeeded
-			return migrator.LatestMigration.Version == version;
+			return MigrateTo(db, Enums.DbType.MySql, typeof(MySqlClient).Assembly, version);
 		}
 	}
 }

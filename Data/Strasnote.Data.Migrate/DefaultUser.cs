@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
 using Jeebs;
 using Jeebs.Linq;
 using Microsoft.AspNetCore.Identity;
@@ -40,8 +41,8 @@ namespace Strasnote.Data.Migrate
 						   PhoneNumber = string.Empty,
 						   UserPublicKey = keys.PublicKey,
 						   UserPrivateKey = keys.PrivateKey,
-						   SecurityStamp = Rnd.RndString.Get(16),
-						   ConcurrencyStamp = Rnd.RndString.Get(16)
+						   SecurityStamp = Guid.NewGuid().ToString(),
+						   ConcurrencyStamp = Guid.NewGuid().ToString()
 					   };
 
 			user.Switch(
