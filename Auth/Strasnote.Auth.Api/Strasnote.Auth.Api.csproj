@@ -22,11 +22,4 @@
     <ProjectReference Include="..\Strasnote.Auth\Strasnote.Auth.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="appsettings.Secrets.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-
 </Project>

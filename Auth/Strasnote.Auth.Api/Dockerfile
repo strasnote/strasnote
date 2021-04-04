@@ -1,9 +1,22 @@
-FROM bcgdesign/aspnet:net5-2.0.7
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-COPY ./publish /app/live
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-RUN bcg-echo "Installing libsodium package..." && \
-	apk add --no-cache libsodium && \
-	bcg-done
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY [".", "."]
+RUN dotnet restore "Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj"
+COPY . .
+WORKDIR "/src/Auth/Strasnote.Auth.Api"
+RUN dotnet build "Strasnote.Auth.Api.csproj" -c Release -o /app/build
 
-ENV ASPNET_ASSEMBLY=Strasnote.Auth.Api.dll
+FROM build AS publish
+RUN dotnet publish "Strasnote.Auth.Api.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Strasnote.Auth.Api.dll"]
