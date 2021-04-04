@@ -3,6 +3,7 @@
 
 using Jeebs;
 using Jeebs.Linq;
+using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
@@ -27,7 +28,6 @@ namespace Strasnote.Data.Migrate
 		public static void Insert(ILog log, IUserRepository repo, UserConfig config)
 		{
 			var user = from ep in GetEmailAndPassword(config)
-					   from hash in Hash.PasswordArgon(ep.password)
 					   from keys in Keys.Generate(ep.password)
 					   select new UserEntity
 					   {
@@ -36,7 +36,7 @@ namespace Strasnote.Data.Migrate
 						   Email = ep.email,
 						   NormalizedEmail = ep.email,
 						   EmailConfirmed = true,
-						   PasswordHash = hash,
+						   PasswordHash = ep.password,
 						   PhoneNumber = string.Empty,
 						   UserPublicKey = keys.PublicKey,
 						   UserPrivateKey = keys.PrivateKey,
@@ -58,8 +58,11 @@ namespace Strasnote.Data.Migrate
 		{
 			if (config.Email is string email && config.Password is string password)
 			{
+				var hasher = new PasswordHasher<UserEntity>();
+				var hashed = hasher.HashPassword(new UserEntity(), password);
+
 				return Return(
-					(email, password)
+					(email, hashed)
 				);
 			}
 
