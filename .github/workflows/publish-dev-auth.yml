@@ -55,10 +55,10 @@ jobs:
       name: C - Test
       run: dotnet test ./Test.csproj --no-restore --no-build -c Release --verbosity normal
     -
-      name: D - Publish x64
+      name: D - Publish
       run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -r linux-musl-x64 -o ./publish
     -
-      name: E - Push x64
+      name: E - Push
       id: docker_build
       uses: docker/build-push-action@v2
       with:
@@ -66,21 +66,6 @@ jobs:
         file: ./Auth/Strasnote.Auth.Api/Dockerfile-automated
         push: true
         platforms: linux/amd64
-        tags: |
-          strasnote/auth:dev
-          strasnote/auth:${{ steps.version.outputs.content }}-dev
-    -
-      name: F - Publish ARM
-      run: dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj -c Release -r linux-musl-arm64 -o ./publish
-    -
-      name: G - Push ARM
-      id: docker_build
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./Auth/Strasnote.Auth.Api/Dockerfile-automated
-        push: true
-        platforms: linux/arm64
         tags: |
           strasnote/auth:dev
           strasnote/auth:${{ steps.version.outputs.content }}-dev
