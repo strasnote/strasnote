@@ -29,7 +29,7 @@
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/home",
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": false
     }
   }
 }
