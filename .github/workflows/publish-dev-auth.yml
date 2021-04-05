@@ -52,11 +52,16 @@ jobs:
     - 
       name: B - Build
       run: |
-        dotnet build ./Test.csproj --no-restore --configuration Release
+        dotnet build ./Test.csproj \
+          --no-restore \
+          --configuration Release
     - 
       name: C - Test
       run: |
-        dotnet test ./Test.csproj --no-restore --no-build --configuration Release
+        dotnet test ./Test.csproj \
+          --no-restore \
+          --no-build \
+          --configuration Release
     -
       name: D - Publish
       run: |
