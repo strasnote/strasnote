@@ -46,7 +46,7 @@ namespace Strasnote.Data.DefaultUser_Tests
 			DefaultUser.Insert(log, user, config);
 
 			// Assert
-			await user.Received().CreateAsync<long>(Arg.Any<UserEntity>());
+			await user.Received().CreateAsync(Arg.Any<UserEntity>());
 		}
 	}
 }

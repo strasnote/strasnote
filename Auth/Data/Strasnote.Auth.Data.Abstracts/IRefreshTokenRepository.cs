@@ -16,7 +16,7 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// Create an entity but do not return anything afterwards
 		/// </summary>
 		/// <param name="entity">Refresh Token to create</param>
-		Task CreateAsync(RefreshTokenEntity entity);
+		new Task CreateAsync(RefreshTokenEntity entity);
 
 		/// <summary>
 		/// Retrieve a refresh token by <paramref name="userId"/> and <paramref name="refreshToken"/>

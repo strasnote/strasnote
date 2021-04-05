@@ -32,11 +32,12 @@ namespace Strasnote.Auth.Data
 		#region Create
 
 		/// <inheritdoc/>
-		public Task<IdentityResult> CreateAsync(UserEntity user, CancellationToken cancellationToken)
+		public async Task<IdentityResult> CreateAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return userRepository.CreateAsync<IdentityResult>(user);
+			await userRepository.CreateAsync(user).ConfigureAwait(false);
+			return IdentityResult.Success;
 		}
 
 		#endregion

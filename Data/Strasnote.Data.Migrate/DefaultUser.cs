@@ -46,7 +46,7 @@ namespace Strasnote.Data.Migrate
 					   };
 
 			user.Switch(
-				some: async x => await repo.CreateAsync<long>(x).ConfigureAwait(false),
+				some: async x => await repo.CreateAsync(x).ConfigureAwait(false),
 				none: r => log.Error("Unable to create user: {Reason}", r)
 			);
 		}

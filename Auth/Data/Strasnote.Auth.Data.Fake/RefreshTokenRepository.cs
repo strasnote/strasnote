@@ -16,10 +16,10 @@ namespace Strasnote.Auth.Data.Fake
 	{
 		public RefreshTokenRepository(ILog<RefreshTokenRepository> log) : base(log) { }
 
-		public Task CreateAsync(RefreshTokenEntity entity)
+		public new Task CreateAsync(RefreshTokenEntity entity)
 		{
 			LogOperation(Operation.Create, "{Token}", entity);
-			return Task.CompletedTask;
+			return Task.FromResult(0L);
 		}
 
 		public Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken)
