@@ -55,7 +55,7 @@ namespace Strasnote.Data.Migrate
 		/// Check email and password are both set before returning them
 		/// </summary>
 		/// <param name="config">UserConfig</param>
-		static private Option<(string email, string password)> GetEmailAndPassword(UserConfig config)
+		static internal Option<(string email, string password)> GetEmailAndPassword(UserConfig config)
 		{
 			if (config.Email is string email && config.Password is string password)
 			{
