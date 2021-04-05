@@ -2,7 +2,9 @@
 // Licensed under https://strasnote.com/licence
 
 using Jeebs;
+using Microsoft.AspNetCore.Identity;
 using Strasnote.Data.Config;
+using Strasnote.Data.Entities.Auth;
 using Strasnote.Data.Migrate;
 using Strasnote.Util;
 using Xunit;
@@ -47,6 +49,7 @@ namespace Strasnote.Data.DefaultUser_Tests
 			var email = Rnd.Str;
 			var password = Rnd.Str;
 			var config = new UserConfig { Email = email, Password = password };
+			var hasher = new PasswordHasher<UserEntity>();
 
 			// Act
 			var result = DefaultUser.GetEmailAndPassword(config);
@@ -54,7 +57,7 @@ namespace Strasnote.Data.DefaultUser_Tests
 			// Assert
 			var some = result.AssertSome();
 			Assert.Equal(email, some.email);
-			Assert.NotEqual(password, some.password);
+			Assert.Equal(PasswordVerificationResult.Success, hasher.VerifyHashedPassword(new(), some.password, password));
 		}
 	}
 }

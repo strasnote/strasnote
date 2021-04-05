@@ -59,7 +59,7 @@ namespace Strasnote.Data.Migrate
 			if (config.Email is string email && config.Password is string password)
 			{
 				var hasher = new PasswordHasher<UserEntity>();
-				var hashed = hasher.HashPassword(new UserEntity(), password);
+				var hashed = hasher.HashPassword(new(), password);
 
 				return Return(
 					(email, hashed)
