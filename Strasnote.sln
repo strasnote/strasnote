@@ -39,9 +39,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		LICENSE = LICENSE
+		.github\workflows\publish-dev-auth.yml = .github\workflows\publish-dev-auth.yml
+		.github\workflows\publish-prod-auth.yml = .github\workflows\publish-prod-auth.yml
 		README.md = README.md
 		Test.csproj = Test.csproj
 		.github\workflows\test.yml = .github\workflows\test.yml
+		Version = Version
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Auth.Abstracts", "Auth\Strasnote.Auth.Abstracts\Strasnote.Auth.Abstracts.csproj", "{2151C8C3-C77A-4A6B-82F8-B1F0C1A713F0}"
@@ -129,6 +132,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{B80D9188-D04F-4971-94CF-1A57E206F8A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Data.Clients.MySql", "Tests\Data\Clients\Tests.Strasnote.Data.Clients.MySql\Tests.Strasnote.Data.Clients.MySql.csproj", "{F27211B8-F975-42DD-AAFE-ED814E64D034}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data.Migrate", "Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj", "{67CF25A4-EBAE-4F2F-9C07-1D6B2A910B2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data.Clients.Migrator", "Data\Clients\Strasnote.Data.Clients.Migrator\Strasnote.Data.Clients.Migrator.csproj", "{ED5D0CF5-0B9E-48C2-BCBA-C0CDBCA03890}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Strasnote.Data.Migrate", "Tests\Data\Tests.Strasnote.Data.Migrate\Tests.Strasnote.Data.Migrate.csproj", "{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -288,6 +297,18 @@ Global
 		{F27211B8-F975-42DD-AAFE-ED814E64D034}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F27211B8-F975-42DD-AAFE-ED814E64D034}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F27211B8-F975-42DD-AAFE-ED814E64D034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67CF25A4-EBAE-4F2F-9C07-1D6B2A910B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CF25A4-EBAE-4F2F-9C07-1D6B2A910B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67CF25A4-EBAE-4F2F-9C07-1D6B2A910B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CF25A4-EBAE-4F2F-9C07-1D6B2A910B2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED5D0CF5-0B9E-48C2-BCBA-C0CDBCA03890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED5D0CF5-0B9E-48C2-BCBA-C0CDBCA03890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED5D0CF5-0B9E-48C2-BCBA-C0CDBCA03890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED5D0CF5-0B9E-48C2-BCBA-C0CDBCA03890}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -341,6 +362,9 @@ Global
 		{6006EF8E-0936-48F8-93C1-FBEF8A451DDF} = {E68207F2-CC38-4D78-A6C2-812D5630E641}
 		{B80D9188-D04F-4971-94CF-1A57E206F8A3} = {E68207F2-CC38-4D78-A6C2-812D5630E641}
 		{F27211B8-F975-42DD-AAFE-ED814E64D034} = {B80D9188-D04F-4971-94CF-1A57E206F8A3}
+		{67CF25A4-EBAE-4F2F-9C07-1D6B2A910B2A} = {797720B2-7A04-4110-A615-0C27B7CF2DDB}
+		{ED5D0CF5-0B9E-48C2-BCBA-C0CDBCA03890} = {F92EB2C3-2A95-4CE4-895E-739E0BAFD73B}
+		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E} = {E68207F2-CC38-4D78-A6C2-812D5630E641}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF05D0DF-D04A-46E8-A71F-775870189F62}

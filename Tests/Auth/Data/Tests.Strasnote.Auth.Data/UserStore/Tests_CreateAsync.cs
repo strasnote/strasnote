@@ -8,6 +8,7 @@ using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
+using Strasnote.Util;
 using Xunit;
 
 namespace Tests.Strasnote.Auth.Data
@@ -16,12 +17,10 @@ namespace Tests.Strasnote.Auth.Data
 	{
 		private readonly IUserRepository userRepository = Substitute.For<IUserRepository>();
 
-		private readonly IdentityResult identityResult = IdentityResult.Success;
-
 		public Tests_CreateAsync()
 		{
-			userRepository.CreateAsync<IdentityResult>(Arg.Any<UserEntity>())
-				.Returns(identityResult);
+			userRepository.CreateAsync(Arg.Any<UserEntity>())
+				.Returns(Rnd.Lng);
 		}
 
 		[Fact]
@@ -47,7 +46,7 @@ namespace Tests.Strasnote.Auth.Data
 			await userStore.CreateAsync(new UserEntity(), new CancellationToken());
 
 			// Assert
-			await userRepository.Received(1).CreateAsync<IdentityResult>(Arg.Any<UserEntity>());
+			await userRepository.Received(1).CreateAsync(Arg.Any<UserEntity>());
 		}
 	}
 }

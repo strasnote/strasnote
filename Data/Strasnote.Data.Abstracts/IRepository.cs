@@ -59,7 +59,7 @@ namespace Strasnote.Data.Abstracts
 		/// Create an entity
 		/// </summary>
 		/// <param name="entity">Entity to create</param>
-		Task<TModel> CreateAsync<TModel>(TEntity entity);
+		Task<long> CreateAsync(TEntity entity);
 
 		/// <summary>
 		/// Retrieve a single entity by ID
@@ -71,6 +71,7 @@ namespace Strasnote.Data.Abstracts
 		/// <summary>
 		/// Update an entity
 		/// </summary>
+		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="entity">Entity to update</param>
 		Task<TModel> UpdateAsync<TModel>(TEntity entity);
 

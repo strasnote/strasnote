@@ -20,7 +20,7 @@ namespace Strasnote
 		{
 			// Add secrets
 			@this
-				.AddJsonFile($"{host.ContentRootPath}/appsettings.Secrets.json", optional: false);
+				.AddJsonFile($"{host.ContentRootPath}/appsettings.Secrets.json", optional: true);
 
 			// Add environment settings
 			@this

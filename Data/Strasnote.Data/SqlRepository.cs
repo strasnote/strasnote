@@ -240,14 +240,14 @@ namespace Strasnote.Data
 		#region CRUD Queries
 
 		/// <inheritdoc/>
-		public virtual Task<TId> CreateAsync<TId>(TEntity entity)
+		public virtual Task<long> CreateAsync(TEntity entity)
 		{
 			// Log create
 			var query = Queries.GetCreateQuery(Table, GetProperties<TEntity>());
 			LogOperation(Operation.Create, "{Query} {@Entity}", query, entity);
 
 			// Perform create and return created entity
-			return Connection.ExecuteScalarAsync<TId>(
+			return Connection.ExecuteScalarAsync<long>(
 				sql: query,
 				param: entity,
 				commandType: CommandType.Text

@@ -22,5 +22,8 @@ namespace Strasnote.Data.Fake
 
 		public bool MigrateTo(long? version) =>
 			true;
+		public bool MigrateTo(long version) => throw new System.NotImplementedException();
+		public bool MigrateToLatest() => throw new System.NotImplementedException();
+		public void Nuke() => throw new System.NotImplementedException();
 	}
 }

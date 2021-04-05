@@ -19,9 +19,19 @@ namespace Strasnote.Data.Abstracts
 		IDbTables Tables { get; }
 
 		/// <summary>
-		/// Perform database migration to specified <paramref name="version"/>, or the latest available version
+		/// Perform database migration to the latest version
 		/// </summary>
-		/// <param name="version">[Optional] The version to migrate the database to - if not set the latest version will be used</param>
-		bool MigrateTo(long? version);
+		bool MigrateToLatest();
+
+		/// <summary>
+		/// Perform database migration to specified <paramref name="version"/>
+		/// </summary>
+		/// <param name="version">[Optional] The version to migrate the database to</param>
+		bool MigrateTo(long version);
+
+		/// <summary>
+		/// Delete all data and tables
+		/// </summary>
+		void Nuke();
 	}
 }

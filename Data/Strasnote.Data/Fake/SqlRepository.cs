@@ -52,13 +52,13 @@ namespace Strasnote.Data.Fake
 		protected abstract object GetFakeModelForCreate();
 
 		/// <inheritdoc/>
-		public override Task<TModel> CreateAsync<TModel>(TEntity entity)
+		public override Task<long> CreateAsync(TEntity entity)
 		{
 			// Log create
 			LogOperation(Operation.Create, "{Entity}", entity);
 
 			// Perform create and return created entity
-			return ConvertToModel<TModel>(GetFakeModelForCreate());
+			return ConvertToModel<long>(GetFakeModelForCreate());
 		}
 
 		/// <summary>

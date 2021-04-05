@@ -22,7 +22,7 @@ namespace Strasnote.Auth.Data
 			: base(client, log, client.Tables.RefreshToken) { }
 
 		/// <inheritdoc/>
-		public Task CreateAsync(RefreshTokenEntity entity) => throw new NotImplementedException();
+		public new Task CreateAsync(RefreshTokenEntity entity) => throw new NotImplementedException();
 
 		/// <inheritdoc/>
 		public Task<bool> DeleteByUserIdAsync(long userId) => throw new NotImplementedException();

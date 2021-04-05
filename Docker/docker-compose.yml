@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+    auth:
+        image: strasnote/auth:dev
+        container_name: strasnote-auth
+        restart: always
+        ports:
+            - "0.0.0.0:5000:5000"
+        environment:
+            - DB__MYSQL__HOST=db
+            - DB__MYSQL__USER=auth
+            - DB__MYSQL__PASS=auth
+            - DB__MYSQL__DATABASE=auth
+            - MIGRATE__NUKEONSTARTUP=true
+            - USER__EMAIL=example@example.com
+            - USER__PASSWORD=example
+        networks:
+            - strasnote
+    db:
+        image: bcgdesign/mariadb:latest
+        container_name: strasnote-db
+        restart: unless-stopped
+        environment:
+            - MARIADB_ROOT_PASSWORD=auth
+            - MARIADB_USERNAME=auth
+            - MARIADB_PASSWORD=auth
+        volumes:
+            - ./v/data:/var/lib/mysql
+            - ./v/backup:/var/lib/backup
+        networks:
+            - strasnote
+
+networks:
+    strasnote:
+        driver: bridge
+        name: strasnote
