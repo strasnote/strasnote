@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Auth\Data\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Auth\Data\Strasnote.Auth.Data.Fake\Strasnote.Auth.Data.Fake.csproj" />
   </ItemGroup>
 
 </Project>

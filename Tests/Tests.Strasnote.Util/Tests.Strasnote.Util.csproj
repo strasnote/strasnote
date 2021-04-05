@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Util\Strasnote.Util.csproj" />
+    <ProjectReference Include="..\..\src\Util\Strasnote.Util.csproj" />
   </ItemGroup>
 
 </Project>

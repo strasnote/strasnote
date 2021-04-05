@@ -8,12 +8,7 @@ on:
       - '**'
     paths:
       - '.github/workflows/publish-dev-auth.yml'
-      - 'Auth/**'
-      - 'Data/**'
-      - 'Encryption/**'
-      - 'Logging/**'
-      - 'Notes/**'
-      - 'Util/**'
+      - 'src/**'
 
 jobs:
   restore-build-test-publish-push:
@@ -48,24 +43,24 @@ jobs:
     - 
       name: A - Restore
       run: |
-        dotnet restore ./Test.csproj
+        dotnet restore ./tests/Test.csproj
     - 
       name: B - Build
       run: |
-        dotnet build ./Test.csproj \
+        dotnet build ./tests/Test.csproj \
           --no-restore \
           --configuration Release
     - 
       name: C - Test
       run: |
-        dotnet test ./Test.csproj \
+        dotnet test ./tests/Test.csproj \
           --no-restore \
           --no-build \
           --configuration Release
     -
       name: D - Publish
       run: |
-        dotnet publish ./Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj \
+        dotnet publish ./src/Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
           --output ./publish
@@ -75,7 +70,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./Auth/Strasnote.Auth.Api/Dockerfile-automated
+        file: ./src/Auth/Strasnote.Auth.Api/Dockerfile-automated
         push: true
         platforms: linux/amd64
         tags: |
