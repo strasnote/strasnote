@@ -1,7 +1,11 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Strasnote.Auth.Abstracts;
 using Strasnote.Data.Entities.Auth;
 
@@ -11,17 +15,12 @@ namespace Strasnote.Auth
 	{
 		public SignInManager(
 			UserManager<UserEntity> userManager,
-			Microsoft.AspNetCore.Http.IHttpContextAccessor contextAccessor,
+			IHttpContextAccessor contextAccessor,
 			IUserClaimsPrincipalFactory<UserEntity> claimsFactory,
-			Microsoft.Extensions.Options.IOptions<IdentityOptions> optionsAccessor,
-			Microsoft.Extensions.Logging.ILogger<SignInManager<UserEntity>> logger,
-			Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider schemes) : base(
-				userManager,
-				contextAccessor,
-				claimsFactory,
-				optionsAccessor,
-				logger,
-				schemes)
+			IOptions<IdentityOptions> optionsAccessor,
+			ILogger<SignInManager<UserEntity>> logger,
+			IAuthenticationSchemeProvider schemes,
+			IUserConfirmation<UserEntity> confirmation) : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
 		{
 		}
 	}

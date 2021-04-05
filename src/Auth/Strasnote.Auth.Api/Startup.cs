@@ -5,7 +5,6 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,7 +59,6 @@ namespace Strasnote.Auth.Api
 			services.AddTransient<ISqlClient, MySqlClient>();
 			services.AddTransient<IDbClient>(s => s.GetRequiredService<ISqlClient>());
 
-			services.AddTransient<UserStore>();
 			services.AddTransient<IUserRepository, UserSqlRepository>();
 			services.AddTransient<IUserStore<UserEntity>, UserStore>();
 
@@ -76,7 +74,7 @@ namespace Strasnote.Auth.Api
 
 			services.AddTransient<JwtSecurityTokenHandler>();
 
-			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+			services.AddHttpContextAccessor();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
