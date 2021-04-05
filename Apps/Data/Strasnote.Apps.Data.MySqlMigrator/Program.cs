@@ -4,7 +4,6 @@
 using System;
 using MySql.Data.MySqlClient;
 using Strasnote.Data.Clients.MySql;
-using Strasnote.Data.Migrate;
 
 namespace Strasnote.Apps.Data.MySqlMigrator
 {

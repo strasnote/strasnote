@@ -10,7 +10,6 @@ using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Encryption;
 using Strasnote.Logging;
-using Strasnote.Util;
 using static F.OptionF;
 
 namespace Strasnote.Data.Migrate

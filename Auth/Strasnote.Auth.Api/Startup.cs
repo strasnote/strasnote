@@ -18,7 +18,6 @@ using Strasnote.Data.Abstracts;
 using Strasnote.Data.Clients.MySql;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
-using Strasnote.Data.Migrate;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api
