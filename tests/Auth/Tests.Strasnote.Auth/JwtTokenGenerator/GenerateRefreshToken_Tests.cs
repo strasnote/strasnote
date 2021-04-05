@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Strasnote.Auth;
@@ -22,7 +23,8 @@ namespace Tests.Strasnote.Auth
 				RefreshTokenExpiryMinutes = 60
 			}
 		});
-		private readonly IUserManager userManager = Substitute.For<IUserManager>();
+		private readonly IUserManager userManager;
+		private readonly IUserStore<UserEntity> userStore = Substitute.For<IUserStore<UserEntity>>();
 
 		private UserEntity userEntity = new()
 		{
@@ -31,14 +33,20 @@ namespace Tests.Strasnote.Auth
 			SecurityStamp = Guid.NewGuid().ToString()
 		};
 
-		public GenerateRefreshToken_Tests()
-		{
-			userManager.PasswordHasher.HashPassword(Arg.Any<UserEntity>(), Arg.Any<string>())
-				.Returns(Rnd.RndString.Get(20));
-		}
+		public GenerateRefreshToken_Tests() =>
+			userManager = new UserManager(
+				userStore,
+				null!,
+				new PasswordHasher<UserEntity>(),
+				null!,
+				null!,
+				null!,
+				null!,
+				null!,
+				null!);
 
 		[Fact]
-		public void Hashed_Token_Is_Returned()
+		public void RefreshTokenValue_Returned_Is_Valid_Identity_Hash()
 		{
 			// Arrange
 			var jwtTokenGenerator = new JwtTokenGenerator(
@@ -49,7 +57,11 @@ namespace Tests.Strasnote.Auth
 			var result = jwtTokenGenerator.GenerateRefreshToken(userEntity);
 
 			// Assert
-			Assert.False(string.IsNullOrWhiteSpace(result.RefreshTokenValue));
+			var passwordHasher = new PasswordHasher<UserEntity>();
+
+			Assert.Equal(
+				PasswordVerificationResult.Success,
+				passwordHasher.VerifyHashedPassword(new(), result.RefreshTokenValue, jwtTokenGenerator.RefreshTokenString));
 		}
 
 		[Fact]

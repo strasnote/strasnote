@@ -22,6 +22,8 @@ namespace Strasnote.Auth
 		private readonly AuthConfig authConfig;
 		private readonly IUserManager userManager;
 
+		internal string RefreshTokenString = string.Empty;
+
 		public JwtTokenGenerator(
 			IOptions<AuthConfig> authConfig,
 			IUserManager userManager)
@@ -75,8 +77,8 @@ namespace Strasnote.Auth
 		/// <inheritdoc/>
 		public RefreshTokenEntity GenerateRefreshToken(UserEntity userEntity)
 		{
-			var token = Rnd.RndString.Get(50, numbers: true, special: true);
-			var hashedToken = userManager.PasswordHasher.HashPassword(userEntity, token);
+			RefreshTokenString = Rnd.RndString.Get(50, numbers: true, special: true);
+			var hashedToken = userManager.PasswordHasher.HashPassword(userEntity, RefreshTokenString);
 
 			var tokenExpiry = DateTimeOffset.Now.AddMinutes(authConfig.Jwt.RefreshTokenExpiryMinutes);
 
