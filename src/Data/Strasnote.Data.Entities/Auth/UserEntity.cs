@@ -3,9 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Notes;
+using Microsoft.AspNetCore.Identity;
 
 namespace Strasnote.Data.Entities.Auth
 {

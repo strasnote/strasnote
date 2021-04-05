@@ -11,6 +11,8 @@ namespace Strasnote.Data.Entities.Auth
 	/// </summary>
 	public record RefreshTokenEntity : IEntity
 	{
+		private DateTime refreshTokenExpires;
+
 		/// <inheritdoc/>
 		[Ignore]
 		public long Id
@@ -27,7 +29,13 @@ namespace Strasnote.Data.Entities.Auth
 		/// <summary>
 		/// Token expiry date
 		/// </summary>
-		public DateTimeOffset RefreshTokenExpires { get; init; }
+		public DateTime RefreshTokenExpires
+		{
+			get =>
+				refreshTokenExpires;
+			set =>
+				refreshTokenExpires = value.ToUniversalTime();
+		}
 
 		/// <summary>
 		/// Token value
@@ -50,7 +58,7 @@ namespace Strasnote.Data.Entities.Auth
 		/// <param name="token">Token value</param>
 		/// <param name="expires">Token expiry date</param>
 		/// <param name="userId">User ID this Token belongs to</param>
-		public RefreshTokenEntity(string token, DateTimeOffset expires, long userId)
+		public RefreshTokenEntity(string token, DateTime expires, long userId)
 		{
 			RefreshTokenValue = token;
 			RefreshTokenExpires = expires;

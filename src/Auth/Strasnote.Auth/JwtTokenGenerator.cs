@@ -33,7 +33,7 @@ namespace Strasnote.Auth
 		}
 
 		/// <inheritdoc/>
-		public async Task<string> GenerateAccessTokenAsync(UserEntity user)
+		public Task<string> GenerateAccessTokenAsync(UserEntity user)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var secret = Encoding.ASCII.GetBytes(authConfig.Jwt.Secret);
@@ -55,23 +55,12 @@ namespace Strasnote.Auth
 				Audience = authConfig.Jwt.Audience
 			};
 
-			// Get the user's roles and add them as claims
-			var roles = await userManager.GetRolesAsync(user);
-
-			if (roles != null)
-			{
-				foreach (var role in roles)
-				{
-					claims.Add(new Claim(ClaimTypes.Role, role));
-				}
-			}
-
 			// Add all the claims to the token descriptor
 			tokenDescriptor.Subject.AddClaims(claims);
 
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 
-			return tokenHandler.WriteToken(token);
+			return Task.FromResult(tokenHandler.WriteToken(token));
 		}
 
 		/// <inheritdoc/>
@@ -80,7 +69,7 @@ namespace Strasnote.Auth
 			RefreshTokenString = Rnd.RndString.Get(50, numbers: true, special: true);
 			var hashedToken = userManager.PasswordHasher.HashPassword(userEntity, RefreshTokenString);
 
-			var tokenExpiry = DateTimeOffset.Now.AddMinutes(authConfig.Jwt.RefreshTokenExpiryMinutes);
+			var tokenExpiry = DateTime.Now.AddMinutes(authConfig.Jwt.RefreshTokenExpiryMinutes);
 
 			return new(hashedToken, tokenExpiry, userEntity.Id);
 		}

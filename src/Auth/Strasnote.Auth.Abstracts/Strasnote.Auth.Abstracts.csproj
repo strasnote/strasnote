@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
     <ProjectReference Include="..\Strasnote.Auth.Models\Strasnote.Auth.Models.csproj" />
   </ItemGroup>

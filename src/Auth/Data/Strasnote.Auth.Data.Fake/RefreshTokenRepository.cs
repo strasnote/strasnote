@@ -25,7 +25,7 @@ namespace Strasnote.Auth.Data.Fake
 		public Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken)
 		{
 			LogOperation("RetrieveForUser", "{UserId} {Token}", userId, refreshToken);
-			return Task.FromResult(new RefreshTokenEntity("token", DateTimeOffset.Now.AddDays(1), 1));
+			return Task.FromResult(new RefreshTokenEntity("token", DateTime.Now.AddDays(1), 1));
 		}
 
 		public Task<bool> DeleteByUserIdAsync(long userId)

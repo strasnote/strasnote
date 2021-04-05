@@ -3,6 +3,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Dapper;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;
@@ -22,10 +23,14 @@ namespace Strasnote.Auth.Data
 			: base(client, log, client.Tables.RefreshToken) { }
 
 		/// <inheritdoc/>
-		public new Task CreateAsync(RefreshTokenEntity entity) => throw new NotImplementedException();
+		public Task<bool> DeleteByUserIdAsync(long userId)
+		{
+			const string sql = @"DELETE 
+								 FROM `auth.refresh_token` 
+								 WHERE `auth.refresh_token`.UserId = @UserId";
 
-		/// <inheritdoc/>
-		public Task<bool> DeleteByUserIdAsync(long userId) => throw new NotImplementedException();
+			return Connection.ExecuteScalarAsync<bool>(sql, new { UserId = userId });
+		}
 
 		/// <inheritdoc/>
 		public Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken) => throw new NotImplementedException();
