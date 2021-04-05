@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Notes\Strasnote.Notes.Api\Strasnote.Notes.Api.csproj" />
+    <ProjectReference Include="..\..\..\src\Notes\Strasnote.Notes.Api\Strasnote.Notes.Api.csproj" />
   </ItemGroup>
 
 </Project>

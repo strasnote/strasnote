@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
+	  <ProjectReference Include="..\..\..\src\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
 	</ItemGroup>
 
 </Project>

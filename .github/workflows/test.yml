@@ -8,13 +8,8 @@ on:
       - '**'
     paths:
       - '.github/workflows/test.yml'
-      - 'Auth/**'
-      - 'Data/**'
-      - 'Encryption/**'
-      - 'Logging/**'
-      - 'Notes/**'
-      - 'Tests/**'
-      - 'Util/**'
+      - 'src/**'
+      - 'tests/**'
 
 jobs:
   restore-build-test:
@@ -31,15 +26,20 @@ jobs:
     - 
       name: A - Restore
       run: |
-        dotnet restore Test.csproj
+        dotnet restore ./tests/Test.csproj
     - 
       name: B - Build
       run: |
-        dotnet build Test.csproj --no-restore --configuration Release
+        dotnet build ./tests/Test.csproj \
+          --no-restore \
+          --configuration Release
     - 
       name: C - Test
       run: |
-        dotnet test Test.csproj --no-restore --no-build --configuration Release
+        dotnet test ./tests/Test.csproj \
+          --no-restore \
+          --no-build \
+          --configuration Release
     - 
       if: success()
       name: Finish - Success
