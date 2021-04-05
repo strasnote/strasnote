@@ -9,10 +9,10 @@ namespace Strasnote.Data.Migrator_Tests
 	public class ExecuteAsync_Tests
 	{
 		[Fact]
-		public void If_Nuke_On_Startup_True_Runs_Client_Nuke_And_MigrateToLatest()
+		public void If_Nuke_On_Startup_True_Runs_Client_Nuke_And_MigrateToLatest_And_Inserts_Test_Data()
 		{
 			// Arrange
-			var (migrator, migrate, _, client, _, _) = Migrator_Setup.Get();
+			var (migrator, migrate, _, client, log, _) = Migrator_Setup.Get();
 			migrate.NukeOnStartup = true;
 
 			// Act
@@ -21,6 +21,7 @@ namespace Strasnote.Data.Migrator_Tests
 			// Assert
 			client.Received().Nuke();
 			client.Received().MigrateToLatest();
+			log.Received().Information("Inserting test data.");
 		}
 
 		[Fact]
