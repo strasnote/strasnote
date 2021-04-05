@@ -69,7 +69,7 @@ namespace Strasnote.Auth
 			RefreshTokenString = Rnd.RndString.Get(50, numbers: true, special: true);
 			var hashedToken = userManager.PasswordHasher.HashPassword(userEntity, RefreshTokenString);
 
-			var tokenExpiry = DateTimeOffset.Now.AddMinutes(authConfig.Jwt.RefreshTokenExpiryMinutes);
+			var tokenExpiry = DateTime.Now.AddMinutes(authConfig.Jwt.RefreshTokenExpiryMinutes);
 
 			return new(hashedToken, tokenExpiry, userEntity.Id);
 		}
