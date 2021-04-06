@@ -32,7 +32,7 @@ namespace Strasnote.Data.Abstracts
 		/// <param name="query">Query - text or stored procedure</param>
 		/// <param name="param">Query parameters</param>
 		/// <param name="type">Command Type</param>
-		Task<TModel> QuerySingleAsync<TModel>(string query, object param, CommandType type);
+		Task<TModel?> QuerySingleAsync<TModel>(string query, object param, CommandType type);
 
 		#endregion
 	}

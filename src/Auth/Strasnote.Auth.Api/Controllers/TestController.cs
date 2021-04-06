@@ -21,7 +21,7 @@ namespace Strasnote.Auth.Api.Controllers
 
 		[HttpGet]
 		[Route("id/{id}")]
-		public async Task<MiniUser> GetById(long id)
+		public async Task<MiniUser?> GetById(long id)
 		{
 			log.Trace("Get user with ID: {Id}", id);
 			return await users.RetrieveAsync<MiniUser>(id);
@@ -29,7 +29,7 @@ namespace Strasnote.Auth.Api.Controllers
 
 		[HttpGet]
 		[Route("email/{email}")]
-		public async Task<MiniUser> GetByEmail(string email)
+		public async Task<MiniUser?> GetByEmail(string email)
 		{
 			log.Trace("Get user with Email: {Email}", email);
 			return await users.RetrieveByEmailAsync<MiniUser>(email);

@@ -170,20 +170,20 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> QuerySingleAsync<TModel>(string query, object param) =>
+		public virtual Task<TModel?> QuerySingleAsync<TModel>(string query, object param) =>
 			QuerySingleAsync<TModel>(query, param, CommandType.Text);
 
 		/// <inheritdoc cref="QuerySingleAsync{TModel}(string, object)"/>
 		/// <param name="query">Query - text or stored procedure</param>
 		/// <param name="param">Query parameters</param>
 		/// <param name="type">Command Type</param>
-		public virtual Task<TModel> QuerySingleAsync<TModel>(string query, object param, CommandType type)
+		public virtual Task<TModel?> QuerySingleAsync<TModel>(string query, object param, CommandType type)
 		{
 			// Log query single
 			LogOperation(Operation.QuerySingle, "{Type}: {Query} - {@Parameters}", type, query, param);
 
 			// Perform retrieve and map to TModel
-			return Connection.QuerySingleAsync<TModel>(
+			return Connection.QuerySingleAsync<TModel?>(
 				sql: query,
 				param: param,
 				commandType: type
@@ -230,10 +230,10 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public async virtual Task<TModel> QuerySingleAsync<TModel>(
+		public async virtual Task<TModel?> QuerySingleAsync<TModel>(
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		) =>
-			(await QueryAsync<TModel>(predicates).ConfigureAwait(false)).Single();
+			(await QueryAsync<TModel>(predicates).ConfigureAwait(false)).SingleOrDefault();
 
 		#endregion
 
@@ -255,14 +255,14 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> RetrieveAsync<TModel>(long id)
+		public virtual Task<TModel?> RetrieveAsync<TModel>(long id)
 		{
 			// Log retrieve
 			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
 			LogOperation(Operation.RetrieveById, "{Query} {Id}", query, id);
 
 			// Perform retrieve and map to model
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
+			return Connection.QuerySingleOrDefaultAsync<TModel?>(
 				sql: query,
 				param: new { id },
 				commandType: CommandType.Text
@@ -270,14 +270,14 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> UpdateAsync<TModel>(TEntity entity)
+		public virtual Task<TModel?> UpdateAsync<TModel>(TEntity entity)
 		{
 			// Log update
 			var query = Queries.GetUpdateQuery(Table, GetProperties<TEntity>(), nameof(IEntity.Id), entity.Id);
 			LogOperation(Operation.Update, "{Query} {@Entity}", query, entity);
 
 			// Perform update and return updated entity
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
+			return Connection.QuerySingleOrDefaultAsync<TModel?>(
 				sql: query,
 				param: entity,
 				commandType: CommandType.Text
