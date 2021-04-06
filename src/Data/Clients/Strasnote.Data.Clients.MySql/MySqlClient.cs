@@ -67,21 +67,21 @@ namespace Strasnote.Data.Clients.MySql
 
 		/// <inheritdoc/>
 		public bool MigrateToLatest() =>
-			MigrateTo(null);
+			MigrateToVersion(null);
 
 		/// <inheritdoc/>
 		public bool MigrateTo(long version) =>
-			MigrateTo(version);
+			MigrateToVersion(version);
 
 		/// <inheritdoc/>
 		public void Nuke() =>
-			MigrateTo(0);
+			MigrateToVersion(0);
 
 		/// <summary>
 		/// Perform database migration
 		/// </summary>
 		/// <param name="version">[Optional] The version to migrate the database to - if not set the latest version will be used</param>
-		private bool MigrateTo(long? version)
+		private bool MigrateToVersion(long? version)
 		{
 			using var db = new MySqlConnection(ConnectionString);
 			return MigrateTo(db, Enums.DbType.MySql, typeof(MySqlClient).Assembly, version);
