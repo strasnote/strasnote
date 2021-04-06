@@ -151,6 +151,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{27630B2F-2
 		docs\index.md = docs\index.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strasnote.AppBase", "src\AppBase\Strasnote.AppBase.csproj", "{22B29C8B-F3DE-4EEC-B78C-C8779530E27D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -317,6 +319,10 @@ Global
 		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22B29C8B-F3DE-4EEC-B78C-C8779530E27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22B29C8B-F3DE-4EEC-B78C-C8779530E27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22B29C8B-F3DE-4EEC-B78C-C8779530E27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22B29C8B-F3DE-4EEC-B78C-C8779530E27D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -379,6 +385,7 @@ Global
 		{67CF25A4-EBAE-4F2F-9C07-1D6B2A910B2A} = {797720B2-7A04-4110-A615-0C27B7CF2DDB}
 		{ED5D0CF5-0B9E-48C2-BCBA-C0CDBCA03890} = {F92EB2C3-2A95-4CE4-895E-739E0BAFD73B}
 		{6C21EB43-9F5C-4A60-B278-F403E4A7D74E} = {E68207F2-CC38-4D78-A6C2-812D5630E641}
+		{22B29C8B-F3DE-4EEC-B78C-C8779530E27D} = {514C9759-4D0C-4C75-9AA5-38C418C445B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF05D0DF-D04A-46E8-A71F-775870189F62}
