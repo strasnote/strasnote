@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AppBase\Strasnote.AppBase.csproj" />
     <ProjectReference Include="..\..\Data\Clients\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj" />
     <ProjectReference Include="..\..\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
     <ProjectReference Include="..\..\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
