@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Data.Exceptions;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Util;
 using Xunit;
@@ -45,6 +46,20 @@ namespace Tests.Strasnote.Auth.Data
 
 			// Assert
 			await userRepository.Received(1).RetrieveByUsernameAsync<UserEntity>(Arg.Any<string>());
+		}
+
+		[Fact]
+		public async Task Throws_Exception_When_User_Not_Found()
+		{
+			// Arrange
+			var userStore = new UserStore(userRepository);
+			userRepository.RetrieveByUsernameAsync<UserEntity>(Arg.Any<string>()).Returns(Task.FromResult<UserEntity?>(null));
+
+			// Act
+			Task action() => userStore.FindByNameAsync(Rnd.Str, new CancellationToken());
+
+			// Assert
+			await Assert.ThrowsAsync<UserNotFoundByUsernameException>(action);
 		}
 	}
 }

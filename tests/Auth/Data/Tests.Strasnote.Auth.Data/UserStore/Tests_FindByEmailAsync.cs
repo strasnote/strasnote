@@ -3,9 +3,11 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Data.Exceptions;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Util;
 using Xunit;
@@ -46,6 +48,20 @@ namespace Tests.Strasnote.Auth.Data
 
 			// Assert
 			await userRepository.Received(1).RetrieveByEmailAsync<UserEntity>(Arg.Any<string>());
+		}
+
+		[Fact]
+		public async Task Throws_Exception_When_User_Not_Found()
+		{
+			// Arrange
+			var userStore = new UserStore(userRepository);
+			userRepository.RetrieveByEmailAsync<UserEntity>(Arg.Any<string>()).Returns(Task.FromResult<UserEntity?>(null));
+
+			// Act
+			Task action() => userStore.FindByEmailAsync(Rnd.Str, new CancellationToken());
+
+			// Assert
+			await Assert.ThrowsAsync<UserNotFoundByEmailException>(action);
 		}
 	}
 }
