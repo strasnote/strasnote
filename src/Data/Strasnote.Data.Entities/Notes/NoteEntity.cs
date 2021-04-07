@@ -34,12 +34,28 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// When the Note was created
 		/// </summary>
-		public DateTimeOffset NoteCreated { get; init; }
+		public DateTime NoteCreated
+		{
+			get =>
+				noteCreated;
+			init =>
+				noteCreated = value.ToUniversalTime();
+		}
+
+		private DateTime noteCreated;
 
 		/// <summary>
 		/// When the Note was updated
 		/// </summary>
-		public DateTimeOffset NoteUpdated { get; init; }
+		public DateTime NoteUpdated
+		{
+			get =>
+				noteUpdated;
+			init =>
+				noteUpdated = value.ToUniversalTime();
+		}
+
+		private DateTime noteUpdated;
 
 		#region Relationships
 

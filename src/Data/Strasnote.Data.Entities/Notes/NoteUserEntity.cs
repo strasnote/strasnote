@@ -27,7 +27,15 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// [Optional] Expiry date of the User's access to this Note
 		/// </summary>
-		public DateTimeOffset? NoteUserExpiry { get; init; }
+		public DateTime? NoteUserExpiry
+		{
+			get =>
+				noteUserExpiry;
+			init =>
+				noteUserExpiry = value?.ToUniversalTime();
+		}
+
+		private DateTime? noteUserExpiry;
 
 		#region Relationships
 

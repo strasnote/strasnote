@@ -39,12 +39,28 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// When the Tag was created
 		/// </summary>
-		public DateTimeOffset TagCreated { get; init; }
+		public DateTime TagCreated
+		{
+			get =>
+				tagCreated;
+			init =>
+				tagCreated = value.ToUniversalTime();
+		}
+
+		private DateTime tagCreated;
 
 		/// <summary>
 		/// When the Tag was last updated
 		/// </summary>
-		public DateTimeOffset TagUpdated { get; init; }
+		public DateTime TagUpdated
+		{
+			get =>
+				tagUpdated;
+			init =>
+				tagUpdated = value.ToUniversalTime();
+		}
+
+		private DateTime tagUpdated;
 
 		#region Relationships
 
