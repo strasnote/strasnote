@@ -16,12 +16,12 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// Retrieve a User by email
 		/// </summary>
 		/// <param name="email">Email address</param>
-		Task<TModel> RetrieveByEmailAsync<TModel>(string email);
+		Task<TModel?> RetrieveByEmailAsync<TModel>(string email);
 
 		/// <summary>
 		/// Retrieve a User by username
 		/// </summary>
 		/// <param name="name">Username</param>
-		Task<TModel> RetrieveByUsernameAsync<TModel>(string name);
+		Task<TModel?> RetrieveByUsernameAsync<TModel>(string name);
 	}
 }

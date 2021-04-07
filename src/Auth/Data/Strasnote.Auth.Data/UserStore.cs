@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Exceptions;
 using Strasnote.Data.Entities.Auth;
 
 namespace Strasnote.Auth.Data
@@ -45,19 +46,40 @@ namespace Strasnote.Auth.Data
 		#region Retrieve
 
 		/// <inheritdoc/>
-		public Task<UserEntity> FindByIdAsync(string userId, CancellationToken cancellationToken)
+		public async Task<UserEntity> FindByIdAsync(string userId, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return userRepository.RetrieveAsync<UserEntity>(long.Parse(userId));
+			return long.TryParse(userId, out long id) switch
+			{
+				true =>
+					await userRepository.RetrieveAsync<UserEntity>(id).ConfigureAwait(false) switch
+					{
+						UserEntity user =>
+							user,
+
+						_ =>
+							throw new UserNotFoundByIdException(id)
+					},
+
+				false =>
+					throw new UserNotFoundInvalidIdException(userId)
+			};
 		}
 
 		/// <inheritdoc/>
-		public Task<UserEntity> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+		public async Task<UserEntity> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return userRepository.RetrieveByUsernameAsync<UserEntity>(normalizedUserName);
+			return await userRepository.RetrieveByUsernameAsync<UserEntity>(normalizedUserName).ConfigureAwait(false) switch
+			{
+				UserEntity user =>
+					user,
+
+				_ =>
+					throw new UserNotFoundByUsernameException(normalizedUserName)
+			};
 		}
 
 		/// <inheritdoc/>
@@ -111,11 +133,18 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task<UserEntity> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+		public async Task<UserEntity> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return userRepository.RetrieveByEmailAsync<UserEntity>(normalizedEmail);
+			return await userRepository.RetrieveByEmailAsync<UserEntity>(normalizedEmail).ConfigureAwait(false) switch
+			{
+				UserEntity user =>
+					user,
+
+				_ =>
+					throw new UserNotFoundByEmailException(normalizedEmail)
+			};
 		}
 
 		/// <inheritdoc/>
@@ -150,11 +179,18 @@ namespace Strasnote.Auth.Data
 		#region Update
 
 		/// <inheritdoc/>
-		public Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken)
+		public async Task<IdentityResult> UpdateAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
-			return userRepository.UpdateAsync<IdentityResult>(user);
+			return await userRepository.UpdateAsync<UserEntity>(user).ConfigureAwait(false) switch
+			{
+				UserEntity =>
+					IdentityResult.Success,
+
+				_ =>
+					IdentityResult.Failed(new IdentityError { Description = "User not found." })
+			};
 		}
 
 		/// <inheritdoc/>

@@ -31,7 +31,7 @@ namespace Strasnote.Data.Abstracts
 		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="query">Query - text or stored procedure</param>
 		/// <param name="param">Query parameters</param>
-		Task<TModel> QuerySingleAsync<TModel>(string query, object param);
+		Task<TModel?> QuerySingleAsync<TModel>(string query, object param);
 
 		/// <summary>
 		/// Retrieve entities using the specified predicates (uses AND)
@@ -47,7 +47,7 @@ namespace Strasnote.Data.Abstracts
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="predicates">List of predicates (uses AND)</param>
-		Task<TModel> QuerySingleAsync<TModel>(
+		Task<TModel?> QuerySingleAsync<TModel>(
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		);
 
@@ -66,14 +66,14 @@ namespace Strasnote.Data.Abstracts
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="id">ID of entity to retrieve</param>
-		Task<TModel> RetrieveAsync<TModel>(long id);
+		Task<TModel?> RetrieveAsync<TModel>(long id);
 
 		/// <summary>
 		/// Update an entity
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="entity">Entity to update</param>
-		Task<TModel> UpdateAsync<TModel>(TEntity entity);
+		Task<TModel?> UpdateAsync<TModel>(TEntity entity);
 
 		/// <summary>
 		/// Delete an entity

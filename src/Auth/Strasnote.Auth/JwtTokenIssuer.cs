@@ -6,11 +6,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Exceptions;
 using Strasnote.Auth.Models;
 
 namespace Strasnote.Auth
@@ -44,38 +46,39 @@ namespace Strasnote.Auth
 		/// <inheritdoc/>
 		public async Task<TokenResponse> GetTokenAsync(string email, string password)
 		{
-			if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+			try
 			{
-				return new TokenResponse("Email/password not supplied", false);
+				if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+				{
+					return new TokenResponse("Email/password not supplied", false);
+				}
+
+				var user = await userManager.FindByEmailAsync(email);
+				var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, true);
+
+				if (signInResult.IsLockedOut)
+				{
+					return new TokenResponse("User locked out", false);
+				}
+
+				if (!signInResult.Succeeded)
+				{
+					return new TokenResponse("User login failed", false);
+				}
+
+				var refreshToken = jwtTokenGenerator.GenerateRefreshToken(user);
+
+				await refreshTokenRepository.DeleteByUserIdAsync(user.Id);
+				await refreshTokenRepository.CreateAsync(refreshToken);
+
+				var accessToken = await jwtTokenGenerator.GenerateAccessTokenAsync(user);
+
+				return new(accessToken, refreshToken.RefreshTokenValue);
 			}
-
-			var user = await userManager.FindByEmailAsync(email);
-
-			if (user == null)
+			catch (UserNotFoundException)
 			{
 				return new TokenResponse("User does not exist", false);
 			}
-
-			var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, true);
-
-			if (signInResult.IsLockedOut)
-			{
-				return new TokenResponse("User locked out", false);
-			}
-
-			if (!signInResult.Succeeded)
-			{
-				return new TokenResponse("User login failed", false);
-			}
-
-			var refreshToken = jwtTokenGenerator.GenerateRefreshToken(user);
-
-			await refreshTokenRepository.DeleteByUserIdAsync(user.Id);
-			await refreshTokenRepository.CreateAsync(refreshToken);
-
-			var accessToken = await jwtTokenGenerator.GenerateAccessTokenAsync(user);
-
-			return new(accessToken, refreshToken.RefreshTokenValue);
 		}
 
 		/// <inheritdoc/>

@@ -21,13 +21,13 @@ namespace Strasnote.Auth.Data
 			: base(client, log, client.Tables.User) { }
 
 		/// <inheritdoc/>
-		public Task<TModel> RetrieveByEmailAsync<TModel>(string email) =>
+		public Task<TModel?> RetrieveByEmailAsync<TModel>(string email) =>
 			QuerySingleAsync<TModel>(
 				(u => u.Email, SearchOperator.Equal, email)
 			);
 
 		/// <inheritdoc/>
-		public Task<TModel> RetrieveByUsernameAsync<TModel>(string name) =>
+		public Task<TModel?> RetrieveByUsernameAsync<TModel>(string name) =>
 			RetrieveByEmailAsync<TModel>(name);
 	}
 }

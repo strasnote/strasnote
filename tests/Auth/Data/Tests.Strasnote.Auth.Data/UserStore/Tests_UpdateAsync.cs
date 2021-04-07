@@ -3,7 +3,6 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
@@ -28,7 +27,7 @@ namespace Tests.Strasnote.Auth.Data
 			await userStore.UpdateAsync(userEntity, new CancellationToken());
 
 			// Assert
-			await userRepository.Received(1).UpdateAsync<IdentityResult>(userEntity);
+			await userRepository.Received(1).UpdateAsync<UserEntity>(userEntity);
 		}
 	}
 }
