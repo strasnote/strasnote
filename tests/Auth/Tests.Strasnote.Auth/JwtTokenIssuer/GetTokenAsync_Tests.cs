@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using Strasnote.Auth;
 using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
+using Strasnote.Auth.Exceptions;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Util;
 using Xunit;
@@ -146,7 +148,7 @@ namespace Tests.Strasnote.Auth
 		{
 			// Arrange
 			userManager.FindByEmailAsync(Arg.Any<string>())
-				.ReturnsNull();
+				.Throws<UserNotFoundByEmailException>();
 
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
@@ -157,7 +159,7 @@ namespace Tests.Strasnote.Auth
 				jwtTokenGenerator);
 
 			// Act
-			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
+			var result = await jwtTokenService.GetTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
 			Assert.False(result.Success);

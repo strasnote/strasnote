@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
-using Strasnote.Auth.Data.Exceptions;
+using Strasnote.Auth.Exceptions;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Util;
 using Xunit;
