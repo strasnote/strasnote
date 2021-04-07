@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Strasnote.Auth.Abstracts;
@@ -15,21 +17,30 @@ namespace Strasnote.Auth.Extensions
 		/// </summary>
 		/// <param name="services">IServiceCollection</param>
 		/// <param name="configuration">IConfiguration</param>
-		/// <returns>The <paramref name="services"/> object with the added services.</returns>
-		public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
 		{
 			// JWT Tokens
 			services.AddTransient<IJwtTokenIssuer, JwtTokenIssuer>();
 			services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
+			services.AddTransient<JwtSecurityTokenHandler>();
+
+			services
+				.AddAuthentication(options =>
+				{
+					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				})
+				.AddJwtBearer(config =>
+				{
+					config.RequireHttpsMetadata = true;
+					config.SaveToken = true;
+					config.TokenValidationParameters = new AuthConfigTokenValidationParameters(configuration);
+				});
 
 			// Identity
 			services.AddTransient<IUserManager, UserManager>();
 			services.AddTransient<ISignInManager, SignInManager>();
-
-			// Config options
-			services.AddOptions<AuthConfig>()
-				.Bind(configuration.GetSection(AuthConfig.AppSettingsSectionName))
-				.ValidateDataAnnotations(); // ToDo: implement validation output/log (startup?): https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-5.0#options-validation
+			services.AddHttpContextAccessor();
 
 			return services;
 		}

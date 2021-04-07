@@ -5,11 +5,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
+    <None Remove="appsettings.Secrets.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.Secrets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\AppBase\Strasnote.AppBase.csproj" />
+    <ProjectReference Include="..\..\..\Auth\Data\Strasnote.Auth.Data\Strasnote.Auth.Data.csproj" />
     <ProjectReference Include="..\..\..\Data\Clients\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj" />
     <ProjectReference Include="..\..\..\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
     <ProjectReference Include="..\..\..\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
     <ProjectReference Include="..\..\..\Encryption\Strasnote.Encryption\Strasnote.Encryption.csproj" />
     <ProjectReference Include="..\..\..\Util\Strasnote.Util.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
