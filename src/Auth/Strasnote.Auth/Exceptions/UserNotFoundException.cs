@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Strasnote.Auth.Data.Exceptions
+namespace Strasnote.Auth.Exceptions
 {
 	public abstract class UserNotFoundException : Exception
 	{

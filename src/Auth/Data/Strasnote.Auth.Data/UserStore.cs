@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
-using Strasnote.Auth.Data.Exceptions;
+using Strasnote.Auth.Exceptions;
 using Strasnote.Data.Entities.Auth;
 
 namespace Strasnote.Auth.Data
