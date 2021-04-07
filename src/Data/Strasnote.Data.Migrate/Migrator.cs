@@ -63,7 +63,7 @@ namespace Strasnote.Data.Migrate
 		/// <summary>
 		/// Wipe and reinstall the database and test data
 		/// </summary>
-		private Task Nuke()
+		public Task Nuke()
 		{
 			// Destroy database (i.e. migrate to version 0)
 			log.Information("Nuking database.");
@@ -79,7 +79,7 @@ namespace Strasnote.Data.Migrate
 		/// <summary>
 		/// Migrate to the latest version of the database
 		/// </summary>
-		private void MigrateToLatest()
+		public void MigrateToLatest()
 		{
 			log.Information("Migrating database to the latest version.");
 			client.MigrateToLatest();
@@ -88,12 +88,14 @@ namespace Strasnote.Data.Migrate
 		/// <summary>
 		/// Insert test data
 		/// </summary>
-		private async Task InsertTestData()
+		public async Task InsertTestData()
 		{
 			log.Information("Inserting test data.");
 
 			// Insert default user
-			DefaultUser.Insert(log, user, userConfig);
+			await Task.Run(
+				() => DefaultUser.Insert(log, user, userConfig)
+			).ConfigureAwait(false);
 		}
 	}
 }
