@@ -49,6 +49,11 @@ namespace Strasnote.AppBase
 				.Configure(
 					(host, app) => Configure(app, host.HostingEnvironment, host.Configuration)
 				)
+
+				// Force .NET to look for Controllers in the App assembly, not this one
+				.UseSetting(
+					WebHostDefaults.ApplicationKey, GetType().Assembly.FullName
+				)
 			);
 
 		/// <summary>
