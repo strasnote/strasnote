@@ -120,7 +120,7 @@ namespace Strasnote.Auth
 				return new("Refresh token invalid", false);
 			}
 
-			if (existingRefreshToken.RefreshTokenExpires <= DateTimeOffset.Now)
+			if (existingRefreshToken.RefreshTokenExpires <= DateTime.UtcNow)
 			{
 				return new("Refresh token has expired", false);
 			}

@@ -27,7 +27,15 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// [Optional] Expiry date of the User's access to this Folder
 		/// </summary>
-		public DateTimeOffset? FolderUserExpiry { get; init; }
+		public DateTime? FolderUserExpiry
+		{
+			get =>
+				folderUserExpiry;
+			init =>
+				folderUserExpiry = value?.ToUniversalTime();
+		}
+
+		private DateTime? folderUserExpiry;
 
 		#region Relationships
 

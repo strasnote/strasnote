@@ -39,12 +39,28 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// When the Folder was created
 		/// </summary>
-		public DateTimeOffset FolderCreated { get; init; }
+		public DateTime FolderCreated
+		{
+			get =>
+				folderCreated;
+			init =>
+				folderCreated = value.ToUniversalTime();
+		}
+
+		private DateTime folderCreated;
 
 		/// <summary>
 		/// When the Folder was updated
 		/// </summary>
-		public DateTimeOffset FolderUpdated { get; init; }
+		public DateTime FolderUpdated
+		{
+			get =>
+				folderUpdated;
+			init =>
+				folderUpdated = value.ToUniversalTime();
+		}
+
+		private DateTime folderUpdated;
 
 		#region Relationships
 

@@ -44,7 +44,15 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// [Optional] Expiry date of this encryption key
 		/// </summary>
-		public DateTimeOffset? EncryptedExpiry { get; init; }
+		public DateTime? EncryptedExpiry
+		{
+			get =>
+				encryptedExpiry;
+			init =>
+				encryptedExpiry = value?.ToUniversalTime();
+		}
+
+		private DateTime? encryptedExpiry;
 
 		#region Relationships
 

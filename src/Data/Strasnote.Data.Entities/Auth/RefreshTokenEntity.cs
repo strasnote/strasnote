@@ -11,8 +11,6 @@ namespace Strasnote.Data.Entities.Auth
 	/// </summary>
 	public record RefreshTokenEntity : IEntity
 	{
-		private DateTime refreshTokenExpires;
-
 		/// <inheritdoc/>
 		[Ignore]
 		public long Id
@@ -33,9 +31,11 @@ namespace Strasnote.Data.Entities.Auth
 		{
 			get =>
 				refreshTokenExpires;
-			set =>
+			init =>
 				refreshTokenExpires = value.ToUniversalTime();
 		}
+
+		private DateTime refreshTokenExpires;
 
 		/// <summary>
 		/// Token value

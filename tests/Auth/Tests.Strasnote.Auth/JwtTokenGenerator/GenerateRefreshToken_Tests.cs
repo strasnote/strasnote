@@ -76,7 +76,7 @@ namespace Tests.Strasnote.Auth
 			var result = jwtTokenGenerator.GenerateRefreshToken(userEntity);
 
 			// Assert
-			Assert.True(result.RefreshTokenExpires > DateTimeOffset.Now.AddMinutes(authConfig.Value.Jwt.RefreshTokenExpiryMinutes).AddSeconds(-10));
+			Assert.True(result.RefreshTokenExpires > DateTime.UtcNow.AddMinutes(authConfig.Value.Jwt.RefreshTokenExpiryMinutes).AddSeconds(-10));
 		}
 
 		[Fact]
