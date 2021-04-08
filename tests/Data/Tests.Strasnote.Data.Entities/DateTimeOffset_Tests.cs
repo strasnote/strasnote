@@ -3,7 +3,7 @@
 
 using System;
 using System.Linq;
-using Strasnote.Data.Entities;
+using Strasnote.Data.Entities.Tests;
 using Xunit;
 
 namespace Strasnote.Data.Entities_Tests
@@ -23,11 +23,11 @@ namespace Strasnote.Data.Entities_Tests
 							 };
 
 			// Act
-			var result = properties.Where(p => p.Property == typeof(DateTimeOffset));
+			var result = properties.Where(p => typeof(DateTimeOffset) == p.Property);
 
 			// Assert
 			Assert.Collection(result,
-				x => Assert.Equal(nameof(TestEntity), x.Entity)
+				x => Assert.Equal(nameof(DateTimeTestEntity), x.Entity)
 			);
 		}
 	}

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Strasnote.Data.Entities;
+using Strasnote.Data.Entities.Tests;
 using Strasnote.Util;
 using Xunit;
 
@@ -57,7 +57,7 @@ namespace Strasnote.Data.Entities_Tests
 		public void All_DateTime_Properties_Set_DateTime_To_UTC()
 		{
 			// Arrange
-			var entities = GetEntitiesWithDateTimeProperties(t => typeof(TestEntity) != t);
+			var entities = GetEntitiesWithDateTimeProperties(t => typeof(DateTimeTestEntity) != t);
 			var (localDateTime, utcDateTime) = GetRandomDateTime();
 
 			// Act
@@ -73,7 +73,7 @@ namespace Strasnote.Data.Entities_Tests
 		public void Test_Entity_DateTime_Property_Does_Not_Set_DateTime_To_UTC()
 		{
 			// Arrange
-			var entities = GetEntitiesWithDateTimeProperties(t => typeof(TestEntity) == t);
+			var entities = GetEntitiesWithDateTimeProperties(t => typeof(DateTimeTestEntity) == t);
 			var (localDateTime, utcDateTime) = GetRandomDateTime();
 
 			// Act

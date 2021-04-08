@@ -4,12 +4,12 @@
 using System;
 using Strasnote.Data.Abstracts;
 
-namespace Strasnote.Data.Entities
+namespace Strasnote.Data.Entities.Tests
 {
 	/// <summary>
 	/// This entity only exists to ensure that the test for DateTimeOffset properties works correctly
 	/// </summary>
-	internal class TestEntity : IEntity
+	internal class DateTimeTestEntity : IEntity
 	{
 		/// <summary>
 		/// Unused ID
