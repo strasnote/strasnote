@@ -11,8 +11,19 @@ namespace Strasnote.Data.Entities
 	/// </summary>
 	internal class TestEntity : IEntity
 	{
+		/// <summary>
+		/// Unused ID
+		/// </summary>
 		public long Id { get; init; }
 
-		public DateTimeOffset TestProperty { get; set; }
+		/// <summary>
+		/// Unused test property - see Tests.Strasnote.Data.Entities.DateTimeOffset_Tests
+		/// </summary>
+		public DateTimeOffset TestOffsetProperty { get; set; }
+
+		/// <summary>
+		/// Unused test property - see Tests.Strasnote.Data.Entities.DateTimeUtc_Tests
+		/// </summary>
+		public DateTime TestUtcProperty { get; set; }
 	}
 }

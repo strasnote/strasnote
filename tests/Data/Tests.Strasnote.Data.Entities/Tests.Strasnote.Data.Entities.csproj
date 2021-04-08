@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
+    <ProjectReference Include="..\..\..\src\Util\Strasnote.Util.csproj" />
   </ItemGroup>
 
 </Project>
