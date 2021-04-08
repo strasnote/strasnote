@@ -74,7 +74,7 @@ namespace Strasnote.Data.Entities_Tests
 		{
 			// Arrange
 			var entities = GetEntitiesWithDateTimeProperties(t => typeof(DateTimeTestEntity) == t);
-			var (localDateTime, utcDateTime) = GetRandomDateTime();
+			var (localDateTime, _) = GetRandomDateTime();
 
 			// Act
 			var results = SetGetValues(entities, localDateTime);
