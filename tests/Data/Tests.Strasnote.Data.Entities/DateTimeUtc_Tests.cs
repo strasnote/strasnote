@@ -65,7 +65,11 @@ namespace Strasnote.Data.Entities_Tests
 
 			// Assert
 			Assert.All(results,
-				x => Assert.Equal(utcDateTime, x, TimeSpan.Zero)
+				x =>
+				{
+					Assert.Equal(utcDateTime, x, TimeSpan.Zero);
+					Assert.Equal(DateTimeKind.Utc, x.Kind);
+				}
 			);
 		}
 
@@ -81,7 +85,11 @@ namespace Strasnote.Data.Entities_Tests
 
 			// Assert
 			Assert.All(results,
-				x => Assert.Equal(localDateTime, x, TimeSpan.Zero)
+				x =>
+				{
+					Assert.Equal(localDateTime, x, TimeSpan.Zero);
+					Assert.Equal(DateTimeKind.Local, x.Kind);
+				}
 			);
 		}
 
