@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Strasnote.AppBase;
-using Strasnote.Auth.Extensions;
+using Strasnote.Auth.Data.Extensions;
 using Strasnote.Data.Clients.MySql;
 
 namespace Strasnote.Apps.Data.MySqlMigrator
