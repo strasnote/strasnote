@@ -11,16 +11,8 @@ namespace Strasnote.Data.Clients.MySql
 		#region Auth
 
 		/// <inheritdoc/>
-		public string Role =>
-			"auth.role";
-
-		/// <inheritdoc/>
 		public string User =>
 			"auth.user";
-
-		/// <inheritdoc/>
-		public string UserRole =>
-			"auth.user_role";
 
 		/// <inheritdoc/>
 		public string RefreshToken =>
