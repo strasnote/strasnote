@@ -3,5 +3,7 @@
     <ProjectReference Include="..\..\AppBase\Strasnote.AppBase.csproj" />
     <ProjectReference Include="..\..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
     <ProjectReference Include="..\..\Util\Strasnote.Util.csproj" />
+    <ProjectReference Include="..\Data\Strasnote.Notes.Data.Abstracts\Strasnote.Notes.Data.Abstracts.csproj" />
+    <ProjectReference Include="..\Data\Strasnote.Notes.Data\Strasnote.Notes.Data.csproj" />
   </ItemGroup>
 </Project>

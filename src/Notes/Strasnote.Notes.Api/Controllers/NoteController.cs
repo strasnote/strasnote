@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.Data.Entities.Notes;
 using Strasnote.Notes.Api.Models.Notes;
@@ -26,7 +22,7 @@ namespace Strasnote.Notes.Api.Controllers
 		public Task<long> Create(NoteEntity note) =>
 			notes.CreateAsync(note);
 
-		[HttpGet]
+		[HttpGet("{id}")]
 		public Task<GetModel?> GetById(long id) =>
 			notes.RetrieveAsync<GetModel>(id);
 	}
