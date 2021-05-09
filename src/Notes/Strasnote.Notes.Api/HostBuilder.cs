@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Strasnote.AppBase;
+using Strasnote.Notes.Data;
+using Strasnote.Notes.Data.Abstracts;
 
 namespace Strasnote.Notes.Api
 {
@@ -18,6 +20,8 @@ namespace Strasnote.Notes.Api
 			base.ConfigureServices(host, services, config);
 
 			services.AddControllers();
+
+			services.AddTransient<INoteRepository, NoteSqlRepository>();
 		}
 
 		/// <inheritdoc/>
