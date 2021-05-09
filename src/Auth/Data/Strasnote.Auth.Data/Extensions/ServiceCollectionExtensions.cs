@@ -3,12 +3,11 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
 
-namespace Strasnote.Auth.Extensions
+namespace Strasnote.Auth.Data.Extensions
 {
 	public static class ServiceCollectionExtensions
 	{
