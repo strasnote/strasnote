@@ -8,6 +8,8 @@ namespace Strasnote.Data.Abstracts
 	/// </summary>
 	public interface IDbTables
 	{
+		#region Auth
+
 		/// <summary>
 		/// Refresh Token table name
 		/// </summary>
@@ -27,5 +29,16 @@ namespace Strasnote.Data.Abstracts
 		/// UserRole table name
 		/// </summary>
 		string UserRole { get; }
+
+		#endregion
+
+		#region Notes
+
+		/// <summary>
+		/// Note table name
+		/// </summary>
+		string Note { get; }
+
+		#endregion
 	}
 }

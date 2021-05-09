@@ -8,9 +8,7 @@ namespace Strasnote.Data.Clients.MySql
 	/// <inheritdoc cref="IDbTables"/>
 	public sealed class DbTables : IDbTables
 	{
-		/// <inheritdoc/>
-		public string RefreshToken =>
-			"auth.refresh_token";
+		#region Auth
 
 		/// <inheritdoc/>
 		public string Role =>
@@ -23,5 +21,19 @@ namespace Strasnote.Data.Clients.MySql
 		/// <inheritdoc/>
 		public string UserRole =>
 			"auth.user_role";
+
+		/// <inheritdoc/>
+		public string RefreshToken =>
+			"auth.refresh_token";
+
+		#endregion
+
+		#region Notes
+
+		/// <inheritdoc/>
+		public string Note =>
+			"main.note";
+
+		#endregion
 	}
 }
