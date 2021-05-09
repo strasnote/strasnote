@@ -7,7 +7,7 @@ using Strasnote.Data.Entities.Notes;
 namespace Strasnote.Notes.Data.Abstracts
 {
 	/// <summary>
-	/// Abstraction for interacting with the note database
+	/// Abstraction for interacting with notes in the database
 	/// </summary>
 	public interface INoteRepository : IRepository<NoteEntity>
 	{
