@@ -16,19 +16,9 @@ namespace Strasnote.Data.Abstracts
 		string RefreshToken { get; }
 
 		/// <summary>
-		/// Role table name
-		/// </summary>
-		string Role { get; }
-
-		/// <summary>
 		/// User table name
 		/// </summary>
 		string User { get; }
-
-		/// <summary>
-		/// UserRole table name
-		/// </summary>
-		string UserRole { get; }
 
 		#endregion
 
