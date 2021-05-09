@@ -13,8 +13,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\Notes\Storage\Strasnote.Notes.Storage.FileSystem\Strasnote.Notes.Storage.FileSystem.csproj" />
-  </ItemGroup>
-
 </Project>
