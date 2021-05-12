@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System;
+using System.Threading.Tasks;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Notes;
@@ -18,5 +20,20 @@ namespace Strasnote.Notes.Data
 		/// <param name="client">ISqlClient</param>
 		/// <param name="log">ILog</param>
 		public NoteSqlRepository(ISqlClient client, ILog<NoteSqlRepository> log) : base(client, log, client.Tables.Note) { }
+
+		/// <inheritdoc/>
+		public override Task<long> CreateAsync(NoteEntity entity) =>
+			base.CreateAsync(entity with
+			{
+				NoteCreated = DateTime.Now,
+				NoteUpdated = DateTime.Now
+			});
+
+		/// <inheritdoc/>
+		public override Task<TModel> UpdateAsync<TModel>(NoteEntity entity) =>
+			base.UpdateAsync<TModel>(entity with
+			{
+				NoteUpdated = DateTime.Now
+			});
 	}
 }
