@@ -299,7 +299,7 @@ namespace Strasnote.Data
 		{
 			// Log update
 			var query = Queries.GetUpdateQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
-			LogOperation(Operation.Update, "{Query} {@Model}", query, model);
+			LogOperation(Operation.Update, "{Query} {@Model}", query, model ?? new object());
 
 			// Perform update
 			var updated = await Connection.ExecuteAsync(
@@ -316,7 +316,7 @@ namespace Strasnote.Data
 			// Otherwise, log error and throw exception
 			else
 			{
-				Log.Error("Unable to update {EntityType} with ID {Id} using Model {Model}.", typeof(TEntity), id, model);
+				Log.Error("Unable to update {Entity} with ID {Id} using Model {Model}.", typeof(TEntity), id, model ?? new object());
 				throw new RepositoryUpdateException<TEntity>(id);
 			}
 		}

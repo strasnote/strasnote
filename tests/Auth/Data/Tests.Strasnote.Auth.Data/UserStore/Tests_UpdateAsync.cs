@@ -27,7 +27,7 @@ namespace Tests.Strasnote.Auth.Data
 			await userStore.UpdateAsync(userEntity, new CancellationToken()).ConfigureAwait(false);
 
 			// Assert
-			await userRepository.Received(1).UpdateAsync<UserEntity>(userEntity).ConfigureAwait(false);
+			await userRepository.Received(1).UpdateAsync(0, userEntity).ConfigureAwait(false);
 		}
 	}
 }

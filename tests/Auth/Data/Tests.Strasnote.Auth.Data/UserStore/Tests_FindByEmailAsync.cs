@@ -54,7 +54,7 @@ namespace Tests.Strasnote.Auth.Data
 		{
 			// Arrange
 			var userStore = new UserStore(userRepository);
-			userRepository.RetrieveByEmailAsync<UserEntity>(Arg.Any<string>()).Returns(Task.FromResult<UserEntity?>(null));
+			userRepository.RetrieveByEmailAsync<UserEntity?>(Arg.Any<string>()).Returns(Task.FromResult<UserEntity?>(null));
 
 			// Act
 			Task action() => userStore.FindByEmailAsync(Rnd.Str, new CancellationToken());
