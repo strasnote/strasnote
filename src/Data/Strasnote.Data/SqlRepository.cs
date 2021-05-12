@@ -184,16 +184,20 @@ namespace Strasnote.Data
 			LogOperation(Operation.QuerySingle, "{Type}: {Query} - {@Parameters}", type, query, param);
 
 			// Perform retrieve and map to TModel
-			return Connection.QuerySingleAsync<TModel>(
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
 				param: param,
 				commandType: type
 			);
 		}
 
-		/// <inheritdoc/>
-		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(
-			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		/// <summary>
+		/// Convert predicates to list of where columns, and then get the retrieve query
+		/// </summary>
+		/// <typeparam name="TModel">Return Model type</typeparam>
+		/// <param name="predicates">Search predicates</param>
+		private (string query, Dictionary<string, object> param) GetRetrieveQuery<TModel>(
+			(Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
 		{
 			// Convert the expressions to column names
@@ -218,8 +222,17 @@ namespace Strasnote.Data
 				}
 			}
 
+			// Get query
+			return Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where);
+		}
+
+		/// <inheritdoc/>
+		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(
+			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		)
+		{
 			// Log retrieve
-			var (query, param) = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where);
+			var (query, param) = GetRetrieveQuery<TModel>(predicates);
 			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, param);
 
 			// Perform retrieve and map to TModel
@@ -231,10 +244,21 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public async virtual Task<TModel> QuerySingleAsync<TModel>(
+		public virtual Task<TModel> QuerySingleAsync<TModel>(
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
-		) =>
-			(await QueryAsync<TModel>(predicates).ConfigureAwait(false)).Single();
+		)
+		{
+			// Log retrieve
+			var (query, param) = GetRetrieveQuery<TModel>(predicates);
+			LogOperation(Operation.RetrieveSingle, "{Query} - {@Parameters}", query, param);
+
+			// Perform retrieve and map to TModel
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
+				sql: query,
+				param: param,
+				commandType: CommandType.Text
+			);
+		}
 
 		#endregion
 
@@ -263,7 +287,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.RetrieveById, "{Query} {Id}", query, id);
 
 			// Perform retrieve and map to model
-			return Connection.QuerySingleAsync<TModel>(
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
 				param: new { id },
 				commandType: CommandType.Text
@@ -271,29 +295,29 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual async Task<TModel> UpdateAsync<TModel>(TEntity entity)
+		public virtual async Task<TModel> UpdateAsync<TModel>(long id, TModel model)
 		{
 			// Log update
-			var query = Queries.GetUpdateQuery(Table, GetProperties<TEntity>(), nameof(IEntity.Id), entity.Id);
-			LogOperation(Operation.Update, "{Query} {@Entity}", query, entity);
+			var query = Queries.GetUpdateQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
+			LogOperation(Operation.Update, "{Query} {@Model}", query, model ?? new object());
 
 			// Perform update
 			var updated = await Connection.ExecuteAsync(
 				sql: query,
-				param: entity,
+				param: model,
 				commandType: CommandType.Text
 			).ConfigureAwait(false);
 
 			// If the update was successful, retrieve updated model
 			if (updated > 0)
 			{
-				return await RetrieveAsync<TModel>(entity.Id).ConfigureAwait(false);
+				return await RetrieveAsync<TModel>(id).ConfigureAwait(false);
 			}
 			// Otherwise, log error and throw exception
 			else
 			{
-				Log.Error("Unable to update Entity {Entity}.", entity);
-				throw new RepositoryUpdateException<TEntity>(entity.Id);
+				Log.Error("Unable to update {Entity} with ID {Id} using Model {Model}.", typeof(TEntity), id, model ?? new object());
+				throw new RepositoryUpdateException<TEntity>(id);
 			}
 		}
 

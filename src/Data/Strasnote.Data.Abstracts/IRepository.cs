@@ -72,8 +72,8 @@ namespace Strasnote.Data.Abstracts
 		/// Update an entity and return updated model
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
-		/// <param name="entity">Entity to update</param>
-		Task<TModel> UpdateAsync<TModel>(TEntity entity);
+		/// <param name="model">Model containing properties to update</param>
+		Task<TModel> UpdateAsync<TModel>(long id, TModel model);
 
 		/// <summary>
 		/// Delete an entity and return the number of affected rows

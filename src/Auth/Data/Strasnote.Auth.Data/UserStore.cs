@@ -183,7 +183,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return await userRepository.UpdateAsync<UserEntity>(user).ConfigureAwait(false) switch
+			return await userRepository.UpdateAsync(user.Id, user).ConfigureAwait(false) switch
 			{
 				UserEntity =>
 					IdentityResult.Success,

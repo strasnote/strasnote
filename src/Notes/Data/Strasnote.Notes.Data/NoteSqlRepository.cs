@@ -28,12 +28,5 @@ namespace Strasnote.Notes.Data
 				NoteCreated = DateTime.Now,
 				NoteUpdated = DateTime.Now
 			});
-
-		/// <inheritdoc/>
-		public override Task<TModel> UpdateAsync<TModel>(NoteEntity entity) =>
-			base.UpdateAsync<TModel>(entity with
-			{
-				NoteUpdated = DateTime.Now
-			});
 	}
 }
