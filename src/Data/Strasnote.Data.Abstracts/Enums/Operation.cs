@@ -19,6 +19,11 @@ namespace Strasnote.Data.Abstracts
 		Retrieve,
 
 		/// <summary>
+		/// Retrieve Single operations
+		/// </summary>
+		RetrieveSingle,
+
+		/// <summary>
 		/// Retrieve by ID operation
 		/// </summary>
 		RetrieveById,

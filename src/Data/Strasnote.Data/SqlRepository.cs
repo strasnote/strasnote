@@ -184,16 +184,20 @@ namespace Strasnote.Data
 			LogOperation(Operation.QuerySingle, "{Type}: {Query} - {@Parameters}", type, query, param);
 
 			// Perform retrieve and map to TModel
-			return Connection.QuerySingleAsync<TModel>(
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
 				param: param,
 				commandType: type
 			);
 		}
 
-		/// <inheritdoc/>
-		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(
-			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		/// <summary>
+		/// Convert predicates to list of where columns, and then get the retrieve query
+		/// </summary>
+		/// <typeparam name="TModel">Return Model type</typeparam>
+		/// <param name="predicates">Search predicates</param>
+		private (string query, Dictionary<string, object> param) GetRetrieveQuery<TModel>(
+			(Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
 		{
 			// Convert the expressions to column names
@@ -218,8 +222,17 @@ namespace Strasnote.Data
 				}
 			}
 
+			// Get query
+			return Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where);
+		}
+
+		/// <inheritdoc/>
+		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(
+			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+		)
+		{
 			// Log retrieve
-			var (query, param) = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where);
+			var (query, param) = GetRetrieveQuery<TModel>(predicates);
 			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, param);
 
 			// Perform retrieve and map to TModel
@@ -231,10 +244,21 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public async virtual Task<TModel> QuerySingleAsync<TModel>(
+		public virtual Task<TModel> QuerySingleAsync<TModel>(
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
-		) =>
-			(await QueryAsync<TModel>(predicates).ConfigureAwait(false)).Single();
+		)
+		{
+			// Log retrieve
+			var (query, param) = GetRetrieveQuery<TModel>(predicates);
+			LogOperation(Operation.RetrieveSingle, "{Query} - {@Parameters}", query, param);
+
+			// Perform retrieve and map to TModel
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
+				sql: query,
+				param: param,
+				commandType: CommandType.Text
+			);
+		}
 
 		#endregion
 
@@ -263,7 +287,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.RetrieveById, "{Query} {Id}", query, id);
 
 			// Perform retrieve and map to model
-			return Connection.QuerySingleAsync<TModel>(
+			return Connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
 				param: new { id },
 				commandType: CommandType.Text
