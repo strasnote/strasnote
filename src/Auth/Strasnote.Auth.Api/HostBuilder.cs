@@ -10,6 +10,7 @@ using Strasnote.AppBase;
 using Strasnote.Auth.Data.Extensions;
 using Strasnote.Auth.Extensions;
 using Strasnote.Data.Clients.MySql;
+using Strasnote.Notes.Data;
 
 namespace Strasnote.Auth.Api
 {
@@ -26,6 +27,9 @@ namespace Strasnote.Auth.Api
 			// Auth
 			services.AddAuth(config);
 			services.AddAuthData<MySqlClient>();
+
+			// Notes (required for migrator)
+			services.AddNotesData<MySqlClient>();
 		}
 
 		/// <inheritdoc/>

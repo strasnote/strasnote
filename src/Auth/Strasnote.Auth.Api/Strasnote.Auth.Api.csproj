@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
     <ProjectReference Include="..\..\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
     <ProjectReference Include="..\..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
+    <ProjectReference Include="..\..\Notes\Data\Strasnote.Notes.Data\Strasnote.Notes.Data.csproj" />
     <ProjectReference Include="..\Data\Strasnote.Auth.Data.Abstracts\Strasnote.Auth.Data.Abstracts.csproj" />
     <ProjectReference Include="..\Data\Strasnote.Auth.Data\Strasnote.Auth.Data.csproj" />
     <ProjectReference Include="..\Strasnote.Auth\Strasnote.Auth.csproj" />

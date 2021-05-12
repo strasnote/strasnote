@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Strasnote.AppBase;
 using Strasnote.Auth.Data.Extensions;
 using Strasnote.Data.Clients.MySql;
+using Strasnote.Notes.Data;
 
 namespace Strasnote.Apps.Data.MySqlMigrator
 {
@@ -17,6 +18,7 @@ namespace Strasnote.Apps.Data.MySqlMigrator
 			base.ConfigureServices(host, services, config);
 
 			services.AddAuthData<MySqlClient>();
+			services.AddNotesData<MySqlClient>();
 		}
 	}
 }
