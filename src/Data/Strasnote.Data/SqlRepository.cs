@@ -295,29 +295,29 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual async Task<TModel> UpdateAsync<TModel>(TEntity entity)
+		public virtual async Task<TModel> UpdateAsync<TModel>(long id, TModel model)
 		{
 			// Log update
-			var query = Queries.GetUpdateQuery(Table, GetProperties<TEntity>(), nameof(IEntity.Id), entity.Id);
-			LogOperation(Operation.Update, "{Query} {@Entity}", query, entity);
+			var query = Queries.GetUpdateQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
+			LogOperation(Operation.Update, "{Query} {@Model}", query, model);
 
 			// Perform update
 			var updated = await Connection.ExecuteAsync(
 				sql: query,
-				param: entity,
+				param: model,
 				commandType: CommandType.Text
 			).ConfigureAwait(false);
 
 			// If the update was successful, retrieve updated model
 			if (updated > 0)
 			{
-				return await RetrieveAsync<TModel>(entity.Id).ConfigureAwait(false);
+				return await RetrieveAsync<TModel>(id).ConfigureAwait(false);
 			}
 			// Otherwise, log error and throw exception
 			else
 			{
-				Log.Error("Unable to update Entity {Entity}.", entity);
-				throw new RepositoryUpdateException<TEntity>(entity.Id);
+				Log.Error("Unable to update {EntityType} with ID {Id} using Model {Model}.", typeof(TEntity), id, model);
+				throw new RepositoryUpdateException<TEntity>(id);
 			}
 		}
 
