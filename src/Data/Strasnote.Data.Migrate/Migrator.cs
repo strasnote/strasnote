@@ -9,6 +9,7 @@ using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Logging;
+using Strasnote.Notes.Data.Abstracts;
 
 namespace Strasnote.Data.Migrate
 {
@@ -24,6 +25,8 @@ namespace Strasnote.Data.Migrate
 		private readonly IDbClient client;
 
 		private readonly ILog log;
+
+		private readonly INoteRepository note;
 
 		private readonly IUserRepository user;
 
@@ -42,6 +45,7 @@ namespace Strasnote.Data.Migrate
 			log = services.GetRequiredService<ILog<Migrator>>();
 
 			// Get repositories
+			note = services.GetRequiredService<INoteRepository>();
 			user = services.GetRequiredService<IUserRepository>();
 		}
 
@@ -93,9 +97,10 @@ namespace Strasnote.Data.Migrate
 			log.Information("Inserting test data.");
 
 			// Insert default user
-			await Task.Run(
-				() => DefaultUser.Insert(log, user, userConfig)
-			).ConfigureAwait(false);
+			await Task.Run(() => DefaultUser.Insert(log, user, userConfig)).ConfigureAwait(false);
+
+			// Insert test notes
+			await TestNote.InsertAsync(log, note).ConfigureAwait(false);
 		}
 	}
 }

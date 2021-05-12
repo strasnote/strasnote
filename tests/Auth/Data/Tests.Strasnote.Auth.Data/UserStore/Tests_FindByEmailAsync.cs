@@ -43,10 +43,10 @@ namespace Tests.Strasnote.Auth.Data
 			var userStore = new UserStore(userRepository);
 
 			// Act
-			await userStore.FindByEmailAsync(Rnd.Str, new CancellationToken());
+			await userStore.FindByEmailAsync(Rnd.Str, new CancellationToken()).ConfigureAwait(false);
 
 			// Assert
-			await userRepository.Received(1).RetrieveByEmailAsync<UserEntity>(Arg.Any<string>());
+			await userRepository.Received(1).RetrieveByEmailAsync<UserEntity>(Arg.Any<string>()).ConfigureAwait(false);
 		}
 
 		[Fact]
@@ -60,7 +60,7 @@ namespace Tests.Strasnote.Auth.Data
 			Task action() => userStore.FindByEmailAsync(Rnd.Str, new CancellationToken());
 
 			// Assert
-			await Assert.ThrowsAsync<UserNotFoundByEmailException>(action);
+			await Assert.ThrowsAsync<UserNotFoundByEmailException>(action).ConfigureAwait(false);
 		}
 	}
 }

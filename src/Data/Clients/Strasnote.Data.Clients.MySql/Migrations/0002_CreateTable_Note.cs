@@ -12,13 +12,15 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		{
 			Execute(@"
 				CREATE TABLE `main.note` (
-					`NoteId` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+					`Id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					`NoteContent` TEXT NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
-					`NoteCreated` DATETIME NOT NULL DEFAULT current_timestamp(),
-					`NoteUpdated` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+					`NoteCreated` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+					`NoteUpdated` TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 					`FolderId` BIGINT(20) NOT NULL DEFAULT '0',
 					`UserId` BIGINT(20) NOT NULL DEFAULT '0',
-					PRIMARY KEY (`NoteId`) USING BTREE
+					PRIMARY KEY (`Id`) USING BTREE,
+					INDEX `FolderId` (`FolderId`) USING BTREE,
+					INDEX `UserId` (`UserId`) USING BTREE
 				)
 				COLLATE='utf8_general_ci'
 				ENGINE=InnoDB

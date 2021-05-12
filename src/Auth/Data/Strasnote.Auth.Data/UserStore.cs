@@ -279,10 +279,10 @@ namespace Strasnote.Auth.Data
 
 			return await userRepository.DeleteAsync(user.Id).ConfigureAwait(false) switch
 			{
-				true =>
+				> 0 =>
 					IdentityResult.Success,
 
-				false =>
+				_ =>
 					IdentityResult.Failed()
 			};
 		}

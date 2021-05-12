@@ -23,6 +23,6 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// Delete a refresh token by <paramref name="userId"/>
 		/// </summary>
 		/// <param name="userId">The user's ID</param>
-		Task<bool> DeleteByUserIdAsync(long userId);
+		Task<int> DeleteByUserIdAsync(long userId);
 	}
 }

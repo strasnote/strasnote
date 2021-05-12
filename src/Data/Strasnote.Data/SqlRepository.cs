@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Dapper;
 using Strasnote.Data.Abstracts;
+using Strasnote.Data.Exceptions;
 using Strasnote.Logging;
 
 namespace Strasnote.Data
@@ -140,8 +141,8 @@ namespace Strasnote.Data
 					return shared.ToList();
 				}
 
-				// Otherwise select all
-				return new() { { Queries.SelectAll } };
+				// Otherwise empty list - will therefore select all
+				return new();
 			});
 
 		#endregion
@@ -170,20 +171,20 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel?> QuerySingleAsync<TModel>(string query, object param) =>
+		public virtual Task<TModel> QuerySingleAsync<TModel>(string query, object param) =>
 			QuerySingleAsync<TModel>(query, param, CommandType.Text);
 
 		/// <inheritdoc cref="QuerySingleAsync{TModel}(string, object)"/>
 		/// <param name="query">Query - text or stored procedure</param>
 		/// <param name="param">Query parameters</param>
 		/// <param name="type">Command Type</param>
-		public virtual Task<TModel?> QuerySingleAsync<TModel>(string query, object param, CommandType type)
+		public virtual Task<TModel> QuerySingleAsync<TModel>(string query, object param, CommandType type)
 		{
 			// Log query single
 			LogOperation(Operation.QuerySingle, "{Type}: {Query} - {@Parameters}", type, query, param);
 
 			// Perform retrieve and map to TModel
-			return Connection.QuerySingleAsync<TModel?>(
+			return Connection.QuerySingleAsync<TModel>(
 				sql: query,
 				param: param,
 				commandType: type
@@ -230,10 +231,10 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public async virtual Task<TModel?> QuerySingleAsync<TModel>(
+		public async virtual Task<TModel> QuerySingleAsync<TModel>(
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		) =>
-			(await QueryAsync<TModel>(predicates).ConfigureAwait(false)).SingleOrDefault();
+			(await QueryAsync<TModel>(predicates).ConfigureAwait(false)).Single();
 
 		#endregion
 
@@ -246,7 +247,7 @@ namespace Strasnote.Data
 			var query = Queries.GetCreateQuery(Table, GetProperties<TEntity>());
 			LogOperation(Operation.Create, "{Query} {@Entity}", query, entity);
 
-			// Perform create and return created entity
+			// Perform create and return created entity ID
 			return Connection.ExecuteScalarAsync<long>(
 				sql: query,
 				param: entity,
@@ -255,14 +256,14 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel?> RetrieveAsync<TModel>(long id)
+		public virtual Task<TModel> RetrieveAsync<TModel>(long id)
 		{
 			// Log retrieve
 			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
 			LogOperation(Operation.RetrieveById, "{Query} {Id}", query, id);
 
 			// Perform retrieve and map to model
-			return Connection.QuerySingleOrDefaultAsync<TModel?>(
+			return Connection.QuerySingleAsync<TModel>(
 				sql: query,
 				param: new { id },
 				commandType: CommandType.Text
@@ -270,29 +271,41 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel?> UpdateAsync<TModel>(TEntity entity)
+		public virtual async Task<TModel> UpdateAsync<TModel>(TEntity entity)
 		{
 			// Log update
 			var query = Queries.GetUpdateQuery(Table, GetProperties<TEntity>(), nameof(IEntity.Id), entity.Id);
 			LogOperation(Operation.Update, "{Query} {@Entity}", query, entity);
 
-			// Perform update and return updated entity
-			return Connection.QuerySingleOrDefaultAsync<TModel?>(
+			// Perform update
+			var updated = await Connection.ExecuteAsync(
 				sql: query,
 				param: entity,
 				commandType: CommandType.Text
-			);
+			).ConfigureAwait(false);
+
+			// If the update was successful, retrieve updated model
+			if (updated > 0)
+			{
+				return await RetrieveAsync<TModel>(entity.Id).ConfigureAwait(false);
+			}
+			// Otherwise, log error and throw exception
+			else
+			{
+				Log.Error("Unable to update Entity {Entity}.", entity);
+				throw new RepositoryUpdateException<TEntity>(entity.Id);
+			}
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<bool> DeleteAsync(long id)
+		public virtual Task<int> DeleteAsync(long id)
 		{
 			// Log delete
 			var query = Queries.GetDeleteQuery(Table, nameof(IEntity.Id), id);
 			LogOperation(Operation.Delete, "{Query} {Id}", query, id);
 
-			// Perform retrieve and map to model
-			return Connection.ExecuteScalarAsync<bool>(
+			// Perform delete and return the number of affected rows
+			return Connection.ExecuteAsync(
 				sql: query,
 				param: new { id },
 				commandType: CommandType.Text

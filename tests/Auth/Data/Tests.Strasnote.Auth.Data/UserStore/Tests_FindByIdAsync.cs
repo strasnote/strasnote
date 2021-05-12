@@ -43,10 +43,10 @@ namespace Tests.Strasnote.Auth.Data
 			var userStore = new UserStore(userRepository);
 
 			// Act
-			await userStore.FindByIdAsync("1", new CancellationToken());
+			await userStore.FindByIdAsync("1", new CancellationToken()).ConfigureAwait(false);
 
 			// Assert
-			await userRepository.Received(1).RetrieveAsync<UserEntity>(Arg.Any<long>());
+			await userRepository.Received(1).RetrieveAsync<UserEntity>(Arg.Any<long>()).ConfigureAwait(false);
 		}
 
 		[Fact]
@@ -54,13 +54,13 @@ namespace Tests.Strasnote.Auth.Data
 		{
 			// Arrange
 			var userStore = new UserStore(userRepository);
-			userRepository.RetrieveAsync<UserEntity>(Arg.Any<long>()).Returns(Task.FromResult<UserEntity?>(null));
+			userRepository.RetrieveAsync<UserEntity?>(Arg.Any<long>()).Returns(Task.FromResult<UserEntity?>(null));
 
 			// Act
 			Task action() => userStore.FindByIdAsync(Rnd.Str, new CancellationToken());
 
 			// Assert
-			await Assert.ThrowsAsync<UserNotFoundInvalidIdException>(action);
+			await Assert.ThrowsAsync<UserNotFoundInvalidIdException>(action).ConfigureAwait(false);
 		}
 
 		[Fact]
@@ -68,13 +68,13 @@ namespace Tests.Strasnote.Auth.Data
 		{
 			// Arrange
 			var userStore = new UserStore(userRepository);
-			userRepository.RetrieveAsync<UserEntity>(Arg.Any<long>()).Returns(Task.FromResult<UserEntity?>(null));
+			userRepository.RetrieveAsync<UserEntity?>(Arg.Any<long>()).Returns(Task.FromResult<UserEntity?>(null));
 
 			// Act
 			Task action() => userStore.FindByIdAsync("1", new CancellationToken());
 
 			// Assert
-			await Assert.ThrowsAsync<UserNotFoundByIdException>(action);
+			await Assert.ThrowsAsync<UserNotFoundByIdException>(action).ConfigureAwait(false);
 		}
 	}
 }

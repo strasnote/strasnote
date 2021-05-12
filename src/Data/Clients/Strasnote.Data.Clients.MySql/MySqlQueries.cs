@@ -40,14 +40,24 @@ namespace Strasnote.Data.Clients.MySql
 		public string GetRetrieveQuery(string table, List<string> columns, string idColumn, long id)
 		{
 			// Get columns
-			var col = new List<string>();
-			foreach (var column in columns)
+			string select;
+			if (columns.Count > 0)
 			{
-				col.Add($"`{column}`");
+				var col = new List<string>();
+				foreach (var column in columns)
+				{
+					col.Add($"`{column}`");
+				}
+
+				select = string.Join(", ", col);
+			}
+			else
+			{
+				select = SelectAll;
 			}
 
 			// Return query
-			return $"SELECT {string.Join(", ", col)} FROM `{table}` WHERE `{idColumn}` = {id};";
+			return $"SELECT {select} FROM `{table}` WHERE `{idColumn}` = {id};";
 		}
 
 		/// <inheritdoc/>
@@ -56,10 +66,20 @@ namespace Strasnote.Data.Clients.MySql
 		)
 		{
 			// Get columns
-			var col = new List<string>();
-			foreach (var column in columns)
+			string select;
+			if (columns.Count > 0)
 			{
-				col.Add($"`{column}`");
+				var col = new List<string>();
+				foreach (var column in columns)
+				{
+					col.Add($"`{column}`");
+				}
+
+				select = string.Join(", ", col);
+			}
+			else
+			{
+				select = SelectAll;
 			}
 
 			// Add each predicate to the where and parameter lists
@@ -75,7 +95,7 @@ namespace Strasnote.Data.Clients.MySql
 			}
 
 			// Return query and parameters
-			return ($"SELECT {string.Join(", ", col)} FROM `{table}` WHERE {string.Join(" AND ", where)};", param);
+			return ($"SELECT {select} FROM `{table}` WHERE {string.Join(" AND ", where)};", param);
 		}
 
 		/// <inheritdoc/>
@@ -93,7 +113,7 @@ namespace Strasnote.Data.Clients.MySql
 				col.Add($"`{column}` = @{column}");
 			}
 
-			// Return query
+			// Return query to update and then select
 			return $"UPDATE `{table}` SET {string.Join(", ", col)} WHERE `{idColumn}` = {id};";
 		}
 
