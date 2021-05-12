@@ -140,8 +140,8 @@ namespace Strasnote.Data
 					return shared.ToList();
 				}
 
-				// Otherwise select all
-				return new() { { Queries.SelectAll } };
+				// Otherwise empty list - will therefore select all
+				return new();
 			});
 
 		#endregion
