@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Collections.Generic;
+using Org.BouncyCastle.Asn1.Sec;
 using Strasnote.Data.Abstracts;
 
 namespace Strasnote.Data.Clients.MySql
@@ -40,14 +41,25 @@ namespace Strasnote.Data.Clients.MySql
 		public string GetRetrieveQuery(string table, List<string> columns, string idColumn, long id)
 		{
 			// Get columns
-			var col = new List<string>();
-			foreach (var column in columns)
+			string select;
+
+			if (columns.Count > 0)
 			{
-				col.Add($"`{column}`");
+				var col = new List<string>();
+				foreach (var column in columns)
+				{
+					col.Add($"`{column}`");
+				}
+
+				select = string.Join(", ", col);
+			}
+			else
+			{
+				select = SelectAll;
 			}
 
 			// Return query
-			return $"SELECT {string.Join(", ", col)} FROM `{table}` WHERE `{idColumn}` = {id};";
+			return $"SELECT {select} FROM `{table}` WHERE `{idColumn}` = {id};";
 		}
 
 		/// <inheritdoc/>
