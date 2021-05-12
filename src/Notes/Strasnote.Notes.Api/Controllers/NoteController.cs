@@ -24,6 +24,10 @@ namespace Strasnote.Notes.Api.Controllers
 
 		[HttpGet("{id}")]
 		public Task<GetModel?> GetById(long id) =>
-			notes.RetrieveAsync<GetModel>(id);
+			notes.RetrieveAsync<GetModel?>(id);
+
+		[HttpPut("{id}")]
+		public Task<UpdateModel?> Update(long id, UpdateModel note) =>
+			notes.UpdateAsync<UpdateModel?>(id, note);
 	}
 }
