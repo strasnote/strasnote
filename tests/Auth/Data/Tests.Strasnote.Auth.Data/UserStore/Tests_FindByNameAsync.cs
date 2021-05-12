@@ -59,7 +59,7 @@ namespace Tests.Strasnote.Auth.Data
 			Task action() => userStore.FindByNameAsync(Rnd.Str, new CancellationToken());
 
 			// Assert
-			await Assert.ThrowsAsync<UserNotFoundByUsernameException>(action);
+			await Assert.ThrowsAsync<UserNotFoundByUsernameException>(action).ConfigureAwait(false);
 		}
 	}
 }

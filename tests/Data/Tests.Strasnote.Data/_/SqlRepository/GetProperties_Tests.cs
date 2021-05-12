@@ -58,7 +58,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 		}
 
 		[Fact]
-		public void Returns_SelectAll_If_No_Matching_Properties()
+		public void Returns_Empty_List_If_No_Matching_Properties()
 		{
 			// Arrange
 			var (repo, _, _, _, _) = SqlRepository_Setup.Get();
@@ -67,9 +67,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var result = repo.GetProperties<NoMatchingProperties>();
 
 			// Assert
-			Assert.Collection(result,
-				x => Assert.Equal(repo.QueriesTest.SelectAll, x)
-			);
+			Assert.Empty(result);
 		}
 
 		[Fact]

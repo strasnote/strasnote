@@ -9,6 +9,7 @@ using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Migrate;
 using Strasnote.Logging;
+using Strasnote.Notes.Data.Abstracts;
 
 namespace Strasnote.Data.Migrator_Tests
 {
@@ -28,7 +29,8 @@ namespace Strasnote.Data.Migrator_Tests
 			var client = Substitute.For<IDbClient>();
 			var log = Substitute.For<ILog<Migrator>>();
 			var repos = new Repos(
-				Substitute.For<IUserRepository>()
+				Substitute.For<IUserRepository>(),
+				Substitute.For<INoteRepository>()
 			);
 
 			// Create provider
@@ -37,12 +39,13 @@ namespace Strasnote.Data.Migrator_Tests
 			provider.GetService(typeof(IOptions<UserConfig>)).Returns(user);
 			provider.GetService(typeof(IDbClient)).Returns(client);
 			provider.GetService(typeof(ILog<Migrator>)).Returns(log);
+			provider.GetService(typeof(INoteRepository)).Returns(repos.Note);
 			provider.GetService(typeof(IUserRepository)).Returns(repos.User);
 
 			// Return
 			return (new Migrator(provider), migrateConfig, userConfig, client, log, repos);
 		}
 
-		public sealed record Repos(IUserRepository User);
+		public sealed record Repos(IUserRepository User, INoteRepository Note);
 	}
 }

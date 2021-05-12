@@ -24,10 +24,10 @@ namespace Tests.Strasnote.Auth.Data
 			var userEntity = new UserEntity();
 
 			// Act
-			await userStore.DeleteAsync(userEntity, new CancellationToken());
+			await userStore.DeleteAsync(userEntity, new CancellationToken()).ConfigureAwait(false);
 
 			// Assert
-			await userRepository.Received(1).DeleteAsync(Arg.Any<long>());
+			await userRepository.Received(1).DeleteAsync(Arg.Any<long>()).ConfigureAwait(false);
 		}
 
 		[Fact]
@@ -38,7 +38,7 @@ namespace Tests.Strasnote.Auth.Data
 
 			var userEntity = new UserEntity();
 
-			userRepository.DeleteAsync(Arg.Any<long>()).Returns(true);
+			userRepository.DeleteAsync(Arg.Any<long>()).Returns(1);
 
 			// Act
 			var result = await userStore.DeleteAsync(userEntity, new CancellationToken());

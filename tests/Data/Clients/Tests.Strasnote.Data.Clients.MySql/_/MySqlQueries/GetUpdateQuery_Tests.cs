@@ -42,7 +42,7 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 			// Arrange
 			var table = Rnd.Str;
 
-			const string? c0 = nameof(IEntity.Id);
+			var c0 = nameof(IEntity.Id);
 			var c1 = Rnd.Str;
 			var c2 = Rnd.Str;
 			var columns = new List<string>(new[] { c0, c1, c2 });

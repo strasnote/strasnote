@@ -23,16 +23,17 @@ namespace Strasnote.Auth.Data
 			: base(client, log, client.Tables.RefreshToken) { }
 
 		/// <inheritdoc/>
-		public Task<bool> DeleteByUserIdAsync(long userId)
+		public Task<int> DeleteByUserIdAsync(long userId)
 		{
 			const string sql = @"DELETE 
 								 FROM `auth.refresh_token` 
 								 WHERE `auth.refresh_token`.UserId = @UserId";
 
-			return Connection.ExecuteScalarAsync<bool>(sql, new { UserId = userId });
+			return Connection.ExecuteAsync(sql, new { UserId = userId });
 		}
 
 		/// <inheritdoc/>
-		public Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken) => throw new NotImplementedException();
+		public Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken) =>
+			throw new NotImplementedException();
 	}
 }
