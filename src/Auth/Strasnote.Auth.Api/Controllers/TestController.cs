@@ -2,12 +2,14 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api.Controllers
 {
+	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
 	public class TestController : Controller

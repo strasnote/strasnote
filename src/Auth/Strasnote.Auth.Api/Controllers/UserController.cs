@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.Auth.Data;
@@ -10,6 +11,7 @@ using Strasnote.Logging;
 
 namespace Strasnote.Auth.Api.Controllers
 {
+	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
 	public class UserController : Controller
