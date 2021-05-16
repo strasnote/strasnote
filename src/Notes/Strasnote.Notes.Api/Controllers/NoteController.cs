@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.Data.Entities.Notes;
 using Strasnote.Notes.Api.Models.Notes;
@@ -9,6 +10,7 @@ using Strasnote.Notes.Data.Abstracts;
 
 namespace Strasnote.Notes.Api.Controllers
 {
+	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
 	public class NoteController : Controller
