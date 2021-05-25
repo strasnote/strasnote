@@ -11,18 +11,10 @@ namespace Strasnote.Data.Entities.Notes
 	/// </summary>
 	public sealed record FolderUserEntity : IEntity
 	{
-		/// <inheritdoc/>
-		[Ignore]
-		public long Id
-		{
-			get => FolderUserId;
-			init => FolderUserId = value;
-		}
-
 		/// <summary>
 		/// Folder User ID
 		/// </summary>
-		public long FolderUserId { get; init; }
+		public long Id { get; init; }
 
 		/// <summary>
 		/// [Optional] Expiry date of the User's access to this Folder

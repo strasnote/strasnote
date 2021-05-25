@@ -23,6 +23,10 @@ namespace Strasnote.Data.Clients.MySql
 		#region Notes
 
 		/// <inheritdoc/>
+		public string Folder =>
+			"main.folder";
+
+		/// <inheritdoc/>
 		public string Note =>
 			"main.note";
 

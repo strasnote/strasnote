@@ -29,8 +29,9 @@ namespace Strasnote.Data.Migrator_Tests
 			var client = Substitute.For<IDbClient>();
 			var log = Substitute.For<ILog<Migrator>>();
 			var repos = new Repos(
-				Substitute.For<IUserRepository>(),
-				Substitute.For<INoteRepository>()
+				Substitute.For<IFolderRepository>(),
+				Substitute.For<INoteRepository>(),
+				Substitute.For<IUserRepository>()
 			);
 
 			// Create provider
@@ -39,6 +40,7 @@ namespace Strasnote.Data.Migrator_Tests
 			provider.GetService(typeof(IOptions<UserConfig>)).Returns(user);
 			provider.GetService(typeof(IDbClient)).Returns(client);
 			provider.GetService(typeof(ILog<Migrator>)).Returns(log);
+			provider.GetService(typeof(IFolderRepository)).Returns(repos.Folder);
 			provider.GetService(typeof(INoteRepository)).Returns(repos.Note);
 			provider.GetService(typeof(IUserRepository)).Returns(repos.User);
 
@@ -46,6 +48,10 @@ namespace Strasnote.Data.Migrator_Tests
 			return (new Migrator(provider), migrateConfig, userConfig, client, log, repos);
 		}
 
-		public sealed record Repos(IUserRepository User, INoteRepository Note);
+		public sealed record Repos(
+			IFolderRepository Folder,
+			INoteRepository Note,
+			IUserRepository User
+		);
 	}
 }

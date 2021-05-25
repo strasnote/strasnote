@@ -13,18 +13,10 @@ namespace Strasnote.Data.Entities.Notes
 	/// </summary>
 	public sealed record EncryptedEntity : IEntity
 	{
-		/// <inheritdoc/>
-		[Ignore]
-		public long Id
-		{
-			get => EncryptedId;
-			init => EncryptedId = value;
-		}
-
 		/// <summary>
-		/// Enryption ID
+		/// Encrypted ID
 		/// </summary>
-		public long EncryptedId { get; init; }
+		public long Id { get; init; }
 
 		/// <summary>
 		/// Encrypted Object (e.g. Folder / Note) ID

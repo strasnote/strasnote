@@ -21,6 +21,7 @@ namespace Strasnote.Notes.Data
 			services.AddTransient<IDbClient>(s => s.GetRequiredService<ISqlClient>());
 
 			// Add repositories
+			services.AddTransient<IFolderRepository, FolderSqlRepository>();
 			services.AddTransient<INoteRepository, NoteSqlRepository>();
 
 			return services;

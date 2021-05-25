@@ -25,6 +25,11 @@ namespace Strasnote.Data.Abstracts
 		#region Notes
 
 		/// <summary>
+		/// Folder table name
+		/// </summary>
+		string Folder { get; }
+
+		/// <summary>
 		/// Note table name
 		/// </summary>
 		string Note { get; }
