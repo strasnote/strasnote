@@ -7,9 +7,9 @@ using Strasnote.Data.Entities.Notes;
 namespace Strasnote.Notes.Data.Abstracts
 {
 	/// <summary>
-	/// Abstraction for interacting with folders in the database
+	/// Abstraction for interacting with tags in the database
 	/// </summary>
-	public interface IFolderRepository : IRepository<FolderEntity>
+	public interface ITagRepository : IRepository<TagEntity>
 	{
 	}
 }
