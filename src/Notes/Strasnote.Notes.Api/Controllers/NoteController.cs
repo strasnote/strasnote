@@ -31,5 +31,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[HttpPut("{id}")]
 		public Task<UpdateModel?> Update(long id, UpdateModel note) =>
 			notes.UpdateAsync<UpdateModel?>(id, note);
+
+		[HttpDelete("{id}")]
+		public Task<int> Delete(long id) =>
+			notes.DeleteAsync(id);
 	}
 }
