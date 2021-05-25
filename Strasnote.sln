@@ -79,9 +79,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Api", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Auth.Services", "tests\Auth\Tests.Strasnote.Auth.Services\Tests.Strasnote.Auth.Services.csproj", "{755AED91-26CF-490B-B010-094CD8531CFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Storage.FileSystem", "tests\Notes\Storage\Tests.Strasnote.Notes.Storage.FileSystem\Tests.Strasnote.Notes.Storage.FileSystem.csproj", "{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Storage.SqlRepository", "tests\Notes\Storage\Tests.Strasnote.Notes.Storage.SqlRepository\Tests.Strasnote.Notes.Storage.SqlRepository.csproj", "{74BBA08D-EDA1-4680-A895-84254AADAB9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Data", "tests\Notes\Data\Tests.Strasnote.Notes.Data\Tests.Strasnote.Notes.Data.csproj", "{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.Notes.Services", "tests\Notes\Tests.Strasnote.Notes.Services\Tests.Strasnote.Notes.Services.csproj", "{90CE64C9-49A9-4B7F-889A-C6B721BFFF3A}"
 EndProject
@@ -99,7 +97,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data.Entities", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data.Abstracts", "src\Data\Strasnote.Data.Abstracts\Strasnote.Data.Abstracts.csproj", "{8C86E232-32AA-4FDB-BFF4-E65A945FBEE7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{9A168021-B74B-44A4-9235-2D99FA049E50}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{9A168021-B74B-44A4-9235-2D99FA049E50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Data", "src\Data\Strasnote.Data\Strasnote.Data.csproj", "{19B5A8CE-D169-48D5-86C0-CBB91705160B}"
 EndProject
@@ -236,10 +234,6 @@ Global
 		{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74BBA08D-EDA1-4680-A895-84254AADAB9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74BBA08D-EDA1-4680-A895-84254AADAB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74BBA08D-EDA1-4680-A895-84254AADAB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74BBA08D-EDA1-4680-A895-84254AADAB9E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90CE64C9-49A9-4B7F-889A-C6B721BFFF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90CE64C9-49A9-4B7F-889A-C6B721BFFF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90CE64C9-49A9-4B7F-889A-C6B721BFFF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -346,7 +340,6 @@ Global
 		{BFB6F49C-3EDC-4341-BC48-5810D465A89C} = {2C33B749-F50A-45B4-A5F2-38C3945628DA}
 		{755AED91-26CF-490B-B010-094CD8531CFD} = {2C33B749-F50A-45B4-A5F2-38C3945628DA}
 		{C60E7B60-C7F9-4C34-A5FF-EC386F4DD161} = {9A168021-B74B-44A4-9235-2D99FA049E50}
-		{74BBA08D-EDA1-4680-A895-84254AADAB9E} = {9A168021-B74B-44A4-9235-2D99FA049E50}
 		{90CE64C9-49A9-4B7F-889A-C6B721BFFF3A} = {4294A824-4D91-47F7-97FF-95ED134D78A5}
 		{4AAFFBC2-0E15-4FAC-AD03-C005745B1016} = {0155C170-BF68-4217-BFC6-B35A82291B42}
 		{239B0D8C-4CF4-42E5-8806-ACE6FFD2AFE6} = {2C33B749-F50A-45B4-A5F2-38C3945628DA}
