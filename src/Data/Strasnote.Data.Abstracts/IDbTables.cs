@@ -34,6 +34,11 @@ namespace Strasnote.Data.Abstracts
 		/// </summary>
 		string Note { get; }
 
+		/// <summary>
+		/// Tag table name
+		/// </summary>
+		string Tag { get; }
+
 		#endregion
 	}
 }

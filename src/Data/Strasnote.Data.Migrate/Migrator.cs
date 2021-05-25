@@ -30,6 +30,8 @@ namespace Strasnote.Data.Migrate
 
 		private readonly INoteRepository note;
 
+		private readonly ITagRepository tag;
+
 		private readonly IUserRepository user;
 
 		/// <summary>
@@ -49,6 +51,7 @@ namespace Strasnote.Data.Migrate
 			// Get repositories
 			folder = services.GetRequiredService<IFolderRepository>();
 			note = services.GetRequiredService<INoteRepository>();
+			tag = services.GetRequiredService<ITagRepository>();
 			user = services.GetRequiredService<IUserRepository>();
 		}
 
@@ -107,6 +110,9 @@ namespace Strasnote.Data.Migrate
 
 			// Insert test notes
 			await TestNote.InsertAsync(log, note, folderId).ConfigureAwait(false);
+
+			// Insert test tags
+			await TestTag.InsertAsync(log, tag).ConfigureAwait(false);
 		}
 	}
 }

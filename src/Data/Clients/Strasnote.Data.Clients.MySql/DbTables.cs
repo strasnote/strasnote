@@ -30,6 +30,10 @@ namespace Strasnote.Data.Clients.MySql
 		public string Note =>
 			"main.note";
 
+		/// <inheritdoc/>
+		public string Tag =>
+			"main.tag";
+
 		#endregion
 	}
 }
