@@ -13,18 +13,10 @@ namespace Strasnote.Data.Entities.Notes
 	/// </summary>
 	public sealed record FolderEntity : IEntity
 	{
-		/// <inheritdoc/>
-		[Ignore]
-		public long Id
-		{
-			get => FolderId;
-			init => FolderId = value;
-		}
-
 		/// <summary>
 		/// Folder ID
 		/// </summary>
-		public long FolderId { get; init; }
+		public long Id { get; init; }
 
 		/// <summary>
 		/// Folder Name
@@ -32,9 +24,9 @@ namespace Strasnote.Data.Entities.Notes
 		public string FolderName { get; init; } = string.Empty;
 
 		/// <summary>
-		/// Folder ID (of parent Folder) - 0 means it is the default
+		/// Folder ID (of parent Folder) - null means it is top-level
 		/// </summary>
-		public int FolderParentId { get; init; }
+		public long? FolderParentId { get; init; }
 
 		/// <summary>
 		/// When the Folder was created

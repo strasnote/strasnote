@@ -14,12 +14,13 @@ namespace Strasnote.Data.Migrate
 		/// </summary>
 		/// <param name="log">ILog</param>
 		/// <param name="repo">INoteRepository</param>
-		public static async Task InsertAsync(ILog log, INoteRepository repo)
+		/// <param name="folderId">Folder ID</param>
+		public static async Task InsertAsync(ILog log, INoteRepository repo, long folderId)
 		{
 			var noteId = await repo.CreateAsync(new()
 			{
 				UserId = 1,
-				FolderId = 0,
+				FolderId = folderId,
 				NoteContent = "This is a test note."
 			}).ConfigureAwait(false);
 

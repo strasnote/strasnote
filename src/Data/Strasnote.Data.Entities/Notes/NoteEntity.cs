@@ -52,9 +52,9 @@ namespace Strasnote.Data.Entities.Notes
 		#region Relationships
 
 		/// <summary>
-		/// The ID of the Folder this Note is in
+		/// The ID of the Folder this Note is in (null = unfiled)
 		/// </summary>
-		public long FolderId { get; init; }
+		public long? FolderId { get; init; }
 
 		/// <summary>
 		/// The ID of the User who owns this Note
