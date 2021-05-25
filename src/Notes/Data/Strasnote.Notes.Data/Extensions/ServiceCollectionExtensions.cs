@@ -23,6 +23,7 @@ namespace Strasnote.Notes.Data
 			// Add repositories
 			services.AddTransient<IFolderRepository, FolderSqlRepository>();
 			services.AddTransient<INoteRepository, NoteSqlRepository>();
+			services.AddTransient<ITagRepository, TagSqlRepository>();
 
 			return services;
 		}

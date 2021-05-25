@@ -11,22 +11,22 @@ using Strasnote.Notes.Data.Abstracts;
 
 namespace Strasnote.Notes.Data
 {
-	/// <inheritdoc cref="IFolderRepository"/>
-	public sealed class FolderSqlRepository : SqlRepository<FolderEntity>, IFolderRepository
+	/// <inheritdoc cref="ITagRepository"/>
+	public sealed class TagSqlRepository : SqlRepository<TagEntity>, ITagRepository
 	{
 		/// <summary>
 		/// Inject objects
 		/// </summary>
 		/// <param name="client">ISqlClient</param>
 		/// <param name="log">ILog</param>
-		public FolderSqlRepository(ISqlClient client, ILog<FolderSqlRepository> log) : base(client, log, client.Tables.Folder) { }
+		public TagSqlRepository(ISqlClient client, ILog<TagSqlRepository> log) : base(client, log, client.Tables.Tag) { }
 
 		/// <inheritdoc/>
-		public override Task<long> CreateAsync(FolderEntity entity) =>
+		public override Task<long> CreateAsync(TagEntity entity) =>
 			base.CreateAsync(entity with
 			{
-				FolderCreated = DateTime.Now,
-				FolderUpdated = DateTime.Now
+				TagCreated = DateTime.Now,
+				TagUpdated = DateTime.Now
 			});
 	}
 }
