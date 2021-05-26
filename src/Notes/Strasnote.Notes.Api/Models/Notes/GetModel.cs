@@ -9,7 +9,7 @@ namespace Strasnote.Notes.Api.Models.Notes
 	{
 		public long Id { get; init; }
 
-		public string NoteContent { get; init; } = string.Empty;
+		public string? NoteContent { get; init; }
 
 		public DateTime NoteCreated { get; init; }
 
