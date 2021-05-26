@@ -21,8 +21,16 @@ namespace Strasnote.Notes.Api.Controllers
 			this.folders = folders;
 
 		[HttpPost]
-		public Task<long> Create(FolderEntity folder) =>
-			folders.CreateAsync(folder);
+		public Task<long> Create(CreateModel folder)
+		{
+			var folderEntity = new FolderEntity
+			{
+				FolderName = folder.FolderName,
+				FolderParentId = folder.FolderParentId
+			};
+
+			return folders.CreateAsync(folderEntity);
+		}
 
 		[HttpGet("{id}")]
 		public Task<GetModel?> GetById(long id) =>
