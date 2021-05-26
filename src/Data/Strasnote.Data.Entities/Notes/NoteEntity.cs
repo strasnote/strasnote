@@ -21,7 +21,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Note Content (may be encrypted)
 		/// </summary>
-		public string NoteContent { get; init; } = string.Empty;
+		public string? NoteContent { get; init; }
 
 		/// <summary>
 		/// When the Note was created

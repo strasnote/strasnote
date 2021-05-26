@@ -21,8 +21,16 @@ namespace Strasnote.Notes.Api.Controllers
 			this.notes = notes;
 
 		[HttpPost]
-		public Task<long> Create(NoteEntity note) =>
-			notes.CreateAsync(note);
+		public Task<long> Create(CreateModel note)
+		{
+			// ToDo: we should consider some sort of mapping system, even if it's just simple extension methods
+			var noteEntity = new NoteEntity
+			{
+				FolderId = note.FolderId
+			};
+
+			return notes.CreateAsync(noteEntity);
+		}
 
 		[HttpGet("{id}")]
 		public Task<GetModel?> GetById(long id) =>
