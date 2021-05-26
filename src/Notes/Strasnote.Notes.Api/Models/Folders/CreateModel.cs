@@ -8,5 +8,7 @@ namespace Strasnote.Notes.Api.Models.Folders
 		public long? FolderParentId { get; init; }
 
 		public string FolderName { get; set; } = string.Empty;
+
+		public CreateModel(string folderName) => FolderName = folderName;
 	}
 }
