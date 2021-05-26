@@ -4,6 +4,7 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Data.Entities.Notes;
+using Strasnote.Notes.Api.Models.Folders;
 using Strasnote.Notes.Data.Abstracts;
 using Xunit;
 
@@ -17,13 +18,53 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			// Arrange
 			var folders = Substitute.For<IFolderRepository>();
 			var controller = new FolderController(folders);
-			var folder = new FolderEntity();
 
 			// Act
-			await controller.Create(folder).ConfigureAwait(false);
+			await controller.Create(new CreateModel("test")).ConfigureAwait(false);
 
 			// Assert
-			await folders.Received().CreateAsync(folder).ConfigureAwait(false);
+			await folders.Received().CreateAsync(Arg.Any<FolderEntity>()).ConfigureAwait(false);
+		}
+
+		[Fact]
+		public async Task Sets_FolderParentId_On_FolderEntity()
+		{
+			// Arrange
+			var folders = Substitute.For<IFolderRepository>();
+			var controller = new FolderController(folders);
+			var createFolderModel = new CreateModel("test")
+			{
+				FolderParentId = 1
+			};
+
+			// Act
+			await controller.Create(createFolderModel).ConfigureAwait(false);
+
+			// Assert
+			await folders.Received().CreateAsync(new FolderEntity
+			{
+				FolderName = createFolderModel.FolderName,
+				FolderParentId = createFolderModel.FolderParentId
+			}).ConfigureAwait(false);
+		}
+
+		[Fact]
+		public async Task Sets_FolderParentId_To_Null_On_FolderEntity()
+		{
+			// Arrange
+			var folders = Substitute.For<IFolderRepository>();
+			var controller = new FolderController(folders);
+			var createFolderModel = new CreateModel("test");
+
+			// Act
+			await controller.Create(createFolderModel).ConfigureAwait(false);
+
+			// Assert
+			await folders.Received().CreateAsync(new FolderEntity
+			{
+				FolderName = createFolderModel.FolderName,
+				FolderParentId = null
+			}).ConfigureAwait(false);
 		}
 	}
 }

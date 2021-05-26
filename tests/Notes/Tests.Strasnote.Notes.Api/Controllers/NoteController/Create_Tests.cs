@@ -25,6 +25,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			// Assert
 			await notes.Received().CreateAsync(Arg.Any<NoteEntity>()).ConfigureAwait(false);
 		}
+
 		[Fact]
 		public async Task Sets_FolderId_On_NoteEntity()
 		{
