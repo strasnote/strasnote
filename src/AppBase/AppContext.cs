@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
 using Strasnote.AppBase.Abstracts;
 
@@ -27,7 +28,7 @@ namespace Strasnote.AppBase
 			if (context.HttpContext?.User is ClaimsPrincipal principal)
 			{
 				CurrentUserId = GetCurrentUserId(principal.Claims);
-				IsAuthenticated = CurrentUserId is long && (principal.Identity?.IsAuthenticated ?? false);
+				IsAuthenticated = GetUserIsAuthenticated(CurrentUserId, principal.Identity);
 			}
 		}
 
@@ -51,5 +52,13 @@ namespace Strasnote.AppBase
 				_ =>
 					null
 			};
+
+		/// <summary>
+		/// If the User ID is set and identity is authenticated, returns true
+		/// </summary>
+		/// <param name="userId">User ID</param>
+		/// <param name="identity">IIdentity</param>
+		static internal bool GetUserIsAuthenticated(long? userId, IIdentity? identity) =>
+			userId is long && (identity?.IsAuthenticated ?? false);
 	}
 }
