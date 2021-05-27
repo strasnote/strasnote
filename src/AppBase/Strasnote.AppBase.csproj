@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Strasnote.AppBase.Abstracts\Strasnote.AppBase.Abstracts.csproj" />
     <ProjectReference Include="..\Auth\Strasnote.Auth\Strasnote.Auth.csproj" />
     <ProjectReference Include="..\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
     <ProjectReference Include="..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
