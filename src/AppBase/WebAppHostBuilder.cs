@@ -4,8 +4,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Strasnote.AppBase.Abstracts;
 
 namespace Strasnote.AppBase
 {
@@ -63,5 +65,15 @@ namespace Strasnote.AppBase
 		/// <param name="env">IWebHostEnvironment</param>
 		/// <param name="config">IConfiguration</param>
 		protected abstract void Configure(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration config);
+
+		/// <inheritdoc/>
+		protected override void ConfigureServices(IWebHostEnvironment host, IServiceCollection services, IConfiguration config)
+		{
+			base.ConfigureServices(host, services, config);
+
+			services.AddHttpContextAccessor();
+
+			services.AddTransient<IAppContext, AppContext>();
+		}
 	}
 }

@@ -1,8 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
@@ -10,6 +6,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AppBase.Abstracts\Strasnote.AppBase.Abstracts.csproj" />
     <ProjectReference Include="..\Auth\Strasnote.Auth\Strasnote.Auth.csproj" />
     <ProjectReference Include="..\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
     <ProjectReference Include="..\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
