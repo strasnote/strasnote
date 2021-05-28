@@ -9,21 +9,20 @@ using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 {
-	public class Delete_Tests
+	public class Delete_Tests : FolderController_Tests
 	{
 		[Fact]
 		public async Task Calls_Folders_DeleteAsync()
 		{
 			// Arrange
-			var folders = Substitute.For<IFolderRepository>();
-			var controller = new FolderController(folders);
+			var (controller, v) = Setup();
 			var id = Rnd.Lng;
 
 			// Act
 			await controller.Delete(id).ConfigureAwait(false);
 
 			// Assert
-			await folders.Received().DeleteAsync(id).ConfigureAwait(false);
+			await v.Folders.Received().DeleteAsync(id, v.UserId).ConfigureAwait(false);
 		}
 	}
 }
