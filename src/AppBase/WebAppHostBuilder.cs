@@ -73,7 +73,7 @@ namespace Strasnote.AppBase
 
 			services.AddHttpContextAccessor();
 
-			services.AddTransient<IAppContext, AppContext>();
+			services.AddTransient<IAppContext, WebAppContext>();
 		}
 	}
 }
