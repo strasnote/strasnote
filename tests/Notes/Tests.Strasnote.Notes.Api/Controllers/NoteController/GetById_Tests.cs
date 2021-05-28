@@ -19,10 +19,10 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			var noteId = Rnd.Lng;
 
 			// Act
-			await controller.GetById(noteId).ConfigureAwait(false);
+			await controller.GetById(noteId);
 
 			// Assert
-			await v.Notes.Received().RetrieveAsync<GetModel?>(noteId, v.UserId).ConfigureAwait(false);
+			await v.Notes.Received().RetrieveAsync<GetModel?>(noteId, v.UserId);
 		}
 	}
 }

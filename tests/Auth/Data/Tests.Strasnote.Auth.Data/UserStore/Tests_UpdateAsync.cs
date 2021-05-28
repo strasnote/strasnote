@@ -24,10 +24,10 @@ namespace Tests.Strasnote.Auth.Data
 			var userEntity = new UserEntity();
 
 			// Act
-			await userStore.UpdateAsync(userEntity, new CancellationToken()).ConfigureAwait(false);
+			await userStore.UpdateAsync(userEntity, new CancellationToken());
 
 			// Assert
-			await userRepository.Received(1).UpdateAsync(0, userEntity).ConfigureAwait(false);
+			await userRepository.Received(1).UpdateAsync(0, userEntity);
 		}
 	}
 }

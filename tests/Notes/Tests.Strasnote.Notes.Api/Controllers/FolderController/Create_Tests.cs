@@ -4,7 +4,7 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Data.Entities.Notes;
-using Strasnote.Notes.Api.Models.Folders;
+using Strasnote.Util;
 using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
@@ -16,12 +16,15 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
+			var folderName = Rnd.Str;
 
 			// Act
-			await controller.Create(new CreateModel("test")).ConfigureAwait(false);
+			await controller.Create(folderName);
 
 			// Assert
-			await v.Folders.Received().CreateAsync(Arg.Any<FolderEntity>()).ConfigureAwait(false);
+			await v.Folders.Received().CreateAsync(
+				Arg.Is<FolderEntity>(f => f.FolderName == folderName)
+			);
 		}
 
 		[Fact]
@@ -29,20 +32,16 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var createFolderModel = new CreateModel("test")
-			{
-				FolderParentId = 1
-			};
+			var folderName = Rnd.Str;
+			var folderParentId = Rnd.Lng;
 
 			// Act
-			await controller.Create(createFolderModel).ConfigureAwait(false);
+			await controller.Create(folderParentId, folderName);
 
 			// Assert
-			await v.Folders.Received().CreateAsync(new FolderEntity
-			{
-				FolderName = createFolderModel.FolderName,
-				FolderParentId = createFolderModel.FolderParentId
-			}).ConfigureAwait(false);
+			await v.Folders.Received().CreateAsync(
+				Arg.Is<FolderEntity>(f => f.FolderName == folderName && f.FolderParentId == folderParentId)
+			);
 		}
 
 		[Fact]
@@ -50,17 +49,15 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var createFolderModel = new CreateModel("test");
+			var folderName = Rnd.Str;
 
 			// Act
-			await controller.Create(createFolderModel).ConfigureAwait(false);
+			await controller.Create(folderName);
 
 			// Assert
-			await v.Folders.Received().CreateAsync(new FolderEntity
-			{
-				FolderName = createFolderModel.FolderName,
-				FolderParentId = null
-			}).ConfigureAwait(false);
+			await v.Folders.Received().CreateAsync(
+				Arg.Is<FolderEntity>(f => f.FolderName == folderName && f.FolderParentId == null)
+			);
 		}
 	}
 }

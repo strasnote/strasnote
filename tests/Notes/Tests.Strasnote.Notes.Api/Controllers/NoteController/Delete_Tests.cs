@@ -18,10 +18,10 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			var noteId = Rnd.Lng;
 
 			// Act
-			await controller.Delete(noteId).ConfigureAwait(false);
+			await controller.Delete(noteId);
 
 			// Assert
-			await v.Notes.Received().DeleteAsync(noteId, v.UserId).ConfigureAwait(false);
+			await v.Notes.Received().DeleteAsync(noteId, v.UserId);
 		}
 	}
 }

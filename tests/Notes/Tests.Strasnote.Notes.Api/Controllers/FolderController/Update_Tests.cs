@@ -20,10 +20,10 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var model = new UpdateModel();
 
 			// Act
-			await controller.Update(id, model).ConfigureAwait(false);
+			await controller.Update(id, model);
 
 			// Assert
-			await v.Folders.Received().UpdateAsync(id, model, v.UserId).ConfigureAwait(false);
+			await v.Folders.Received().UpdateAsync(id, model, v.UserId);
 		}
 	}
 }

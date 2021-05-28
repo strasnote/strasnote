@@ -24,10 +24,10 @@ namespace Tests.Strasnote.Auth.Data
 			var userEntity = new UserEntity();
 
 			// Act
-			await userStore.DeleteAsync(userEntity, new CancellationToken()).ConfigureAwait(false);
+			await userStore.DeleteAsync(userEntity, new CancellationToken());
 
 			// Assert
-			await userRepository.Received(1).DeleteAsync(Arg.Any<long>()).ConfigureAwait(false);
+			await userRepository.Received(1).DeleteAsync(Arg.Any<long>());
 		}
 
 		[Fact]

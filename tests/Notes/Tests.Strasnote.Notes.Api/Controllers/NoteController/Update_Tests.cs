@@ -20,10 +20,10 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			var model = new UpdateModel();
 
 			// Act
-			await controller.Update(noteId, model).ConfigureAwait(false);
+			await controller.Update(noteId, model);
 
 			// Assert
-			await v.Notes.Received().UpdateAsync(noteId, model, v.UserId).ConfigureAwait(false);
+			await v.Notes.Received().UpdateAsync(noteId, model, v.UserId);
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 		//	var entity = new TestEntity(id, Rnd.Str, Rnd.Int);
 
 		//	// Act
-		//	await repo.UpdateAsync(id, entity).ConfigureAwait(false);
+		//	await repo.UpdateAsync(id, entity);
 
 		//	// Assert
 		//	queries.Received().GetUpdateQuery(table, Arg.Is<List<string>>(c =>
@@ -34,7 +34,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 		//	var entity = new TestEntity(0, Rnd.Str, Rnd.Int);
 
 		//	// Act
-		//	await repo.UpdateAsync(0, entity).ConfigureAwait(false);
+		//	await repo.UpdateAsync(0, entity);
 
 		//	// Assert
 		//	log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

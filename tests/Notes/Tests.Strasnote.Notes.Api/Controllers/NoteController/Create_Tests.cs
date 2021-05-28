@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using NSubstitute;
+using Strasnote.Data.Entities.Notes;
 using Strasnote.Util;
 using Xunit;
 
@@ -17,10 +18,10 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			var (controller, v) = Setup();
 
 			// Act
-			await controller.Create().ConfigureAwait(false);
+			await controller.Create();
 
 			// Assert
-			await v.Notes.Received().CreateAsync(v.UserId).ConfigureAwait(false);
+			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId));
 		}
 
 		[Fact]
@@ -31,10 +32,10 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			var folderId = Rnd.Lng;
 
 			// Act
-			await controller.Create(folderId).ConfigureAwait(false);
+			await controller.Create(folderId);
 
 			// Assert
-			await v.Notes.Received().CreateAsync(v.UserId, folderId).ConfigureAwait(false);
+			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId && n.FolderId == folderId));
 		}
 	}
 }

@@ -18,10 +18,10 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var id = Rnd.Lng;
 
 			// Act
-			await controller.Delete(id).ConfigureAwait(false);
+			await controller.Delete(id);
 
 			// Assert
-			await v.Folders.Received().DeleteAsync(id, v.UserId).ConfigureAwait(false);
+			await v.Folders.Received().DeleteAsync(id, v.UserId);
 		}
 	}
 }

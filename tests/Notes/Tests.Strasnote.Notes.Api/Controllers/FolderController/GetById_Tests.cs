@@ -19,10 +19,10 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var id = Rnd.Lng;
 
 			// Act
-			await controller.GetById(id).ConfigureAwait(false);
+			await controller.GetById(id);
 
 			// Assert
-			await v.Folders.Received().RetrieveAsync<GetModel?>(id, v.UserId).ConfigureAwait(false);
+			await v.Folders.Received().RetrieveAsync<GetModel?>(id, v.UserId);
 		}
 	}
 }
