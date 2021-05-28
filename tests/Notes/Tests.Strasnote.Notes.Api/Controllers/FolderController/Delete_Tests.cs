@@ -3,7 +3,6 @@
 
 using System.Threading.Tasks;
 using NSubstitute;
-using Strasnote.Notes.Data.Abstracts;
 using Strasnote.Util;
 using Xunit;
 

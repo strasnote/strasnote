@@ -1,13 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using NSubstitute;
-using Strasnote.Data.Abstracts;
-using Strasnote.Util;
-using Xunit;
-
 namespace Strasnote.Data.SqlRepository_Tests
 {
 	public class UpdateAsync_Tests

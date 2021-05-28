@@ -2,7 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using NSubstitute;
-using Strasnote.Data.Abstracts;
 using Strasnote.Util;
 using Xunit;
 
