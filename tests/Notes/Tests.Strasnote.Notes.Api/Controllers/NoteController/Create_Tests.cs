@@ -3,42 +3,38 @@
 
 using System.Threading.Tasks;
 using NSubstitute;
-using Strasnote.Data.Entities.Notes;
-using Strasnote.Notes.Api.Models.Notes;
-using Strasnote.Notes.Data.Abstracts;
+using Strasnote.Util;
 using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {
-	public class Create_Tests
+	public class Create_Tests : NoteController_Tests
 	{
 		[Fact]
-		public async Task Calls_Notes_CreateAsync()
+		public async Task Without_FolderId_Calls_Notes_CreateAsync()
 		{
 			// Arrange
-			var notes = Substitute.For<INoteRepository>();
-			var controller = new NoteController(notes);
+			var (controller, v) = Setup();
 
 			// Act
-			await controller.Create(new CreateModel(1)).ConfigureAwait(false);
+			await controller.Create().ConfigureAwait(false);
 
 			// Assert
-			await notes.Received().CreateAsync(Arg.Any<NoteEntity>()).ConfigureAwait(false);
+			await v.Notes.Received().CreateAsync(v.UserId).ConfigureAwait(false);
 		}
 
 		[Fact]
-		public async Task Sets_FolderId_On_NoteEntity()
+		public async Task With_FolderId_Calls_Notes_CreateAsync()
 		{
 			// Arrange
-			var notes = Substitute.For<INoteRepository>();
-			var controller = new NoteController(notes);
-			var createNoteModel = new CreateModel(1);
+			var (controller, v) = Setup();
+			var folderId = Rnd.Lng;
 
 			// Act
-			await controller.Create(createNoteModel).ConfigureAwait(false);
+			await controller.Create(folderId).ConfigureAwait(false);
 
 			// Assert
-			await notes.Received().CreateAsync(new NoteEntity { FolderId = createNoteModel.FolderId }).ConfigureAwait(false);
+			await v.Notes.Received().CreateAsync(v.UserId, folderId).ConfigureAwait(false);
 		}
 	}
 }

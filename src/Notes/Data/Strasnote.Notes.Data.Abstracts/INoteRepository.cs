@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System.Threading.Tasks;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Notes;
 

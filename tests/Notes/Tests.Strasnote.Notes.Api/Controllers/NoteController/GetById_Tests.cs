@@ -4,27 +4,25 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Notes.Api.Models.Notes;
-using Strasnote.Notes.Data.Abstracts;
 using Strasnote.Util;
 using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {
-	public class GetById_Tests
+	public class GetById_Tests : NoteController_Tests
 	{
 		[Fact]
 		public async Task Calls_Notes_RetrieveAsync()
 		{
 			// Arrange
-			var notes = Substitute.For<INoteRepository>();
-			var controller = new NoteController(notes);
-			var id = Rnd.Lng;
+			var (controller, v) = Setup();
+			var noteId = Rnd.Lng;
 
 			// Act
-			await controller.GetById(id).ConfigureAwait(false);
+			await controller.GetById(noteId).ConfigureAwait(false);
 
 			// Assert
-			await notes.Received().RetrieveAsync<GetModel?>(id).ConfigureAwait(false);
+			await v.Notes.Received().RetrieveAsync<GetModel?>(noteId, v.UserId).ConfigureAwait(false);
 		}
 	}
 }
