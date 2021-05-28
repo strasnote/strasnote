@@ -5,4 +5,7 @@
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\AppBase.Abstracts\Strasnote.AppBase.Abstracts.csproj" />
+	</ItemGroup>
 </Project>

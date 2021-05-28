@@ -35,7 +35,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			accessor.HttpContext.Returns(context);
 
 			// Act
-			var result = new AppContext(accessor);
+			var result = new WebAppContext(accessor);
 
 			// Assert
 			Assert.Equal(id, result.CurrentUserId);
