@@ -11,7 +11,7 @@ namespace Strasnote.Data.Entities.Notes
 	/// <summary>
 	/// Tag entity
 	/// </summary>
-	public sealed record TagEntity : IEntity
+	public sealed record TagEntity : IEntityWithUserId
 	{
 		/// <summary>
 		/// Tag ID

@@ -9,7 +9,7 @@ namespace Strasnote.Data.Entities.Notes
 	/// <summary>
 	/// Folder User entity
 	/// </summary>
-	public sealed record FolderUserEntity : IEntity
+	public sealed record FolderUserEntity : IEntityWithUserId
 	{
 		/// <summary>
 		/// Folder User ID
