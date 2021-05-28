@@ -37,8 +37,10 @@ namespace Strasnote.Data.Abstracts
 		/// Retrieve entities using the specified predicates (uses AND)
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
+		/// <param name="userId">Current User ID</param>
 		/// <param name="predicates">List of predicates (uses AND)</param>
 		Task<IEnumerable<TModel>> QueryAsync<TModel>(
+			long? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		);
 
@@ -46,8 +48,10 @@ namespace Strasnote.Data.Abstracts
 		/// Retrieve a single entity using the specified predicates (uses AND)
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
+		/// <param name="userId">Current User ID</param>
 		/// <param name="predicates">List of predicates (uses AND)</param>
 		Task<TModel> QuerySingleAsync<TModel>(
+			long? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		);
 
@@ -65,21 +69,25 @@ namespace Strasnote.Data.Abstracts
 		/// Retrieve a single entity by ID
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
-		/// <param name="id">ID of entity to retrieve</param>
-		Task<TModel> RetrieveAsync<TModel>(long id);
+		/// <param name="entityId">ID of entity to retrieve</param>
+		/// <param name="userId">Current User ID</param>
+		Task<TModel> RetrieveAsync<TModel>(long entityId, long? userId);
 
 		/// <summary>
 		/// Update an entity and return updated model
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
+		/// <param name="entityId">ID of entity to update</param>
 		/// <param name="model">Model containing properties to update</param>
-		Task<TModel> UpdateAsync<TModel>(long id, TModel model);
+		/// <param name="userId">Current User ID</param>
+		Task<TModel> UpdateAsync<TModel>(long entityId, TModel model, long? userId);
 
 		/// <summary>
 		/// Delete an entity and return the number of affected rows
 		/// </summary>
-		/// <param name="id">ID of entity to delete</param>
-		Task<int> DeleteAsync(long id);
+		/// <param name="entityId">ID of entity to delete</param>
+		/// <param name="userId">Current User ID</param>
+		Task<int> DeleteAsync(long entityId, long? userId);
 
 		#endregion
 	}

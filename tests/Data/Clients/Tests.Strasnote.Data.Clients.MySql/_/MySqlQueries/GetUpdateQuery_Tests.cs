@@ -21,16 +21,41 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 			var c2 = Rnd.Str;
 			var columns = new List<string>(new[] { c0, c1, c2 });
 
-			var idColumn = Rnd.Str;
-			var id = Rnd.Int;
+			var entityId = Rnd.Lng;
 
 			var expected = $"UPDATE `{table}` SET `{c0}` = @{c0}, `{c1}` = @{c1}, `{c2}` = @{c2} " +
-				$"WHERE `{idColumn}` = {id};";
+				$"WHERE `{nameof(IEntity.Id)}` = {entityId};";
 
 			var queries = new MySqlQueries();
 
 			// Act
-			var result = queries.GetUpdateQuery(table, columns, idColumn, id);
+			var result = queries.GetUpdateQuery(table, columns, entityId, null);
+
+			// Assert
+			Assert.Equal(expected, result);
+		}
+
+		[Fact]
+		public void Returns_Valid_Update_Query_With_UserId()
+		{
+			// Arrange
+			var table = Rnd.Str;
+
+			var c0 = Rnd.Str;
+			var c1 = Rnd.Str;
+			var c2 = Rnd.Str;
+			var columns = new List<string>(new[] { c0, c1, c2 });
+
+			var entityId = Rnd.Lng;
+			var userId = Rnd.Lng;
+
+			var expected = $"UPDATE `{table}` SET `{c0}` = @{c0}, `{c1}` = @{c1}, `{c2}` = @{c2} " +
+				$"WHERE `{nameof(IEntity.Id)}` = {entityId} AND `{nameof(IEntityWithUserId.UserId)}` = {userId};";
+
+			var queries = new MySqlQueries();
+
+			// Act
+			var result = queries.GetUpdateQuery(table, columns, entityId, userId);
 
 			// Assert
 			Assert.Equal(expected, result);
@@ -42,21 +67,19 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 			// Arrange
 			var table = Rnd.Str;
 
-			var c0 = nameof(IEntity.Id);
+			var c0 = Rnd.Str;
 			var c1 = Rnd.Str;
-			var c2 = Rnd.Str;
-			var columns = new List<string>(new[] { c0, c1, c2 });
+			var columns = new List<string>(new[] { nameof(IEntity.Id), c0, c1 });
 
-			var idColumn = Rnd.Str;
-			var id = Rnd.Int;
+			var entityId = Rnd.Lng;
 
-			var expected = $"UPDATE `{table}` SET `{c1}` = @{c1}, `{c2}` = @{c2} " +
-				$"WHERE `{idColumn}` = {id};";
+			var expected = $"UPDATE `{table}` SET `{c0}` = @{c0}, `{c1}` = @{c1} " +
+				$"WHERE `{nameof(IEntity.Id)}` = {entityId};";
 
 			var queries = new MySqlQueries();
 
 			// Act
-			var result = queries.GetUpdateQuery(table, columns, idColumn, id);
+			var result = queries.GetUpdateQuery(table, columns, entityId, null);
 
 			// Assert
 			Assert.Equal(expected, result);

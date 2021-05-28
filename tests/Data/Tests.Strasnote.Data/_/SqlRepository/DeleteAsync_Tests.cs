@@ -15,13 +15,14 @@ namespace Strasnote.Data.SqlRepository_Tests
 		{
 			// Arrange
 			var (repo, _, queries, _, table) = SqlRepository_Setup.Get();
-			var id = Rnd.Lng;
+			var entityId = Rnd.Lng;
+			var userId = Rnd.Lng;
 
 			// Act
-			repo.DeleteAsync(id);
+			repo.DeleteAsync(entityId, userId);
 
 			// Assert
-			queries.Received().GetDeleteQuery(table, nameof(IEntity.Id), id);
+			queries.Received().GetDeleteQuery(table, entityId, userId);
 		}
 
 		[Fact]
@@ -31,7 +32,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var (repo, _, _, log, _) = SqlRepository_Setup.Get();
 
 			// Act
-			repo.DeleteAsync(Rnd.Lng);
+			repo.DeleteAsync(Rnd.Lng, Rnd.Lng);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());
