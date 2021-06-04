@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using NSubstitute;
-using Strasnote.Data.Abstracts;
 using Strasnote.Util;
 using Xunit;
 
@@ -16,15 +15,16 @@ namespace Strasnote.Data.SqlRepository_Tests
 		{
 			// Arrange
 			var (repo, _, queries, _, table) = SqlRepository_Setup.Get();
-			var id = Rnd.Lng;
+			var entityId = Rnd.Lng;
+			var userId = Rnd.Lng;
 
 			// Act
-			repo.RetrieveAsync<TestEntity>(id);
+			repo.RetrieveAsync<TestEntity>(entityId, userId);
 
 			// Assert
 			queries.Received().GetRetrieveQuery(table, Arg.Is<List<string>>(c =>
 				c[0] == nameof(TestEntity.Bar) && c[1] == nameof(TestEntity.Foo) && c[2] == nameof(TestEntity.Id)
-			), nameof(IEntity.Id), id);
+			), entityId, userId);
 		}
 
 		[Fact]
@@ -34,7 +34,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var (repo, _, _, log, _) = SqlRepository_Setup.Get();
 
 			// Act
-			repo.RetrieveAsync<TestEntity>(Rnd.Lng);
+			repo.RetrieveAsync<TestEntity>(Rnd.Lng, Rnd.Lng);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

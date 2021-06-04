@@ -11,7 +11,7 @@ namespace Strasnote.Data.Entities.Notes
 	/// <summary>
 	/// Enrypted entity
 	/// </summary>
-	public sealed record EncryptedEntity : IEntity
+	public sealed record EncryptedEntity : IEntityWithUserId
 	{
 		/// <summary>
 		/// Encrypted ID

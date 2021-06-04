@@ -31,8 +31,10 @@ namespace Strasnote.Data.SqlRepository_Tests
 				( e => e.Bar, p1Operator, p1Value )
 			};
 
+			var userId = Rnd.Lng;
+
 			// Act
-			repo.QueryAsync<TestEntity>(predicates);
+			repo.QueryAsync<TestEntity>(userId, predicates);
 
 			// Assert
 			queries.Received().GetRetrieveQuery(table, Arg.Is<List<string>>(c =>
@@ -40,7 +42,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			), Arg.Is<List<(string, SearchOperator, object)>>(p =>
 				p[0].Item1 == nameof(TestEntity.Foo) && p[0].Item2 == p0Operator && p[0].Item3 == p0Value
 				&& p[1].Item1 == nameof(TestEntity.Bar) && p[1].Item2 == p1Operator && p[1].Item3 == p1Value
-			));
+			), userId);
 		}
 
 		[Fact]
@@ -54,7 +56,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			};
 
 			// Act
-			repo.QueryAsync<TestEntity>(predicates);
+			repo.QueryAsync<TestEntity>(Rnd.Lng, predicates);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

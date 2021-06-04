@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Threading.Tasks;
+using Strasnote.Data.Entities.Notes;
 using Strasnote.Logging;
 using Strasnote.Notes.Data.Abstracts;
 
@@ -17,7 +18,7 @@ namespace Strasnote.Data.Migrate
 		/// <param name="folderId">Folder ID</param>
 		public static async Task InsertAsync(ILog log, INoteRepository repo, long folderId)
 		{
-			var noteId = await repo.CreateAsync(new()
+			var noteId = await repo.CreateAsync(new NoteEntity
 			{
 				UserId = 1,
 				FolderId = folderId,

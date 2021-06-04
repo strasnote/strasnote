@@ -37,7 +37,7 @@ namespace Strasnote.Data.Clients.MySql
 		}
 
 		/// <inheritdoc/>
-		public string GetRetrieveQuery(string table, List<string> columns, string idColumn, long id)
+		public string GetRetrieveQuery(string table, List<string> columns, long entityId, long? userId)
 		{
 			// Get columns
 			string select;
@@ -56,13 +56,24 @@ namespace Strasnote.Data.Clients.MySql
 				select = SelectAll;
 			}
 
-			// Return query
-			return $"SELECT {select} FROM `{table}` WHERE `{idColumn}` = {id};";
+			// Build query
+			var sql = $"SELECT {select} FROM `{table}` WHERE `{nameof(IEntity.Id)}` = {entityId}";
+
+			// Add User ID
+			if (userId is not null)
+			{
+				sql += $" AND `{nameof(IEntityWithUserId.UserId)}` = {userId}";
+			}
+
+			// Return
+			return $"{sql};";
 		}
 
 		/// <inheritdoc/>
 		public (string query, Dictionary<string, object> param) GetRetrieveQuery(
-			string table, List<string> columns, List<(string column, SearchOperator op, object value)> predicates
+			string table,
+			List<string> columns, List<(string column, SearchOperator op, object value)> predicates,
+			long? userId
 		)
 		{
 			// Get columns
@@ -82,6 +93,12 @@ namespace Strasnote.Data.Clients.MySql
 				select = SelectAll;
 			}
 
+			// Add User ID
+			if (userId is not null)
+			{
+				predicates.Add((nameof(IEntityWithUserId.UserId), SearchOperator.Equal, userId));
+			}
+
 			// Add each predicate to the where and parameter lists
 			var where = new List<string>();
 			var param = new Dictionary<string, object>();
@@ -99,7 +116,7 @@ namespace Strasnote.Data.Clients.MySql
 		}
 
 		/// <inheritdoc/>
-		public string GetUpdateQuery(string table, List<string> columns, string idColumn, long id)
+		public string GetUpdateQuery(string table, List<string> columns, long entityId, long? userId)
 		{
 			// Get columns
 			var col = new List<string>();
@@ -113,12 +130,33 @@ namespace Strasnote.Data.Clients.MySql
 				col.Add($"`{column}` = @{column}");
 			}
 
-			// Return query to update and then select
-			return $"UPDATE `{table}` SET {string.Join(", ", col)} WHERE `{idColumn}` = {id};";
+			// Build query
+			var sql = $"UPDATE `{table}` SET {string.Join(", ", col)} WHERE `{nameof(IEntity.Id)}` = {entityId}";
+
+			// Add User ID
+			if (userId is not null)
+			{
+				sql += $" AND `{nameof(IEntityWithUserId.UserId)}` = {userId}";
+			}
+
+			// Return
+			return $"{sql};";
 		}
 
 		/// <inheritdoc/>
-		public string GetDeleteQuery(string table, string idColumn, long id) =>
-			$"DELETE FROM `{table}` WHERE `{idColumn}` = {id};";
+		public string GetDeleteQuery(string table, long entityId, long? userId)
+		{
+			// Build query
+			var sql = $"DELETE FROM `{table}` WHERE `{nameof(IEntity.Id)}` = {entityId}";
+
+			// Add User ID
+			if (userId is not null)
+			{
+				sql += $" AND `{nameof(IEntityWithUserId.UserId)}` = {userId}";
+			}
+
+			// Return
+			return $"{sql};";
+		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			var claims = new List<Claim>();
 
 			// Act
-			var result = AppContext.GetCurrentUserId(claims);
+			var result = WebAppContext.GetCurrentUserId(claims);
 
 			// Assert
 			Assert.Null(result);
@@ -32,7 +32,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			var claims = new List<Claim> { idClaim };
 
 			// Act
-			var result = AppContext.GetCurrentUserId(claims);
+			var result = WebAppContext.GetCurrentUserId(claims);
 
 			// Assert
 			Assert.Null(result);
@@ -47,7 +47,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			var claims = new List<Claim> { idClaim };
 
 			// Act
-			var result = AppContext.GetCurrentUserId(claims);
+			var result = WebAppContext.GetCurrentUserId(claims);
 
 			// Assert
 			Assert.Equal(id, result);

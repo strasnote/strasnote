@@ -23,6 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Services", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0155C170-BF68-4217-BFC6-B35A82291B42}"
 	ProjectSection(SolutionItems) = preProject
+		tests\.editorconfig = tests\.editorconfig
 		tests\Directory.Build.props = tests\Directory.Build.props
 		tests\Test.csproj = tests\Test.csproj
 	EndProjectSection
@@ -150,7 +151,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Notes.Data.Abstra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.AppBase.Abstracts", "src\AppBase.Abstracts\Strasnote.AppBase.Abstracts.csproj", "{34490587-0A30-418E-9F6B-F3F3B95E319E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Strasnote.AppBase", "tests\Tests.Strasnote.AppBase\Tests.Strasnote.AppBase.csproj", "{5B2DBB02-EEA2-4A8C-9AA6-0B79077AED53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Strasnote.AppBase", "tests\Tests.Strasnote.AppBase\Tests.Strasnote.AppBase.csproj", "{5B2DBB02-EEA2-4A8C-9AA6-0B79077AED53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

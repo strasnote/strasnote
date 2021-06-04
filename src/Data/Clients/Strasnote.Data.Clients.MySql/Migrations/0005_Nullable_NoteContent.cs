@@ -20,6 +20,10 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		protected override void Down()
 		{
 			Execute(@"
+				UPDATE `main.note` SET `NoteContent` = '' WHERE `NoteContent` IS NULL
+			");
+
+			Execute(@"
 				ALTER TABLE `main.note`
 				CHANGE COLUMN `NoteContent` `NoteContent` TEXT NOT NULL 
 				COLLATE 'utf8_general_ci' AFTER `Id`

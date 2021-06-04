@@ -1,13 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using NSubstitute;
-using Strasnote.Data.Abstracts;
-using Strasnote.Util;
-using Xunit;
-
 namespace Strasnote.Data.SqlRepository_Tests
 {
 	public class UpdateAsync_Tests
@@ -25,7 +18,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 		//	var entity = new TestEntity(id, Rnd.Str, Rnd.Int);
 
 		//	// Act
-		//	await repo.UpdateAsync(id, entity).ConfigureAwait(false);
+		//	await repo.UpdateAsync(id, entity);
 
 		//	// Assert
 		//	queries.Received().GetUpdateQuery(table, Arg.Is<List<string>>(c =>
@@ -41,7 +34,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 		//	var entity = new TestEntity(0, Rnd.Str, Rnd.Int);
 
 		//	// Act
-		//	await repo.UpdateAsync(0, entity).ConfigureAwait(false);
+		//	await repo.UpdateAsync(0, entity);
 
 		//	// Assert
 		//	log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

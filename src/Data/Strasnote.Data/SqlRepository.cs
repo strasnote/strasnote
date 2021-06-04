@@ -196,8 +196,10 @@ namespace Strasnote.Data
 		/// </summary>
 		/// <typeparam name="TModel">Return Model type</typeparam>
 		/// <param name="predicates">Search predicates</param>
+		/// <param name="userId">Current User ID</param>
 		private (string query, Dictionary<string, object> param) GetRetrieveQuery<TModel>(
-			(Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
+			(Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates,
+			long? userId
 		)
 		{
 			// Convert the expressions to column names
@@ -223,16 +225,17 @@ namespace Strasnote.Data
 			}
 
 			// Get query
-			return Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where);
+			return Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), where, userId);
 		}
 
 		/// <inheritdoc/>
 		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(
+			long? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
 		{
 			// Log retrieve
-			var (query, param) = GetRetrieveQuery<TModel>(predicates);
+			var (query, param) = GetRetrieveQuery<TModel>(predicates, userId);
 			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, param);
 
 			// Perform retrieve and map to TModel
@@ -245,11 +248,12 @@ namespace Strasnote.Data
 
 		/// <inheritdoc/>
 		public virtual Task<TModel> QuerySingleAsync<TModel>(
+			long? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
 		{
 			// Log retrieve
-			var (query, param) = GetRetrieveQuery<TModel>(predicates);
+			var (query, param) = GetRetrieveQuery<TModel>(predicates, userId);
 			LogOperation(Operation.RetrieveSingle, "{Query} - {@Parameters}", query, param);
 
 			// Perform retrieve and map to TModel
@@ -280,26 +284,25 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> RetrieveAsync<TModel>(long id)
+		public virtual Task<TModel> RetrieveAsync<TModel>(long entityId, long? userId)
 		{
 			// Log retrieve
-			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
-			LogOperation(Operation.RetrieveById, "{Query} {Id}", query, id);
+			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), entityId, userId);
+			LogOperation(Operation.RetrieveById, "{Query} | Entity: {EntityId} | User: {UserId}", query, entityId, userId ?? 0);
 
 			// Perform retrieve and map to model
 			return Connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
-				param: new { id },
 				commandType: CommandType.Text
 			);
 		}
 
 		/// <inheritdoc/>
-		public virtual async Task<TModel> UpdateAsync<TModel>(long id, TModel model)
+		public virtual async Task<TModel> UpdateAsync<TModel>(long entityId, TModel model, long? userId)
 		{
 			// Log update
-			var query = Queries.GetUpdateQuery(Table, GetProperties<TModel>(), nameof(IEntity.Id), id);
-			LogOperation(Operation.Update, "{Query} {@Model}", query, model ?? new object());
+			var query = Queries.GetUpdateQuery(Table, GetProperties<TModel>(), entityId, userId);
+			LogOperation(Operation.Update, "{Query} | Entity: {EntityId} | User: {UserId} | Model: {@Model}", query, entityId, userId ?? 0, model ?? new object());
 
 			// Perform update
 			var updated = await Connection.ExecuteAsync(
@@ -311,22 +314,22 @@ namespace Strasnote.Data
 			// If the update was successful, retrieve updated model
 			if (updated > 0)
 			{
-				return await RetrieveAsync<TModel>(id).ConfigureAwait(false);
+				return await RetrieveAsync<TModel>(entityId, userId).ConfigureAwait(false);
 			}
 			// Otherwise, log error and throw exception
 			else
 			{
-				Log.Error("Unable to update {Entity} with ID {Id} using Model {Model}.", typeof(TEntity), id, model ?? new object());
-				throw new RepositoryUpdateException<TEntity>(id);
+				Log.Error("Unable to update {Entity} with ID {Id} (User {UserId}) using Model {Model}.", typeof(TEntity), entityId, userId ?? 0, model ?? new object());
+				throw new RepositoryUpdateException<TEntity>(entityId);
 			}
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<int> DeleteAsync(long id)
+		public virtual Task<int> DeleteAsync(long id, long? userId)
 		{
 			// Log delete
-			var query = Queries.GetDeleteQuery(Table, nameof(IEntity.Id), id);
-			LogOperation(Operation.Delete, "{Query} {Id}", query, id);
+			var query = Queries.GetDeleteQuery(Table, id, userId);
+			LogOperation(Operation.Delete, "{Query} | Entity: {Id} | User: {UserId}", query, id, userId ?? 0);
 
 			// Perform delete and return the number of affected rows
 			return Connection.ExecuteAsync(

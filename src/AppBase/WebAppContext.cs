@@ -11,7 +11,7 @@ using Strasnote.AppBase.Abstracts;
 namespace Strasnote.AppBase
 {
 	/// <inheritdoc cref="IAppContext"/>
-	public sealed class AppContext : IAppContext
+	public sealed class WebAppContext : IAppContext
 	{
 		/// <inheritdoc/>
 		public bool IsAuthenticated { get; init; }
@@ -23,7 +23,7 @@ namespace Strasnote.AppBase
 		/// Set context information
 		/// </summary>
 		/// <param name="context">IHttpContextAccessor</param>
-		public AppContext(IHttpContextAccessor context)
+		public WebAppContext(IHttpContextAccessor context)
 		{
 			if (context.HttpContext?.User is ClaimsPrincipal principal)
 			{

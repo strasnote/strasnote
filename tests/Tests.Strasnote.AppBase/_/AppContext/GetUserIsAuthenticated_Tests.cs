@@ -1,12 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Util;
 using Xunit;
@@ -21,7 +16,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			// Arrange
 
 			// Act
-			var result = AppContext.GetUserIsAuthenticated(null, Substitute.For<IIdentity>());
+			var result = WebAppContext.GetUserIsAuthenticated(null, Substitute.For<IIdentity>());
 
 			// Assert
 			Assert.False(result);
@@ -34,7 +29,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			var id = Rnd.Lng;
 
 			// Act
-			var result = AppContext.GetUserIsAuthenticated(id, null);
+			var result = WebAppContext.GetUserIsAuthenticated(id, null);
 
 			// Assert
 			Assert.False(result);
@@ -49,7 +44,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			identity.IsAuthenticated.Returns(false);
 
 			// Act
-			var result = AppContext.GetUserIsAuthenticated(id, identity);
+			var result = WebAppContext.GetUserIsAuthenticated(id, identity);
 
 			// Assert
 			Assert.False(result);
@@ -64,7 +59,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 			identity.IsAuthenticated.Returns(true);
 
 			// Act
-			var result = AppContext.GetUserIsAuthenticated(id, identity);
+			var result = WebAppContext.GetUserIsAuthenticated(id, identity);
 
 			// Assert
 			Assert.True(result);
