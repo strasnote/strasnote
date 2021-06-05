@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,17 @@ namespace Strasnote.Notes.Api
 
 			// Notes
 			services.AddNotesData<MySqlClient>();
+
+			// Swagger
+			services.AddSwaggerGen(c =>
+			{
+				c.SwaggerDoc("v1", new() { Title = "Strasnote Notes API", Version = "v1" });
+
+				c.SchemaGeneratorOptions = new() { SchemaIdSelector = type => type.FullName };
+
+				var filePath = Path.Combine(System.AppContext.BaseDirectory, "Strasnote.Notes.Api.xml");
+				c.IncludeXmlComments(filePath);
+			});
 		}
 
 		/// <inheritdoc/>
@@ -46,6 +58,12 @@ namespace Strasnote.Notes.Api
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+
+			app.UseSwagger();
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("v1/swagger.json", "Strasnote Notes API v1");
+			});
 
 			app.UseEndpoints(endpoints =>
 			{

@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.AppBase.Abstracts;
+using Strasnote.Logging;
 using Strasnote.Notes.Api.Models.Notes;
 using Strasnote.Notes.Data.Abstracts;
 using Strasnote.Util;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Strasnote.Notes.Api.Controllers
 {
@@ -16,46 +18,71 @@ namespace Strasnote.Notes.Api.Controllers
 	[Route("[controller]")]
 	public class NoteController : Controller
 	{
-		private readonly IAppContext ctx;
-
 		private readonly INoteRepository notes;
 
-		public NoteController(IAppContext ctx, INoteRepository notes) =>
-			(this.ctx, this.notes) = (ctx, notes);
+		public NoteController(IAppContext ctx, ILog<NoteController> log, INoteRepository notes) : base(ctx, log) =>
+			this.notes = notes;
 
+		/// <summary>
+		/// Creates a Note
+		/// </summary>
+		/// <remarks>
+		/// POST /Note
+		/// </remarks>
+		/// <returns>The ID of the new Note</returns>
 		[HttpPost]
-		public Task<long> Create() =>
-			Is.AuthenticatedUser(
-				ctx,
-				userId => notes.CreateAsync(new()
-				{
-					UserId = userId
-				}),
-				() => 0
+		[SwaggerResponse(201, "The note was created.", typeof(long))]
+		[SwaggerResponse(401, "The user is not authorised.")]
+		[SwaggerResponse(500)]
+		public Task<IActionResult> Create() =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.CreateAsync(new() { UserId = userId }),
+				result: noteId => Created(nameof(GetById), noteId)
 			);
 
+		/// <summary>
+		/// Creates a Note within a folder
+		/// </summary>
+		/// <remarks>
+		/// POST /Note/folderId
+		/// </remarks>
+		/// <param name="folderId">Folder ID</param>
+		/// <returns>The ID of the new Note</returns>
 		[HttpPost("{folderId}")]
-		public Task<long> Create(long folderId) =>
-			Is.AuthenticatedUser(
-				ctx,
-				userId => notes.CreateAsync(new()
-				{
-					UserId = userId,
-					FolderId = folderId
-				}),
-				() => 0
+		[SwaggerResponse(201, "The note was created.", typeof(long))]
+		[SwaggerResponse(401, "The user is not authorised.")]
+		[SwaggerResponse(500)]
+		public Task<IActionResult> Create(long folderId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.CreateAsync(new() { UserId = userId, FolderId = folderId }),
+				result: noteId => Created(nameof(GetById), noteId)
 			);
 
 		[HttpGet("{noteId}")]
-		public Task<GetModel?> GetById(long noteId) =>
-			notes.RetrieveAsync<GetModel?>(noteId, ctx.CurrentUserId);
+		public Task<IActionResult> GetById(long noteId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.RetrieveAsync<GetModel?>(noteId, userId)
+			);
 
 		[HttpPut("{noteId}")]
-		public Task<UpdateModel?> Update(long noteId, UpdateModel note) =>
-			notes.UpdateAsync<UpdateModel?>(noteId, note, ctx.CurrentUserId);
+		public Task<IActionResult> Update(long noteId, [FromBody] UpdateModel note) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.UpdateAsync<UpdateModel?>(noteId, note, userId)
+			);
+
 
 		[HttpDelete("{noteId}")]
-		public Task<int> Delete(long noteId) =>
-			notes.DeleteAsync(noteId, ctx.CurrentUserId);
+		public Task<IActionResult> Delete(long noteId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.DeleteAsync(noteId, userId),
+				result: affected => affected switch
+				{
+					1 =>
+						Ok(),
+
+					_ =>
+						NotFound()
+				}
+			);
 	}
 }

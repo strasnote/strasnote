@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.AppBase.Abstracts;
+using Strasnote.Logging;
 using Strasnote.Notes.Api.Models.Folders;
 using Strasnote.Notes.Data.Abstracts;
 using Strasnote.Util;
@@ -16,12 +17,12 @@ namespace Strasnote.Notes.Api.Controllers
 	[Route("[controller]")]
 	public class FolderController : Controller
 	{
-		private readonly IAppContext ctx;
+		private IAppContext ctx => Context;
 
 		private readonly IFolderRepository folders;
 
-		public FolderController(IAppContext ctx, IFolderRepository folders) =>
-			(this.ctx, this.folders) = (ctx, folders);
+		public FolderController(IAppContext ctx, ILog<FolderController> log, IFolderRepository folders) : base(ctx, log) =>
+			 this.folders = folders;
 
 		[HttpPost]
 		public Task<long> Create([FromBody] string folderName) =>

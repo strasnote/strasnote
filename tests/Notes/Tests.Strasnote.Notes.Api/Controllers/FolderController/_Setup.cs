@@ -3,6 +3,7 @@
 
 using NSubstitute;
 using Strasnote.AppBase.Abstracts;
+using Strasnote.Logging;
 using Strasnote.Notes.Data.Abstracts;
 using Strasnote.Util;
 
@@ -18,13 +19,16 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var userId = Rnd.Lng;
 			ctx.CurrentUserId.Returns(userId);
 
+			var log = Substitute.For<ILog<FolderController>>();
+
 			var folders = Substitute.For<IFolderRepository>();
 
-			return (new(ctx, folders), new(ctx, userId, folders));
+			return (new(ctx, log, folders), new(ctx, log, userId, folders));
 		}
 
 		public sealed record Vars(
 			IAppContext AppContext,
+			ILog<FolderController> Log,
 			long UserId,
 			IFolderRepository Folders
 		);
