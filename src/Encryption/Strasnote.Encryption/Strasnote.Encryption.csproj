@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="Jeebs.Option" Version="5.7.6" />
+    <PackageReference Include="Jeebs.Option" Version="5.7.8" />
     <PackageReference Include="Sodium.Core" Version="1.2.3" />
   </ItemGroup>
 </Project>
