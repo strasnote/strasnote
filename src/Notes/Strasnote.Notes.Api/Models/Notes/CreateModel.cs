@@ -3,5 +3,8 @@
 
 namespace Strasnote.Notes.Api.Models.Notes
 {
-	public record CreateModel(int FolderId);
+	/// <summary>
+	/// See <see cref="Strasnote.Notes.Api.Controllers.NoteController.Create"/>
+	/// </summary>
+	public sealed record CreateModel();
 }

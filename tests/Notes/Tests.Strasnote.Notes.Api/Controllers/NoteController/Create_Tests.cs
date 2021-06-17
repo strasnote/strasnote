@@ -32,7 +32,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			var folderId = Rnd.Lng;
 
 			// Act
-			await controller.Create(folderId);
+			await controller.CreateInFolder(new(folderId));
 
 			// Assert
 			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId && n.FolderId == folderId));

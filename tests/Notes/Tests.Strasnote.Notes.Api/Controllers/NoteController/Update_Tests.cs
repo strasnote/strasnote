@@ -17,7 +17,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			// Arrange
 			var (controller, v) = Setup();
 			var noteId = Rnd.Lng;
-			var model = new UpdateModel();
+			var model = new SaveContentModel(Rnd.Str);
 
 			// Act
 			await controller.SaveContent(noteId, model);

@@ -52,17 +52,20 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Creates a Note within a folder.
 		/// </summary>
 		/// <remarks>
-		/// POST /Note/folderId
+		/// POST /Note/InFolder
+		/// {
+		///     "folderId": 42
+		/// }
 		/// </remarks>
-		/// <param name="folderId">Folder ID</param>
+		/// <param name="model">CreateInFolderModel</param>
 		/// <returns>The ID of the new Note</returns>
-		[HttpPost("{folderId}")]
+		[HttpPost("InFolder")]
 		[SwaggerResponse(201, "The note was created.", typeof(long))]
 		[SwaggerResponse(401, "The user is not authorised.")]
 		[SwaggerResponse(500)]
-		public Task<IActionResult> Create(long folderId) =>
+		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.CreateAsync(new() { UserId = userId, FolderId = folderId }),
+				then: userId => notes.CreateAsync(new() { UserId = userId, FolderId = model.FolderId }),
 				result: noteId => Created(nameof(GetById), noteId)
 			);
 
@@ -73,13 +76,13 @@ namespace Strasnote.Notes.Api.Controllers
 		/// GET /Note/42
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
-		[SwaggerResponse(200, "The requested note.", typeof(GetModel))]
+		[HttpGet("{noteId}")]
+		[SwaggerResponse(200, "The requested note.", typeof(GetByIdModel))]
 		[SwaggerResponse(401, "The user is not authorised.")]
 		[SwaggerResponse(500)]
-		[HttpGet("{noteId}")]
 		public Task<IActionResult> GetById(long noteId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.RetrieveAsync<GetModel?>(noteId, userId)
+				then: userId => notes.RetrieveAsync<GetByIdModel?>(noteId, userId)
 			);
 
 		/// <summary>
@@ -92,14 +95,14 @@ namespace Strasnote.Notes.Api.Controllers
 		/// }
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
-		/// <param name="note">Updated Note values</param>
+		/// <param name="model">Updated Note values</param>
 		[HttpPut("{noteId}")]
-		[SwaggerResponse(200, "Updated note content.", typeof(UpdateModel))]
+		[SwaggerResponse(200, "Updated note content.", typeof(SaveContentModel))]
 		[SwaggerResponse(401, "The user is not authorised.")]
 		[SwaggerResponse(500)]
-		public Task<IActionResult> SaveContent(long noteId, [FromBody] UpdateModel note) =>
+		public Task<IActionResult> SaveContent(long noteId, [FromBody] SaveContentModel model) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.UpdateAsync<UpdateModel?>(noteId, note, userId)
+				then: userId => notes.UpdateAsync<SaveContentModel?>(noteId, model, userId)
 			);
 
 		/// <summary>
@@ -109,11 +112,11 @@ namespace Strasnote.Notes.Api.Controllers
 		/// DELETE /Note/42
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
+		[HttpDelete("{noteId}")]
 		[SwaggerResponse(200, "The note was successfully deleted.")]
 		[SwaggerResponse(401, "The user is not authorised.")]
 		[SwaggerResponse(404, "The note could not be found.")]
 		[SwaggerResponse(500)]
-		[HttpDelete("{noteId}")]
 		public Task<IActionResult> Delete(long noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.DeleteAsync(noteId, userId),

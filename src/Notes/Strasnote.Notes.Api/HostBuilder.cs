@@ -15,6 +15,9 @@ using Strasnote.Notes.Data;
 
 namespace Strasnote.Notes.Api
 {
+	/// <summary>
+	/// Notes API Host Builder
+	/// </summary>
 	public sealed class HostBuilder : WebAppHostBuilder
 	{
 		/// <inheritdoc/>

@@ -17,10 +17,10 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			// Arrange
 			var (controller, v) = Setup();
 			var id = Rnd.Lng;
-			var model = new UpdateModel();
+			var model = new SaveNameModel(Rnd.Str);
 
 			// Act
-			await controller.Update(id, model);
+			await controller.SaveName(id, model);
 
 			// Assert
 			await v.Folders.Received().UpdateAsync(id, model, v.UserId);

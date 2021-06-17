@@ -10,15 +10,36 @@ using Strasnote.Util;
 
 namespace Strasnote.Notes.Api
 {
+	/// <summary>
+	/// Controller Base
+	/// </summary>
 	public abstract class Controller : Microsoft.AspNetCore.Mvc.Controller
 	{
+		/// <summary>
+		/// IAppContext
+		/// </summary>
 		protected IAppContext Context { get; private init; }
 
+		/// <summary>
+		/// ILog
+		/// </summary>
 		protected ILog Log { get; private init; }
 
+		/// <summary>
+		/// Create object
+		/// </summary>
+		/// <param name="context">IAppContext</param>
+		/// <param name="log">ILog</param>
 		protected Controller(IAppContext context, ILog log) =>
 			(Context, Log) = (context, log);
 
+		/// <summary>
+		/// Run standard authentication checks
+		/// </summary>
+		/// <typeparam name="T">Return model type</typeparam>
+		/// <param name="then">Runs if current user is authenticated</param>
+		/// <param name="result">[Optional] If set, will return this IActionResult instead of JSON model</param>
+		/// <param name="otherwise">[Optional] If set, will return if user is not authenticated, instead of Unauthorized</param>
 		protected Task<IActionResult> IsAuthenticatedUserAsync<T>(
 			Func<long, Task<T>> then,
 			Func<T, IActionResult>? result = null,
