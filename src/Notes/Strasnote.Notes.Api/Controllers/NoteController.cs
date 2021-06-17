@@ -5,57 +5,128 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.AppBase.Abstracts;
+using Strasnote.Logging;
 using Strasnote.Notes.Api.Models.Notes;
 using Strasnote.Notes.Data.Abstracts;
-using Strasnote.Util;
 
 namespace Strasnote.Notes.Api.Controllers
 {
+	/// <summary>
+	/// Note Controller
+	/// </summary>
 	[Authorize]
 	[ApiController]
 	[Route("[controller]")]
 	public class NoteController : Controller
 	{
-		private readonly IAppContext ctx;
-
 		private readonly INoteRepository notes;
 
-		public NoteController(IAppContext ctx, INoteRepository notes) =>
-			(this.ctx, this.notes) = (ctx, notes);
+		/// <summary>
+		/// Create object
+		/// </summary>
+		/// <param name="ctx">IAppContext</param>
+		/// <param name="log">ILog</param>
+		/// <param name="notes">INoteRepository</param>
+		public NoteController(IAppContext ctx, ILog<NoteController> log, INoteRepository notes) : base(ctx, log) =>
+			this.notes = notes;
 
+		/// <summary>
+		/// Creates a Note.
+		/// </summary>
+		/// <remarks>
+		/// POST /Note
+		/// </remarks>
+		/// <returns>The ID of the new Note</returns>
 		[HttpPost]
-		public Task<long> Create() =>
-			Is.AuthenticatedUser(
-				ctx,
-				userId => notes.CreateAsync(new()
-				{
-					UserId = userId
-				}),
-				() => 0
+		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> Create() =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.CreateAsync(new() { UserId = userId }),
+				result: noteId => Created(nameof(GetById), noteId)
 			);
 
-		[HttpPost("{folderId}")]
-		public Task<long> Create(long folderId) =>
-			Is.AuthenticatedUser(
-				ctx,
-				userId => notes.CreateAsync(new()
-				{
-					UserId = userId,
-					FolderId = folderId
-				}),
-				() => 0
+		/// <summary>
+		/// Creates a Note within a folder.
+		/// </summary>
+		/// <remarks>
+		/// POST /Note/InFolder
+		/// {
+		///     "folderId": 42
+		/// }
+		/// </remarks>
+		/// <param name="model">CreateInFolderModel</param>
+		/// <returns>The ID of the new Note</returns>
+		[HttpPost("InFolder")]
+		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.CreateAsync(new() { UserId = userId, FolderId = model.FolderId }),
+				result: noteId => Created(nameof(GetById), noteId)
 			);
 
+		/// <summary>
+		/// Retrieves a Note by ID.
+		/// </summary>
+		/// <remarks>
+		/// GET /Note/42
+		/// </remarks>
+		/// <param name="noteId">The Note ID</param>
 		[HttpGet("{noteId}")]
-		public Task<GetModel?> GetById(long noteId) =>
-			notes.RetrieveAsync<GetModel?>(noteId, ctx.CurrentUserId);
+		[ProducesResponseType(typeof(GetByIdModel), 200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> GetById(long noteId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.RetrieveAsync<GetByIdModel?>(noteId, userId)
+			);
 
+		/// <summary>
+		/// Saves Note content.
+		/// </summary>
+		/// <remarks>
+		/// PUT /Note/42
+		/// {
+		///     "noteContent": "..."
+		/// }
+		/// </remarks>
+		/// <param name="noteId">The Note ID</param>
+		/// <param name="model">Updated Note values</param>
 		[HttpPut("{noteId}")]
-		public Task<UpdateModel?> Update(long noteId, UpdateModel note) =>
-			notes.UpdateAsync<UpdateModel?>(noteId, note, ctx.CurrentUserId);
+		[ProducesResponseType(typeof(SaveContentModel), 200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> SaveContent(long noteId, [FromBody] SaveContentModel model) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.UpdateAsync<SaveContentModel?>(noteId, model, userId)
+			);
 
+		/// <summary>
+		/// Deletes a Note by ID.
+		/// </summary>
+		/// <remarks>
+		/// DELETE /Note/42
+		/// </remarks>
+		/// <param name="noteId">The Note ID</param>
 		[HttpDelete("{noteId}")]
-		public Task<int> Delete(long noteId) =>
-			notes.DeleteAsync(noteId, ctx.CurrentUserId);
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> Delete(long noteId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.DeleteAsync(noteId, userId),
+				result: affected => affected switch
+				{
+					1 =>
+						Ok(),
+
+					_ =>
+						NotFound()
+				}
+			);
 	}
 }

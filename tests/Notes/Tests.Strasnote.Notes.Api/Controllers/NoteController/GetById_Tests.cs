@@ -22,7 +22,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			await controller.GetById(noteId);
 
 			// Assert
-			await v.Notes.Received().RetrieveAsync<GetModel?>(noteId, v.UserId);
+			await v.Notes.Received().RetrieveAsync<GetByIdModel?>(noteId, v.UserId);
 		}
 	}
 }

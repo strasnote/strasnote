@@ -19,7 +19,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var folderName = Rnd.Str;
 
 			// Act
-			await controller.Create(folderName);
+			await controller.Create(new(folderName));
 
 			// Assert
 			await v.Folders.Received().CreateAsync(
@@ -36,7 +36,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var folderParentId = Rnd.Lng;
 
 			// Act
-			await controller.Create(folderParentId, folderName);
+			await controller.CreateInFolder(new(folderName, folderParentId));
 
 			// Assert
 			await v.Folders.Received().CreateAsync(
@@ -52,7 +52,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var folderName = Rnd.Str;
 
 			// Act
-			await controller.Create(folderName);
+			await controller.Create(new(folderName));
 
 			// Assert
 			await v.Folders.Received().CreateAsync(

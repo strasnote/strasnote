@@ -22,7 +22,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			await controller.GetById(id);
 
 			// Assert
-			await v.Folders.Received().RetrieveAsync<GetModel?>(id, v.UserId);
+			await v.Folders.Received().RetrieveAsync<GetByIdModel?>(id, v.UserId);
 		}
 	}
 }
