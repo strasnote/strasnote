@@ -42,9 +42,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <returns>The ID of the new Folder</returns>
 		[HttpPost]
-		[SwaggerResponse(201, "The folder was created.", typeof(long))]
-		[SwaggerResponse(401, "The user is not authorised.")]
-		[SwaggerResponse(500)]
+		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
 		public Task<IActionResult> Create([FromBody] CreateModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.CreateAsync(new() { FolderName = model.FolderName, UserId = userId }),
@@ -64,9 +64,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="model">CreateInFolderModel</param>
 		/// <returns>The ID of the new Note</returns>
 		[HttpPost("InFolder")]
-		[SwaggerResponse(201, "The folder was created.", typeof(long))]
-		[SwaggerResponse(401, "The user is not authorised.")]
-		[SwaggerResponse(500)]
+		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
 		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.CreateAsync(new() { FolderName = model.FolderName, FolderParentId = model.ParentId, UserId = userId }),
@@ -81,9 +81,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpGet("{folderId}")]
-		[SwaggerResponse(200, "The requested folder.", typeof(GetByIdModel))]
-		[SwaggerResponse(401, "The user is not authorised.")]
-		[SwaggerResponse(500)]
+		[ProducesResponseType(typeof(GetByIdModel), 200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
 		public Task<IActionResult> GetById(long folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.RetrieveAsync<GetByIdModel?>(folderId, userId)
@@ -101,9 +101,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="folderId">The Folder ID</param>
 		/// <param name="model">Updated Folder values</param>
 		[HttpPut("{folderId}")]
-		[SwaggerResponse(200, "Updated folder name.", typeof(SaveNameModel))]
-		[SwaggerResponse(401, "The user is not authorised.")]
-		[SwaggerResponse(500)]
+		[ProducesResponseType(typeof(SaveNameModel), 200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
 		public Task<IActionResult> SaveName(long folderId, SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.UpdateAsync(folderId, model, userId)
@@ -117,10 +117,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpDelete("{folderId}")]
-		[SwaggerResponse(200, "The folder was successfully deleted.")]
-		[SwaggerResponse(401, "The user is not authorised.")]
-		[SwaggerResponse(404, "The folder could not be found.")]
-		[SwaggerResponse(500)]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(500)]
 		public Task<IActionResult> Delete(long folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.DeleteAsync(folderId, userId),
