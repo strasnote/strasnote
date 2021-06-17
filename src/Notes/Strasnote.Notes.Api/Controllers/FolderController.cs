@@ -8,7 +8,6 @@ using Strasnote.AppBase.Abstracts;
 using Strasnote.Logging;
 using Strasnote.Notes.Api.Models.Folders;
 using Strasnote.Notes.Data.Abstracts;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace Strasnote.Notes.Api.Controllers
 {
