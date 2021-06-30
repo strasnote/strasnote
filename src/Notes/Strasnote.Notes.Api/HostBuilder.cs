@@ -31,6 +31,7 @@ namespace Strasnote.Notes.Api
 			// Auth
 			services.AddAuth(config);
 			services.AddAuthData<MySqlClient>();
+			services.AddApiVersioning();
 
 			// Notes
 			services.AddNotesData<MySqlClient>();

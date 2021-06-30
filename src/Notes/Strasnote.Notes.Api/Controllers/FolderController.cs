@@ -16,7 +16,8 @@ namespace Strasnote.Notes.Api.Controllers
 	/// </summary>
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[ApiVersion("1.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
 	public class FolderController : Controller
 	{
 		private readonly IFolderRepository folders;
@@ -34,7 +35,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Creates a Folder.
 		/// </summary>
 		/// <remarks>
-		/// POST /Folder
+		/// POST /folder
 		/// {
 		///     "folderName": "..."
 		/// }
@@ -54,15 +55,15 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Creates a Folder within a parent folder.
 		/// </summary>
 		/// <remarks>
-		/// POST /Folder/InFolder
+		/// POST /folder/in-folder
 		/// {
 		///     "folderName": "...",
 		///     "parentId": 42
 		/// }
 		/// </remarks>
 		/// <param name="model">CreateInFolderModel</param>
-		/// <returns>The ID of the new Note</returns>
-		[HttpPost("InFolder")]
+		/// <returns>The ID of the new Folder</returns>
+		[HttpPost("in-folder")]
 		[ProducesResponseType(typeof(long), 201)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
@@ -76,7 +77,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Retrieves a Folder by ID.
 		/// </summary>
 		/// <remarks>
-		/// GET /Folder/42
+		/// GET /folder/42
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpGet("{folderId}")]
@@ -92,7 +93,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Saves Folder name.
 		/// </summary>
 		/// <remarks>
-		/// PUT /Folder/42
+		/// PUT /folder/42
 		/// {
 		///     "folderName": "..."
 		/// }
@@ -112,7 +113,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Deletes a Folder by ID.
 		/// </summary>
 		/// <remarks>
-		/// DELETE /Folder/42
+		/// DELETE /folder/42
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpDelete("{folderId}")]
@@ -126,7 +127,7 @@ namespace Strasnote.Notes.Api.Controllers
 				result: affected => affected switch
 				{
 					1 =>
-						Ok(),
+						Ok(true),
 
 					_ =>
 						NotFound()
