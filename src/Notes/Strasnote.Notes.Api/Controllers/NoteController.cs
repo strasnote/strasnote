@@ -16,7 +16,8 @@ namespace Strasnote.Notes.Api.Controllers
 	/// </summary>
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[ApiVersion("1.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
 	public class NoteController : Controller
 	{
 		private readonly INoteRepository notes;
@@ -34,7 +35,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Creates a Note.
 		/// </summary>
 		/// <remarks>
-		/// POST /Note
+		/// POST /note
 		/// </remarks>
 		/// <returns>The ID of the new Note</returns>
 		[HttpPost]
@@ -51,14 +52,14 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Creates a Note within a folder.
 		/// </summary>
 		/// <remarks>
-		/// POST /Note/InFolder
+		/// POST /note/in-folder
 		/// {
 		///     "folderId": 42
 		/// }
 		/// </remarks>
 		/// <param name="model">CreateInFolderModel</param>
 		/// <returns>The ID of the new Note</returns>
-		[HttpPost("InFolder")]
+		[HttpPost("in-folder")]
 		[ProducesResponseType(typeof(ulong), 201)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
@@ -72,7 +73,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Retrieves a Note by ID.
 		/// </summary>
 		/// <remarks>
-		/// GET /Note/42
+		/// GET /note/42
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
 		[HttpGet("{noteId}")]
@@ -88,7 +89,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Saves Note content.
 		/// </summary>
 		/// <remarks>
-		/// PUT /Note/42
+		/// PUT /note/42
 		/// {
 		///     "noteContent": "..."
 		/// }
@@ -108,7 +109,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Deletes a Note by ID.
 		/// </summary>
 		/// <remarks>
-		/// DELETE /Note/42
+		/// DELETE /note/42
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
 		[HttpDelete("{noteId}")]
@@ -122,7 +123,7 @@ namespace Strasnote.Notes.Api.Controllers
 				result: affected => affected switch
 				{
 					1 =>
-						Ok(),
+						Ok(true),
 
 					_ =>
 						NotFound()

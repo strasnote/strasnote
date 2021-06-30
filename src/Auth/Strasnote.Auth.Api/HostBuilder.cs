@@ -23,6 +23,7 @@ namespace Strasnote.Auth.Api
 
 			// MVC
 			services.AddControllers();
+			services.AddApiVersioning();
 
 			// Auth
 			services.AddAuth(config);

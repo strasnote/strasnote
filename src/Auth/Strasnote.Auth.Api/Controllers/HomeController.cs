@@ -7,7 +7,7 @@ using Strasnote.Logging;
 namespace Strasnote.Auth.Api.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("/")]
 	public class HomeController : ControllerBase
 	{
 		private readonly ILog<HomeController> log;
@@ -18,7 +18,9 @@ namespace Strasnote.Auth.Api.Controllers
 		[HttpGet]
 		public ActionResult<string> Get()
 		{
-			return "Auth API Running...";
+			const string msg = "Auth API Running...";
+			log.Debug(msg);
+			return msg;
 		}
 	}
 }
