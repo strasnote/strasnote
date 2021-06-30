@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,14 +23,17 @@ namespace Strasnote.Notes.Api.Controllers
 	{
 		private readonly INoteRepository notes;
 
+		private readonly ITagRepository tags;
+
 		/// <summary>
 		/// Create object
 		/// </summary>
 		/// <param name="ctx">IAppContext</param>
 		/// <param name="log">ILog</param>
 		/// <param name="notes">INoteRepository</param>
-		public NoteController(IAppContext ctx, ILog<NoteController> log, INoteRepository notes) : base(ctx, log) =>
-			this.notes = notes;
+		/// <param name="tags">ITagRepository</param>
+		public NoteController(IAppContext ctx, ILog<NoteController> log, INoteRepository notes, ITagRepository tags) : base(ctx, log) =>
+			(this.notes, this.tags) = (notes, tags);
 
 		/// <summary>
 		/// Creates a Note.
@@ -84,6 +88,23 @@ namespace Strasnote.Notes.Api.Controllers
 		public Task<IActionResult> GetById(ulong noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.RetrieveAsync<GetByIdModel?>(noteId, userId)
+			);
+
+		/// <summary>
+		/// Retrieves the Tags assigned to a Note.
+		/// </summary>
+		/// <remarks>
+		/// GET /note/42/tags
+		/// </remarks>
+		/// <param name="noteId">The Note ID</param>
+		[HttpGet("{noteId}/tags")]
+		[ProducesResponseType(typeof(IEnumerable<TagModel>), 200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> GetTags(ulong noteId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => tags.GetForNote<TagModel>(noteId, userId)
 			);
 
 		/// <summary>
