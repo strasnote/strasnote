@@ -135,8 +135,17 @@ namespace Strasnote.Data.Clients.MySql
 				}
 			}
 
-			// Return query and parameters
-			return ($"SELECT {select} FROM `{table}` WHERE {string.Join(" AND ", where)};", param);
+			// If there are no predicates, return simple select query
+			// (but limit rows to 1000 just in case - this should never really happen)
+			if (where.Count == 0)
+			{
+				return ($"SELECT {select} FROM `{table}` LIMIT 0, 1000;", new());
+			}
+			// Otherwise, return query and parameters
+			else
+			{
+				return ($"SELECT {select} FROM `{table}` WHERE {string.Join(" AND ", where)};", param);
+			}
 		}
 
 		/// <inheritdoc/>
