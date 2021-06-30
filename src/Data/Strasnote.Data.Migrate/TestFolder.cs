@@ -14,7 +14,7 @@ namespace Strasnote.Data.Migrate
 		/// </summary>
 		/// <param name="log">ILog</param>
 		/// <param name="repo">IFolderRepository</param>
-		public static async Task<long> InsertAsync(ILog log, IFolderRepository repo)
+		public static async Task<ulong> InsertAsync(ILog log, IFolderRepository repo)
 		{
 			var folderId = await repo.CreateAsync(new()
 			{

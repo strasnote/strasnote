@@ -14,7 +14,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Note User ID
 		/// </summary>
-		public long Id { get; init; }
+		public ulong Id { get; init; }
 
 		/// <summary>
 		/// [Optional] Expiry date of the User's access to this Note
@@ -34,12 +34,12 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Note ID
 		/// </summary>
-		public long NoteId { get; init; }
+		public ulong NoteId { get; init; }
 
 		/// <summary>
 		/// User ID
 		/// </summary>
-		public long UserId { get; init; }
+		public ulong UserId { get; init; }
 
 		#endregion
 	}

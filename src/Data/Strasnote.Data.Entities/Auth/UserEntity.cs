@@ -10,13 +10,13 @@ using Strasnote.Data.Entities.Notes;
 namespace Strasnote.Data.Entities.Auth
 {
 	/// <inheritdoc cref="IdentityUser{TKey}"/>
-	public class UserEntity : IdentityUser<long>, IEntity
+	public class UserEntity : IdentityUser<ulong>, IEntity
 	{
 		/// <summary>
 		/// User ID (alias for <see cref="IdentityUser{TKey}.Id"/>)
 		/// </summary>
 		[Ignore]
-		public long UserId
+		public ulong UserId
 		{
 			get => Id;
 			set => Id = value;

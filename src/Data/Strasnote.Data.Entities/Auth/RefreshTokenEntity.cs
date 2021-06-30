@@ -13,7 +13,7 @@ namespace Strasnote.Data.Entities.Auth
 	{
 		/// <inheritdoc/>
 		[Ignore]
-		public long Id
+		public ulong Id
 		{
 			get => RefreshTokenId;
 			init => RefreshTokenId = value;
@@ -22,7 +22,7 @@ namespace Strasnote.Data.Entities.Auth
 		/// <summary>
 		/// Token ID
 		/// </summary>
-		public long RefreshTokenId { get; init; }
+		public ulong RefreshTokenId { get; init; }
 
 		/// <summary>
 		/// Token expiry date
@@ -45,7 +45,7 @@ namespace Strasnote.Data.Entities.Auth
 		/// <summary>
 		/// User ID this Token belongs to
 		/// </summary>
-		public long UserId { get; init; }
+		public ulong UserId { get; init; }
 
 		/// <summary>
 		/// Create default object
@@ -58,7 +58,7 @@ namespace Strasnote.Data.Entities.Auth
 		/// <param name="token">Token value</param>
 		/// <param name="expires">Token expiry date</param>
 		/// <param name="userId">User ID this Token belongs to</param>
-		public RefreshTokenEntity(string token, DateTime expires, long userId)
+		public RefreshTokenEntity(string token, DateTime expires, ulong userId)
 		{
 			RefreshTokenValue = token;
 			RefreshTokenExpires = expires;

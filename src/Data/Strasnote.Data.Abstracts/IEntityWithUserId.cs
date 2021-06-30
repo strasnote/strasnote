@@ -11,6 +11,6 @@ namespace Strasnote.Data.Abstracts
 		/// <summary>
 		/// User ID
 		/// </summary>
-		long UserId { get; }
+		ulong UserId { get; }
 	}
 }

@@ -16,12 +16,12 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Encrypted ID
 		/// </summary>
-		public long Id { get; init; }
+		public ulong Id { get; init; }
 
 		/// <summary>
 		/// Encrypted Object (e.g. Folder / Note) ID
 		/// </summary>
-		public long EncryptedObjectId { get; init; }
+		public ulong EncryptedObjectId { get; init; }
 
 		/// <summary>
 		/// Encrypted Object Type (e.g. Folder / Note)
@@ -51,7 +51,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// The ID of the User this Encrypted item belongs to
 		/// </summary>
-		public long UserId { get; init; }
+		public ulong UserId { get; init; }
 
 		#endregion
 

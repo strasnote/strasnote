@@ -15,7 +15,7 @@ namespace Strasnote.Data.Migrate
 		/// </summary>
 		/// <param name="log">ILog</param>
 		/// <param name="repo">ITagRepository</param>
-		public static async Task<long> InsertAsync(ILog log, ITagRepository repo)
+		public static async Task<ulong> InsertAsync(ILog log, ITagRepository repo)
 		{
 			const string name = "1. Tag Tester!";
 			var tagId = await repo.CreateAsync(new()
