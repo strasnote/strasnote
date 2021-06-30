@@ -43,7 +43,7 @@ jobs:
     - 
       if: success()
       name: Finish - Success
-      uses: bencgreen/action-slack-notify@master
+      uses: bfren/action-slack-notify@master
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TESTS }}
         SLACK_USERNAME: Strasnote (Strasnote)
@@ -53,7 +53,7 @@ jobs:
     - 
       if: failure()
       name: Finish - Failure
-      uses: bencgreen/action-slack-notify@master
+      uses: bfren/action-slack-notify@master
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TESTS }}
         SLACK_USERNAME: Strasnote (Strasnote)
