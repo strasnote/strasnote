@@ -10,6 +10,7 @@ on:
       - '.github/workflows/test.yml'
       - 'src/**'
       - 'tests/**'
+  workflow_dispatch:
 
 jobs:
   restore-build-test:
@@ -43,7 +44,7 @@ jobs:
     - 
       if: success()
       name: Finish - Success
-      uses: bencgreen/action-slack-notify@master
+      uses: bfren/action-slack-notify@master
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TESTS }}
         SLACK_USERNAME: Strasnote (Strasnote)
@@ -53,7 +54,7 @@ jobs:
     - 
       if: failure()
       name: Finish - Failure
-      uses: bencgreen/action-slack-notify@master
+      uses: bfren/action-slack-notify@master
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TESTS }}
         SLACK_USERNAME: Strasnote (Strasnote)

@@ -3,5 +3,5 @@ FROM bfren/aspnet:net5.0
 COPY ./publish /app/live
 
 ENV \
-	ASPNET_ASSEMBLY=Strasnote.Auth.Api.dll \
+	ASPNET_ASSEMBLY=Strasnote.Notes.Api.dll \
 	ASPNETCORE_ENVIRONMENT=Production

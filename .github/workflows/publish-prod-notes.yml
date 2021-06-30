@@ -1,4 +1,4 @@
-name: Publish Auth (Prod)
+name: Publish Notes (Prod)
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  auth-restore-build-test-publish-push:
+  notes-restore-build-test-publish-push:
     runs-on: ubuntu-latest
     steps:
     - 
@@ -55,7 +55,7 @@ jobs:
     -
       name: D - Publish
       run: |
-        dotnet publish ./src/Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj \
+        dotnet publish ./src/Notes/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
           --output ./publish
@@ -65,12 +65,12 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./src/Auth/Strasnote.Auth.Api/Dockerfile-automated
+        file: ./src/Notes/Strasnote.Notes.Api/Dockerfile-automated
         push: true
         platforms: linux/amd64
         tags: |
-          strasnote/auth:latest
-          strasnote/auth:${{ steps.version.outputs.content }}
+          strasnote/notes:latest
+          strasnote/notes:${{ steps.version.outputs.content }}
     -
       name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}

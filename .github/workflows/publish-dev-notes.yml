@@ -1,12 +1,18 @@
-name: Publish Auth (Prod)
+name: Publish Notes (Dev)
 
 on:
-  release:
-    types: [published]
+  push:
+    branches-ignore:
+      - 'main'
+    tags-ignore:
+      - '**'
+    paths:
+      - '.github/workflows/publish-dev-notes.yml'
+      - 'src/**'
   workflow_dispatch:
 
 jobs:
-  auth-restore-build-test-publish-push:
+  notes-publish-push:
     runs-on: ubuntu-latest
     steps:
     - 
@@ -35,42 +41,25 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
-    - 
-      name: A - Restore
-      run: |
-        dotnet restore ./tests/Test.csproj
-    - 
-      name: B - Build
-      run: |
-        dotnet build ./tests/Test.csproj \
-          --no-restore \
-          --configuration Release
-    - 
-      name: C - Test
-      run: |
-        dotnet test ./tests/Test.csproj \
-          --no-restore \
-          --no-build \
-          --configuration Release
     -
-      name: D - Publish
+      name: A - Publish
       run: |
-        dotnet publish ./src/Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj \
+        dotnet publish ./src/Notes/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
           --output ./publish
     -
-      name: E - Push
+      name: B - Push
       id: docker_build
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./src/Auth/Strasnote.Auth.Api/Dockerfile-automated
+        file: ./src/Notes/Strasnote.Notes.Api/Dockerfile-automated
         push: true
         platforms: linux/amd64
         tags: |
-          strasnote/auth:latest
-          strasnote/auth:${{ steps.version.outputs.content }}
+          strasnote/notes:dev
+          strasnote/notes:${{ steps.version.outputs.content }}-dev
     -
       name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
