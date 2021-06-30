@@ -1,6 +1,6 @@
 ﻿// The MIT License (MIT)
 //
-// Copyright © 2021 bcg|design <ben@bcgdesign.com>
+// Copyright © 2021 bfren.uk
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 // and associated documentation files (the “Software”), to deal in the Software without 
@@ -84,6 +84,31 @@ namespace Strasnote.Util
 			/// Returns a random integer between <paramref name="min"/> and <paramref name="max"/> inclusive
 			/// </summary>
 			/// <remarks>
+			/// Don't share code with <see cref="GetUInt64(ulong, ulong, RandomNumberGenerator?)"/> for memory allocation reasons
+			/// </remarks>
+			/// <param name="min">Minimum acceptable value</param>
+			/// <param name="max">Maximum acceptable value</param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			public static uint GetUInt32(uint min = 0, uint max = uint.MaxValue, RandomNumberGenerator? generator = null)
+			{
+				// Check arguments
+				if (min >= max)
+				{
+					throw new ArgumentOutOfRangeException(nameof(min), min, MinimumMustBeLessThanMaximum);
+				}
+
+				// Get the range between the specified minimum and maximum values
+				var range = max - min;
+
+				// Now add a random amount of the range to the minimum value - it will never exceed maximum value
+				var add = Math.Round(range * Get(generator));
+				return (uint)(min + add);
+			}
+
+			/// <summary>
+			/// Returns a random integer between <paramref name="min"/> and <paramref name="max"/> inclusive
+			/// </summary>
+			/// <remarks>
 			/// Don't share code with <see cref="GetInt32(int, int, RandomNumberGenerator?)"/> for memory allocation reasons
 			/// </remarks>
 			/// <param name="min">Minimum acceptable value</param>
@@ -108,6 +133,31 @@ namespace Strasnote.Util
 				// Now add a random amount of the range to the minimum value - it will never exceed maximum value
 				var add = Math.Round(range * Get(generator));
 				return (long)(min + add);
+			}
+
+			/// <summary>
+			/// Returns a random integer between <paramref name="min"/> and <paramref name="max"/> inclusive
+			/// </summary>
+			/// <remarks>
+			/// Don't share code with <see cref="GetUInt32(uint, uint, RandomNumberGenerator?)"/> for memory allocation reasons
+			/// </remarks>
+			/// <param name="min">Minimum acceptable value</param>
+			/// <param name="max">Maximum acceptable value</param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			public static ulong GetUInt64(ulong min = 0, ulong max = ulong.MaxValue, RandomNumberGenerator? generator = null)
+			{
+				// Check arguments
+				if (min >= max)
+				{
+					throw new ArgumentOutOfRangeException(nameof(min), min, MinimumMustBeLessThanMaximum);
+				}
+
+				// Get the range between the specified minimum and maximum values
+				var range = max - min;
+
+				// Now add a random amount of the range to the minimum value - it will never exceed maximum value
+				var add = Math.Round(range * Get(generator));
+				return (ulong)(min + add);
 			}
 		}
 	}
