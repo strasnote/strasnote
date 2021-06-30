@@ -4,7 +4,6 @@
 using System.Threading.Tasks;
 using Strasnote.Logging;
 using Strasnote.Notes.Data.Abstracts;
-using Strasnote.Util;
 
 namespace Strasnote.Data.Migrate
 {
@@ -21,8 +20,7 @@ namespace Strasnote.Data.Migrate
 			var tagId = await repo.CreateAsync(new()
 			{
 				UserId = 1,
-				TagName = name,
-				TagNameNormalised = name.Normalise()
+				TagName = name
 			}).ConfigureAwait(false);
 
 			log.Debug("Inserted test tag {Tag}.", tagId);

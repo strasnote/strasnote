@@ -35,11 +35,13 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 				COMMENT ''
 				BEGIN
 
-				SELECT `nt`.`TagId` 
+				SELECT `nt`.`TagId`
 				FROM `main.note_tag` AS `nt`
 				LEFT JOIN `main.note` AS `n` ON `nt`.`NoteId` = `n`.`Id`
+				LEFT JOIN `main.tag` AS `t` ON `nt`.`TagId` = `t`.`Id`
 				WHERE `nt`.`NoteId` = NoteId
-				AND `n`.`UserId` = UserId;
+				AND `n`.`UserId` = UserId
+				AND `t`.`UserId` = UserId;
 
 				END
 			");
