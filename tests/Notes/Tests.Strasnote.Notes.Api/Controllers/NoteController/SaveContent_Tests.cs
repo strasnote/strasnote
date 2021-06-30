@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {
-	public class Update_Tests : NoteController_Tests
+	public class SaveContent_Tests : NoteController_Tests
 	{
 		[Fact]
 		public async Task Calls_Notes_UpdateAsync()

@@ -9,19 +9,20 @@ using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {
-	public class Create_Tests : NoteController_Tests
+	public class CreateInFolder_Tests : NoteController_Tests
 	{
 		[Fact]
 		public async Task Calls_Notes_CreateAsync()
 		{
 			// Arrange
 			var (controller, v) = Setup();
+			var folderId = Rnd.Ulng;
 
 			// Act
-			await controller.Create();
+			await controller.CreateInFolder(new(folderId));
 
 			// Assert
-			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId));
+			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId && n.FolderId == folderId));
 		}
 	}
 }
