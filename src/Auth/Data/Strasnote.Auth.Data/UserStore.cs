@@ -50,7 +50,7 @@ namespace Strasnote.Auth.Data
 		{
 			ThrowIfDisposed();
 
-			return long.TryParse(userId, out long id) switch
+			return ulong.TryParse(userId, out ulong id) switch
 			{
 				true =>
 					await userRepository.RetrieveAsync<UserEntity>(id).ConfigureAwait(false) switch

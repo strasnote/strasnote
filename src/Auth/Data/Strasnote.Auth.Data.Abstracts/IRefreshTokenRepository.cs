@@ -17,12 +17,12 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// </summary>
 		/// <param name="userId">The user's ID</param>
 		/// <param name="refreshToken">The user's current refresh token</param>
-		Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken);
+		Task<RefreshTokenEntity> RetrieveForUserAsync(ulong userId, string refreshToken);
 
 		/// <summary>
 		/// Delete a refresh token by <paramref name="userId"/>
 		/// </summary>
 		/// <param name="userId">The user's ID</param>
-		Task<int> DeleteByUserIdAsync(long userId);
+		Task<int> DeleteByUserIdAsync(ulong userId);
 	}
 }

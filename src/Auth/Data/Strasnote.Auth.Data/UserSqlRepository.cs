@@ -21,7 +21,7 @@ namespace Strasnote.Auth.Data
 			: base(client, log, client.Tables.User) { }
 
 		/// <inheritdoc/>
-		public Task<TModel> RetrieveAsync<TModel>(long entityId) =>
+		public Task<TModel> RetrieveAsync<TModel>(ulong entityId) =>
 			RetrieveAsync<TModel>(entityId, null);
 
 		/// <inheritdoc/>
@@ -35,11 +35,11 @@ namespace Strasnote.Auth.Data
 			RetrieveByEmailAsync<TModel>(name);
 
 		/// <inheritdoc/>
-		public Task<TModel> UpdateAsync<TModel>(long entityId, TModel model) =>
+		public Task<TModel> UpdateAsync<TModel>(ulong entityId, TModel model) =>
 			UpdateAsync(entityId, model, null);
 
 		/// <inheritdoc/>
-		public Task<int> DeleteAsync(long entityId) =>
+		public Task<int> DeleteAsync(ulong entityId) =>
 			DeleteAsync(entityId, null);
 	}
 }
