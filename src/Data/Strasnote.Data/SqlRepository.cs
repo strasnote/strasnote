@@ -34,13 +34,13 @@ namespace Strasnote.Data
 	/// SQL Database Repository base class
 	/// </summary>
 	/// <typeparam name="TEntity">Entity type</typeparam>
-	public abstract class SqlRepository<TEntity> : SqlRepository, ISqlRepository<TEntity>, IDisposable
+	public abstract class SqlRepository<TEntity> : SqlRepository, ISqlRepository<TEntity>
 		where TEntity : IEntity
 	{
 		/// <summary>
-		/// Database connection
+		/// Database client
 		/// </summary>
-		protected IDbConnection Connection { get; private init; }
+		protected ISqlClient Client { get; private init; }
 
 		/// <summary>
 		/// Logger
@@ -73,7 +73,7 @@ namespace Strasnote.Data
 		/// <param name="log">ILog (should be created with the context as the class implementing this abstract)</param>
 		/// <param name="table">The table name for this entity</param>
 		protected SqlRepository(ISqlClient client, ILog log, string table) =>
-			(Connection, Log, Queries, Table) = (client.Connect(), log, client.Queries, table);
+			(Client, Log, Queries, Table) = (client, log, client.Queries, table);
 
 		#region Logging
 
@@ -157,17 +157,20 @@ namespace Strasnote.Data
 		/// <param name="query">Query - text or stored procedure</param>
 		/// <param name="param">Query parameters</param>
 		/// <param name="type">Command Type</param>
-		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(string query, object param, CommandType type)
+		public virtual async Task<IEnumerable<TModel>> QueryAsync<TModel>(string query, object param, CommandType type)
 		{
 			// Log query
 			LogOperation(Operation.Query, "{Type}: {Query} - {@Parameters}", type, query, param);
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform retrieve and map to TModel
-			return Connection.QueryAsync<TModel>(
+			return await connection.QueryAsync<TModel>(
 				sql: query,
 				param: param,
 				commandType: type
-			);
+			).ConfigureAwait(false);
 		}
 
 		/// <inheritdoc/>
@@ -178,17 +181,20 @@ namespace Strasnote.Data
 		/// <param name="query">Query - text or stored procedure</param>
 		/// <param name="param">Query parameters</param>
 		/// <param name="type">Command Type</param>
-		public virtual Task<TModel> QuerySingleAsync<TModel>(string query, object param, CommandType type)
+		public virtual async Task<TModel> QuerySingleAsync<TModel>(string query, object param, CommandType type)
 		{
 			// Log query single
 			LogOperation(Operation.QuerySingle, "{Type}: {Query} - {@Parameters}", type, query, param);
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform retrieve and map to TModel
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
+			return await connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
 				param: param,
 				commandType: type
-			);
+			).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -229,7 +235,7 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<IEnumerable<TModel>> QueryAsync<TModel>(
+		public virtual async Task<IEnumerable<TModel>> QueryAsync<TModel>(
 			long? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
@@ -238,16 +244,19 @@ namespace Strasnote.Data
 			var (query, param) = GetRetrieveQuery<TModel>(predicates, userId);
 			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, param);
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform retrieve and map to TModel
-			return Connection.QueryAsync<TModel>(
+			return await connection.QueryAsync<TModel>(
 				sql: query,
 				param: param,
 				commandType: CommandType.Text
-			);
+			).ConfigureAwait(false);
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> QuerySingleAsync<TModel>(
+		public virtual async Task<TModel> QuerySingleAsync<TModel>(
 			long? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
@@ -256,12 +265,15 @@ namespace Strasnote.Data
 			var (query, param) = GetRetrieveQuery<TModel>(predicates, userId);
 			LogOperation(Operation.RetrieveSingle, "{Query} - {@Parameters}", query, param);
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform retrieve and map to TModel
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
+			return await connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
 				param: param,
 				commandType: CommandType.Text
-			);
+			).ConfigureAwait(false);
 		}
 
 		#endregion
@@ -269,32 +281,38 @@ namespace Strasnote.Data
 		#region CRUD Queries
 
 		/// <inheritdoc/>
-		public virtual Task<long> CreateAsync(TEntity entity)
+		public virtual async Task<long> CreateAsync(TEntity entity)
 		{
 			// Log create
 			var query = Queries.GetCreateQuery(Table, GetProperties<TEntity>());
 			LogOperation(Operation.Create, "{Query} {@Entity}", query, entity);
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform create and return created entity ID
-			return Connection.ExecuteScalarAsync<long>(
+			return await connection.ExecuteScalarAsync<long>(
 				sql: query,
 				param: entity,
 				commandType: CommandType.Text
-			);
+			).ConfigureAwait(false);
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<TModel> RetrieveAsync<TModel>(long entityId, long? userId)
+		public virtual async Task<TModel> RetrieveAsync<TModel>(long entityId, long? userId)
 		{
 			// Log retrieve
 			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), entityId, userId);
 			LogOperation(Operation.RetrieveById, "{Query} | Entity: {EntityId} | User: {UserId}", query, entityId, userId ?? 0);
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform retrieve and map to model
-			return Connection.QuerySingleOrDefaultAsync<TModel>(
+			return await connection.QuerySingleOrDefaultAsync<TModel>(
 				sql: query,
 				commandType: CommandType.Text
-			);
+			).ConfigureAwait(false);
 		}
 
 		/// <inheritdoc/>
@@ -304,8 +322,11 @@ namespace Strasnote.Data
 			var query = Queries.GetUpdateQuery(Table, GetProperties<TModel>(), entityId, userId);
 			LogOperation(Operation.Update, "{Query} | Entity: {EntityId} | User: {UserId} | Model: {@Model}", query, entityId, userId ?? 0, model ?? new object());
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform update
-			var updated = await Connection.ExecuteAsync(
+			var updated = await connection.ExecuteAsync(
 				sql: query,
 				param: model,
 				commandType: CommandType.Text
@@ -325,56 +346,21 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual Task<int> DeleteAsync(long id, long? userId)
+		public virtual async Task<int> DeleteAsync(long id, long? userId)
 		{
 			// Log delete
 			var query = Queries.GetDeleteQuery(Table, id, userId);
 			LogOperation(Operation.Delete, "{Query} | Entity: {Id} | User: {UserId}", query, id, userId ?? 0);
 
+			// Connect to the database
+			using var connection = Client.Connect();
+
 			// Perform delete and return the number of affected rows
-			return Connection.ExecuteAsync(
+			return await connection.ExecuteAsync(
 				sql: query,
 				param: new { id },
 				commandType: CommandType.Text
-			);
-		}
-
-		#endregion
-
-		#region Dispose
-
-		/// <summary>
-		/// Set to true if the object has been disposed
-		/// </summary>
-		private bool disposed;
-
-		/// <summary>
-		/// Suppress garbage collection and call <see cref="Dispose(bool)"/>
-		/// https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
-		/// </summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary>
-		/// Dispose managed resources
-		/// </summary>
-		/// <param name="disposing">True if disposing</param>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposed)
-			{
-				return;
-			}
-
-			if (disposing)
-			{
-				Connection.Dispose();
-			}
-
-			disposed = true;
+			).ConfigureAwait(false);
 		}
 
 		#endregion
