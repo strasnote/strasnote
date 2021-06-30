@@ -13,7 +13,8 @@ namespace Strasnote.Auth.Api.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[ApiVersion("1.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
 	public class UserController : Controller
 	{
 		private readonly UserStore users;
@@ -30,20 +31,11 @@ namespace Strasnote.Auth.Api.Controllers
 			return await users.CreateAsync(user, new());
 		}
 
-		[HttpGet]
-		[Route("id/{id}")]
+		[HttpGet("{id}")]
 		public async Task<UserEntity> GetById(string id)
 		{
 			log.Trace("Get user with ID: {Id}", id);
 			return await users.FindByIdAsync(id, new());
-		}
-
-		[HttpGet]
-		[Route("name/{username}")]
-		public async Task<UserEntity> GetByName(string username)
-		{
-			log.Trace("Get user with name: {Username}", username);
-			return await users.FindByNameAsync(username, new());
 		}
 
 		[HttpPut]
@@ -53,8 +45,7 @@ namespace Strasnote.Auth.Api.Controllers
 			return await users.UpdateAsync(user, new());
 		}
 
-		[HttpDelete]
-		[Route("{id}")]
+		[HttpDelete("{id}")]
 		public async Task<IdentityResult> Delete(string id)
 		{
 			log.Trace("Deleting user with ID: {Id}", id);

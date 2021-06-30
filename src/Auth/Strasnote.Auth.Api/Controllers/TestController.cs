@@ -11,7 +11,8 @@ namespace Strasnote.Auth.Api.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[ApiVersion("1.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
 	public class TestController : Controller
 	{
 		private readonly IUserRepository users;
@@ -21,20 +22,11 @@ namespace Strasnote.Auth.Api.Controllers
 		public TestController(IUserRepository users, ILog<TestController> log) =>
 			(this.users, this.log) = (users, log);
 
-		[HttpGet]
-		[Route("id/{id}")]
+		[HttpGet("{id}")]
 		public async Task<MiniUser?> GetById(ulong id)
 		{
 			log.Trace("Get user with ID: {Id}", id);
 			return await users.RetrieveAsync<MiniUser>(id);
-		}
-
-		[HttpGet]
-		[Route("email/{email}")]
-		public async Task<MiniUser?> GetByEmail(string email)
-		{
-			log.Trace("Get user with Email: {Email}", email);
-			return await users.RetrieveByEmailAsync<MiniUser>(email);
 		}
 
 		public sealed record MiniUser(ulong Id, string Email)
