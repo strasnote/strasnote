@@ -36,6 +36,12 @@ namespace Strasnote.Data.Clients.MySql
 				SearchOperator.MoreThanOrEqual =>
 					">=",
 
+				SearchOperator.In =>
+					"IN",
+
+				SearchOperator.NotIn =>
+					"NOT IN",
+
 				_ =>
 					"="
 			};

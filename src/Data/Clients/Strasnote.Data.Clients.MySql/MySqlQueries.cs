@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using System.Collections;
 using System.Collections.Generic;
 using Strasnote.Data.Abstracts;
 
@@ -105,10 +106,33 @@ namespace Strasnote.Data.Clients.MySql
 			var index = 0;
 			foreach (var (column, op, value) in predicates)
 			{
-				var parameter = $"P{index++}";
+				// Add using standard operators
+				if (op != SearchOperator.In && op != SearchOperator.NotIn)
+				{
+					var parameter = $"P{index++}";
 
-				where.Add($"`{column}` {op.ToOperator()} @{parameter}");
-				param.Add(parameter, value);
+					where.Add($"`{column}` {op.ToOperator()} @{parameter}");
+					param.Add(parameter, value);
+				}
+				// IN operator requires a list (string is a special case that implements IEnumerable<char>)
+				else if (value is not string && value is IEnumerable list)
+				{
+					// Add a parameter for each value in the list
+					var inParameters = new List<string>();
+					foreach (var inValue in list)
+					{
+						var inParameter = $"@P{index++}";
+
+						param.Add(inParameter, inValue);
+						inParameters.Add(inParameter);
+					}
+
+					// If there are any parameters, add them
+					if (inParameters.Count > 0)
+					{
+						where.Add($"`{column}` {op.ToOperator()} ({string.Join(',', inParameters)})");
+					}
+				}
 			}
 
 			// Return query and parameters
