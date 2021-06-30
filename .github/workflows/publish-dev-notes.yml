@@ -11,7 +11,7 @@ on:
       - 'src/**'
 
 jobs:
-  restore-build-test-publish-push:
+  restore-build-publish-push:
     runs-on: ubuntu-latest
     steps:
     - 
@@ -40,32 +40,15 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
-    - 
-      name: A - Restore
-      run: |
-        dotnet restore ./tests/Test.csproj
-    - 
-      name: B - Build
-      run: |
-        dotnet build ./tests/Test.csproj \
-          --no-restore \
-          --configuration Release
-    - 
-      name: C - Test
-      run: |
-        dotnet test ./tests/Test.csproj \
-          --no-restore \
-          --no-build \
-          --configuration Release
     -
-      name: D - Publish
+      name: A - Publish
       run: |
         dotnet publish ./src/Notes/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
           --output ./publish
     -
-      name: E - Push
+      name: B - Push
       id: docker_build
       uses: docker/build-push-action@v2
       with:
