@@ -39,10 +39,12 @@ namespace Strasnote.Notes.Api
 		/// <typeparam name="T">Return model type</typeparam>
 		/// <param name="then">Runs if current user is authenticated</param>
 		/// <param name="result">[Optional] If set, will return this IActionResult instead of JSON model</param>
+		/// <param name="ifNull">[Optional] If set, will return this IActionResult if <paramref name="then"/> returns a null result</param>
 		/// <param name="otherwise">[Optional] If set, will return if user is not authenticated, instead of Unauthorized</param>
 		protected Task<IActionResult> IsAuthenticatedUserAsync<T>(
 			Func<ulong, Task<T>> then,
 			Func<T, IActionResult>? result = null,
+			Func<IActionResult>? ifNull = null,
 			Func<IActionResult>? otherwise = null
 		)
 		{
@@ -71,7 +73,11 @@ namespace Strasnote.Notes.Api
 							T =>
 								Json(value),
 
-							// Value is null so return not found
+							// Return value using custom ifNull function
+							_ when ifNull is not null =>
+								ifNull(),
+
+							// Return not found
 							_ =>
 								NotFound()
 						};

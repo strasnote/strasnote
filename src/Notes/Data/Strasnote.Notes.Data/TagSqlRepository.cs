@@ -8,6 +8,7 @@ using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Notes;
 using Strasnote.Logging;
 using Strasnote.Notes.Data.Abstracts;
+using Strasnote.Util;
 
 namespace Strasnote.Notes.Data
 {
@@ -25,6 +26,7 @@ namespace Strasnote.Notes.Data
 		public override Task<ulong> CreateAsync(TagEntity entity) =>
 			base.CreateAsync(entity with
 			{
+				TagNameNormalised = entity.TagName.Normalise(),
 				TagCreated = DateTime.Now,
 				TagUpdated = DateTime.Now
 			});
