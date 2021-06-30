@@ -23,7 +23,7 @@ namespace Strasnote.Auth.Data
 			: base(client, log, client.Tables.RefreshToken) { }
 
 		/// <inheritdoc/>
-		public async Task<int> DeleteByUserIdAsync(long userId)
+		public async Task<int> DeleteByUserIdAsync(ulong userId)
 		{
 			// Connect to the database
 			using var connection = Client.Connect();
@@ -36,7 +36,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task<RefreshTokenEntity> RetrieveForUserAsync(long userId, string refreshToken) =>
+		public Task<RefreshTokenEntity> RetrieveForUserAsync(ulong userId, string refreshToken) =>
 			throw new NotImplementedException();
 	}
 }

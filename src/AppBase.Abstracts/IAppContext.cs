@@ -16,6 +16,6 @@ namespace Strasnote.AppBase.Abstracts
 		/// <summary>
 		/// Current User ID
 		/// </summary>
-		long? CurrentUserId { get; }
+		ulong? CurrentUserId { get; }
 	}
 }

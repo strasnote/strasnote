@@ -8,7 +8,7 @@ namespace Strasnote.Auth.Exceptions
 	public sealed class UserNotFoundByIdException : UserNotFoundException
 	{
 		public UserNotFoundByIdException() { }
-		public UserNotFoundByIdException(long id) : this($"ID: {id}") { }
+		public UserNotFoundByIdException(ulong id) : this($"ID: {id}") { }
 		public UserNotFoundByIdException(string message) : base(message) { }
 		public UserNotFoundByIdException(string message, Exception inner) : base(message, inner) { }
 	}

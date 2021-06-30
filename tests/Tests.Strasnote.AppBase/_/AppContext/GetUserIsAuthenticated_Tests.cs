@@ -26,7 +26,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 		public void IIdentity_Null_Returns_False()
 		{
 			// Arrange
-			var id = Rnd.Lng;
+			var id = Rnd.Ulng;
 
 			// Act
 			var result = WebAppContext.GetUserIsAuthenticated(id, null);
@@ -39,7 +39,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 		public void UserId_Not_Null_And_IIdentity_IsAuthenticated_False_Returns_False()
 		{
 			// Arrange
-			var id = Rnd.Lng;
+			var id = Rnd.Ulng;
 			var identity = Substitute.For<IIdentity>();
 			identity.IsAuthenticated.Returns(false);
 
@@ -54,7 +54,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 		public void UserId_Not_Null_And_IIdentity_IsAuthenticated_True_Returns_True()
 		{
 			// Arrange
-			var id = Rnd.Lng;
+			var id = Rnd.Ulng;
 			var identity = Substitute.For<IIdentity>();
 			identity.IsAuthenticated.Returns(true);
 

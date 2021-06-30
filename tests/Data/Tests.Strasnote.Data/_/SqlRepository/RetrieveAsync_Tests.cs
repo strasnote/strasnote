@@ -15,8 +15,8 @@ namespace Strasnote.Data.SqlRepository_Tests
 		{
 			// Arrange
 			var (repo, _, queries, _, table) = SqlRepository_Setup.Get();
-			var entityId = Rnd.Lng;
-			var userId = Rnd.Lng;
+			var entityId = Rnd.Ulng;
+			var userId = Rnd.Ulng;
 
 			// Act
 			repo.RetrieveAsync<TestEntity>(entityId, userId);
@@ -34,7 +34,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var (repo, _, _, log, _) = SqlRepository_Setup.Get();
 
 			// Act
-			repo.RetrieveAsync<TestEntity>(Rnd.Lng, Rnd.Lng);
+			repo.RetrieveAsync<TestEntity>(Rnd.Ulng, Rnd.Ulng);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

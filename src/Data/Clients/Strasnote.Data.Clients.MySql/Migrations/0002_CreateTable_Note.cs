@@ -16,8 +16,8 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 					`NoteContent` TEXT NOT NULL DEFAULT '' COLLATE 'utf8_general_ci',
 					`NoteCreated` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
 					`NoteUpdated` TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-					`FolderId` BIGINT(20) NULL DEFAULT NULL,
-					`UserId` BIGINT(20) NOT NULL DEFAULT '0',
+					`FolderId` BIGINT(20) UNSIGNED NULL DEFAULT NULL,
+					`UserId` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
 					PRIMARY KEY (`Id`) USING BTREE,
 					INDEX `FolderId` (`FolderId`) USING BTREE,
 					INDEX `UserId` (`UserId`) USING BTREE

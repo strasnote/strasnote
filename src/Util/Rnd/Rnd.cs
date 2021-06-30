@@ -1,6 +1,6 @@
 ﻿// The MIT License (MIT)
 //
-// Copyright © 2021 bcg|design <ben@bcgdesign.com>
+// Copyright © 2021 bfren.uk
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 // and associated documentation files (the “Software”), to deal in the Software without 
@@ -30,15 +30,27 @@ namespace Strasnote.Util
 			RndString.Get(6);
 
 		/// <summary>
-		/// Generate a random 32-bit integer between 0 and 1000
+		/// Generate a random 32-bit integer between 0 and 10000
 		/// </summary>
 		public static int Int =>
-			RndNumber.GetInt32(max: 1000);
+			RndNumber.GetInt32(max: 10000);
 
 		/// <summary>
-		/// Generate a random 64-bit integer between 0 and 1000
+		/// Generate a random 32-bit integer between 0 and 10000
+		/// </summary>
+		public static uint Uint =>
+			RndNumber.GetUInt32(max: 10000);
+
+		/// <summary>
+		/// Generate a random 64-bit integer between 0 and 10000
 		/// </summary>
 		public static long Lng =>
-			RndNumber.GetInt64(max: 1000L);
+			RndNumber.GetInt64(max: 10000L);
+
+		/// <summary>
+		/// Generate a random 64-bit unsigned integer between 0 and 10000
+		/// </summary>
+		public static ulong Ulng =>
+			RndNumber.GetUInt64(max: 10000L);
 	}
 }

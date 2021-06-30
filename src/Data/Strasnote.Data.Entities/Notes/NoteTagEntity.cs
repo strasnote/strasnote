@@ -13,19 +13,19 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Note Tag ID
 		/// </summary>
-		public long Id { get; init; }
+		public ulong Id { get; init; }
 
 		#region Relationships
 
 		/// <summary>
 		/// Note ID
 		/// </summary>
-		public long NoteId { get; init; }
+		public ulong NoteId { get; init; }
 
 		/// <summary>
 		/// Tag ID
 		/// </summary>
-		public long TagId { get; init; }
+		public ulong TagId { get; init; }
 
 		#endregion
 	}

@@ -31,7 +31,7 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// </summary>
 		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="entityId">ID of entity to retrieve</param>
-		Task<TModel> RetrieveAsync<TModel>(long entityId);
+		Task<TModel> RetrieveAsync<TModel>(ulong entityId);
 
 		/// <summary>
 		/// Update an entity and return updated model
@@ -39,13 +39,13 @@ namespace Strasnote.Auth.Data.Abstracts
 		/// <typeparam name="TModel">Return object type</typeparam>
 		/// <param name="entityId">ID of entity to update</param>
 		/// <param name="model">Model containing properties to update</param>
-		Task<TModel> UpdateAsync<TModel>(long entityId, TModel model);
+		Task<TModel> UpdateAsync<TModel>(ulong entityId, TModel model);
 
 		/// <summary>
 		/// Delete an entity and return the number of affected rows
 		/// </summary>
 		/// <param name="entityId">ID of entity to delete</param>
-		Task<int> DeleteAsync(long entityId);
+		Task<int> DeleteAsync(ulong entityId);
 
 		#endregion
 	}

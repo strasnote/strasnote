@@ -15,7 +15,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var noteId = Rnd.Lng;
+			var noteId = Rnd.Ulng;
 
 			// Act
 			await controller.Delete(noteId);

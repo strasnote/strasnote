@@ -29,7 +29,7 @@ namespace Tests.Strasnote.Auth
 		private UserEntity userEntity = new()
 		{
 			UserName = Rnd.Str,
-			Id = Rnd.Int,
+			Id = Rnd.Ulng,
 			SecurityStamp = Guid.NewGuid().ToString()
 		};
 

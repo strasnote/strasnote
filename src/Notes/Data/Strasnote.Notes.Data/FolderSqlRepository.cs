@@ -22,7 +22,7 @@ namespace Strasnote.Notes.Data
 		public FolderSqlRepository(ISqlClient client, ILog<FolderSqlRepository> log) : base(client, log, client.Tables.Folder) { }
 
 		/// <inheritdoc/>
-		public override Task<long> CreateAsync(FolderEntity entity) =>
+		public override Task<ulong> CreateAsync(FolderEntity entity) =>
 			base.CreateAsync(entity with
 			{
 				FolderCreated = DateTime.Now,

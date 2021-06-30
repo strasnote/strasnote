@@ -14,7 +14,7 @@ namespace Strasnote.Data.Entities.Tests
 		/// <summary>
 		/// Unused ID
 		/// </summary>
-		public long Id { get; init; }
+		public ulong Id { get; init; }
 
 		/// <summary>
 		/// Unused test property - see Tests.Strasnote.Data.Entities.DateTimeOffset_Tests

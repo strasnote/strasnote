@@ -22,7 +22,7 @@ namespace Strasnote.Notes.Data
 		public NoteSqlRepository(ISqlClient client, ILog<NoteSqlRepository> log) : base(client, log, client.Tables.Note) { }
 
 		/// <inheritdoc/>
-		public override Task<long> CreateAsync(NoteEntity entity) =>
+		public override Task<ulong> CreateAsync(NoteEntity entity) =>
 			base.CreateAsync(entity with
 			{
 				NoteCreated = DateTime.Now,

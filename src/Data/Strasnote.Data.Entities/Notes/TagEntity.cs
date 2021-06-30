@@ -16,7 +16,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Tag ID
 		/// </summary>
-		public long Id { get; init; }
+		public ulong Id { get; init; }
 
 		/// <summary>
 		/// Tag Name
@@ -59,7 +59,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// User ID (of the User who owns this Tag)
 		/// </summary>
-		public long UserId { get; init; }
+		public ulong UserId { get; init; }
 
 		#endregion
 

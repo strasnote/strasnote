@@ -37,7 +37,7 @@ namespace Strasnote.Data.Clients.MySql
 		}
 
 		/// <inheritdoc/>
-		public string GetRetrieveQuery(string table, List<string> columns, long entityId, long? userId)
+		public string GetRetrieveQuery(string table, List<string> columns, ulong entityId, ulong? userId)
 		{
 			// Get columns
 			string select;
@@ -73,7 +73,7 @@ namespace Strasnote.Data.Clients.MySql
 		public (string query, Dictionary<string, object> param) GetRetrieveQuery(
 			string table,
 			List<string> columns, List<(string column, SearchOperator op, object value)> predicates,
-			long? userId
+			ulong? userId
 		)
 		{
 			// Get columns
@@ -116,7 +116,7 @@ namespace Strasnote.Data.Clients.MySql
 		}
 
 		/// <inheritdoc/>
-		public string GetUpdateQuery(string table, List<string> columns, long entityId, long? userId)
+		public string GetUpdateQuery(string table, List<string> columns, ulong entityId, ulong? userId)
 		{
 			// Get columns
 			var col = new List<string>();
@@ -144,7 +144,7 @@ namespace Strasnote.Data.Clients.MySql
 		}
 
 		/// <inheritdoc/>
-		public string GetDeleteQuery(string table, long entityId, long? userId)
+		public string GetDeleteQuery(string table, ulong entityId, ulong? userId)
 		{
 			// Build query
 			var sql = $"DELETE FROM `{table}` WHERE `{nameof(IEntity.Id)}` = {entityId}";

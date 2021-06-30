@@ -20,7 +20,7 @@ namespace Tests.Strasnote.Auth.Data
 		public Tests_CreateAsync()
 		{
 			userRepository.CreateAsync(Arg.Any<UserEntity>())
-				.Returns(Rnd.Lng);
+				.Returns(Rnd.Ulng);
 		}
 
 		[Fact]

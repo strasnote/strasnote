@@ -26,7 +26,7 @@ namespace Strasnote.Data.Abstracts
 		/// <param name="columns">List of columns to select</param>
 		/// <param name="entityId">Entity ID value</param>
 		/// <param name="userId">Optional User ID to retrieve items relating to the specified user only</param>
-		string GetRetrieveQuery(string table, List<string> columns, long entityId, long? userId);
+		string GetRetrieveQuery(string table, List<string> columns, ulong entityId, ulong? userId);
 
 		/// <summary>
 		/// Return Retrieve query using all predicates (performs an AND query)
@@ -38,7 +38,7 @@ namespace Strasnote.Data.Abstracts
 		(string query, Dictionary<string, object> param) GetRetrieveQuery(
 			string table,
 			List<string> columns, List<(string column, SearchOperator op, object value)> predicates,
-			long? userId
+			ulong? userId
 		);
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Strasnote.Data.Abstracts
 		/// <param name="columns">List of columns to update</param>
 		/// <param name="entityId">Entity ID value</param>
 		/// <param name="userId">Optional User ID to retrieve items relating to the specified user only</param>
-		string GetUpdateQuery(string table, List<string> columns, long entityId, long? userId);
+		string GetUpdateQuery(string table, List<string> columns, ulong entityId, ulong? userId);
 
 		/// <summary>
 		/// Return Delete query
@@ -56,6 +56,6 @@ namespace Strasnote.Data.Abstracts
 		/// <param name="table">Table name</param>
 		/// <param name="entityId">Entity ID value</param>
 		/// <param name="userId">Optional User ID to retrieve items relating to the specified user only</param>
-		string GetDeleteQuery(string table, long entityId, long? userId);
+		string GetDeleteQuery(string table, ulong entityId, ulong? userId);
 	}
 }

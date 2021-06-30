@@ -16,7 +16,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Note ID
 		/// </summary>
-		public long Id { get; init; }
+		public ulong Id { get; init; }
 
 		/// <summary>
 		/// Note Content (may be encrypted)
@@ -54,12 +54,12 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// The ID of the Folder this Note is in (null = unfiled)
 		/// </summary>
-		public long? FolderId { get; init; }
+		public ulong? FolderId { get; init; }
 
 		/// <summary>
 		/// The ID of the User who owns this Note
 		/// </summary>
-		public long UserId { get; init; }
+		public ulong UserId { get; init; }
 
 		#endregion
 

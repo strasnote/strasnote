@@ -18,7 +18,7 @@ namespace Strasnote.Util.Is_Tests
 			var ctx = Substitute.For<IAppContext>();
 			ctx.IsAuthenticated.Returns(false);
 
-			var then = Substitute.For<Func<long, Task<string>>>();
+			var then = Substitute.For<Func<ulong, Task<string>>>();
 			var otherwise = Substitute.For<Func<string>>();
 
 			// Act
@@ -36,7 +36,7 @@ namespace Strasnote.Util.Is_Tests
 			var ctx = Substitute.For<IAppContext>();
 			ctx.IsAuthenticated.Returns(true);
 
-			var then = Substitute.For<Func<long, Task<string>>>();
+			var then = Substitute.For<Func<ulong, Task<string>>>();
 			var otherwise = Substitute.For<Func<string>>();
 
 			// Act
@@ -52,11 +52,11 @@ namespace Strasnote.Util.Is_Tests
 		{
 			// Arrange
 			var ctx = Substitute.For<IAppContext>();
-			var userId = Rnd.Lng;
+			var userId = Rnd.Ulng;
 			ctx.IsAuthenticated.Returns(true);
 			ctx.CurrentUserId.Returns(userId);
 
-			var then = Substitute.For<Func<long, Task<string>>>();
+			var then = Substitute.For<Func<ulong, Task<string>>>();
 			var otherwise = Substitute.For<Func<string>>();
 
 			// Act

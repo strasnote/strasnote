@@ -205,7 +205,7 @@ namespace Strasnote.Data
 		/// <param name="userId">Current User ID</param>
 		private (string query, Dictionary<string, object> param) GetRetrieveQuery<TModel>(
 			(Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates,
-			long? userId
+			ulong? userId
 		)
 		{
 			// Convert the expressions to column names
@@ -236,7 +236,7 @@ namespace Strasnote.Data
 
 		/// <inheritdoc/>
 		public virtual async Task<IEnumerable<TModel>> QueryAsync<TModel>(
-			long? userId,
+			ulong? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
 		{
@@ -257,7 +257,7 @@ namespace Strasnote.Data
 
 		/// <inheritdoc/>
 		public virtual async Task<TModel> QuerySingleAsync<TModel>(
-			long? userId,
+			ulong? userId,
 			params (Expression<Func<TEntity, object>> property, SearchOperator op, object value)[] predicates
 		)
 		{
@@ -281,7 +281,7 @@ namespace Strasnote.Data
 		#region CRUD Queries
 
 		/// <inheritdoc/>
-		public virtual async Task<long> CreateAsync(TEntity entity)
+		public virtual async Task<ulong> CreateAsync(TEntity entity)
 		{
 			// Log create
 			var query = Queries.GetCreateQuery(Table, GetProperties<TEntity>());
@@ -291,7 +291,7 @@ namespace Strasnote.Data
 			using var connection = Client.Connect();
 
 			// Perform create and return created entity ID
-			return await connection.ExecuteScalarAsync<long>(
+			return await connection.ExecuteScalarAsync<ulong>(
 				sql: query,
 				param: entity,
 				commandType: CommandType.Text
@@ -299,7 +299,7 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual async Task<TModel> RetrieveAsync<TModel>(long entityId, long? userId)
+		public virtual async Task<TModel> RetrieveAsync<TModel>(ulong entityId, ulong? userId)
 		{
 			// Log retrieve
 			var query = Queries.GetRetrieveQuery(Table, GetProperties<TModel>(), entityId, userId);
@@ -316,7 +316,7 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual async Task<TModel> UpdateAsync<TModel>(long entityId, TModel model, long? userId)
+		public virtual async Task<TModel> UpdateAsync<TModel>(ulong entityId, TModel model, ulong? userId)
 		{
 			// Log update
 			var query = Queries.GetUpdateQuery(Table, GetProperties<TModel>(), entityId, userId);
@@ -346,7 +346,7 @@ namespace Strasnote.Data
 		}
 
 		/// <inheritdoc/>
-		public virtual async Task<int> DeleteAsync(long id, long? userId)
+		public virtual async Task<int> DeleteAsync(ulong id, ulong? userId)
 		{
 			// Log delete
 			var query = Queries.GetDeleteQuery(Table, id, userId);

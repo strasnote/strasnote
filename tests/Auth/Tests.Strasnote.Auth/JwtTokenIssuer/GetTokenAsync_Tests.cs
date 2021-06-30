@@ -231,7 +231,7 @@ namespace Tests.Strasnote.Auth
 			var result = await jwtTokenService.GetTokenAsync("test@email.com", Rnd.Str);
 
 			// Assert
-			await refreshTokenRepository.Received().DeleteByUserIdAsync(Arg.Any<long>());
+			await refreshTokenRepository.Received().DeleteByUserIdAsync(Arg.Any<ulong>());
 		}
 
 		[Fact]

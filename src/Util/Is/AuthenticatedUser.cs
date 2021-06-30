@@ -19,9 +19,9 @@ namespace Strasnote.Util
 		/// <param name="ctx">IAppContext</param>
 		/// <param name="then">Runs if user is correctly authenticated, passing the User ID as a parameter</param>
 		/// <param name="otherwise">Runs if user is not authenticated</param>
-		public static Task<T> AuthenticatedUser<T>(IAppContext ctx, Func<long, Task<T>> then, Func<T> otherwise)
+		public static Task<T> AuthenticatedUser<T>(IAppContext ctx, Func<ulong, Task<T>> then, Func<T> otherwise)
 		{
-			if (ctx.IsAuthenticated && ctx.CurrentUserId is long userId)
+			if (ctx.IsAuthenticated && ctx.CurrentUserId is ulong userId)
 			{
 				return then(userId);
 			}

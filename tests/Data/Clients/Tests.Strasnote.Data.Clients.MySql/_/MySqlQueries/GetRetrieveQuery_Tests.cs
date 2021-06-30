@@ -21,7 +21,7 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 			var c2 = Rnd.Str;
 			var columns = new List<string>(new[] { c0, c1, c2 });
 
-			var entityId = Rnd.Lng;
+			var entityId = Rnd.Ulng;
 
 			var expected = $"SELECT `{c0}`, `{c1}`, `{c2}` FROM `{table}` WHERE `{nameof(IEntity.Id)}` = {entityId};";
 
@@ -45,8 +45,8 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 			var c2 = Rnd.Str;
 			var columns = new List<string>(new[] { c0, c1, c2 });
 
-			var entityId = Rnd.Lng;
-			var userId = Rnd.Lng;
+			var entityId = Rnd.Ulng;
+			var userId = Rnd.Ulng;
 
 			var expected = $"SELECT `{c0}`, `{c1}`, `{c2}` FROM `{table}` WHERE `{nameof(IEntity.Id)}` = {entityId} " +
 				$"AND `{nameof(IEntityWithUserId.UserId)}` = {userId};";
@@ -134,7 +134,7 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 				{ ( p1Column, p1Operator, p1Value ) }
 			};
 
-			var userId = Rnd.Lng;
+			var userId = Rnd.Ulng;
 
 			var queries = new MySqlQueries();
 

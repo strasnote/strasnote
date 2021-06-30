@@ -16,7 +16,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			var ctx = Substitute.For<IAppContext>();
 			ctx.IsAuthenticated.Returns(true);
 
-			var userId = Rnd.Lng;
+			var userId = Rnd.Ulng;
 			ctx.CurrentUserId.Returns(userId);
 
 			var log = Substitute.For<ILog<NoteController>>();
@@ -29,7 +29,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 		public sealed record Vars(
 			IAppContext AppContext,
 			ILog<NoteController> Log,
-			long UserId,
+			ulong UserId,
 			INoteRepository Notes
 		);
 	}

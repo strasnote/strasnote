@@ -53,7 +53,7 @@ namespace Tests.Strasnote.Auth
 			userManager.FindByIdAsync(Arg.Any<string>())
 				.Returns(userEntity);
 
-			refreshTokenRepository.RetrieveForUserAsync(Arg.Any<long>(), Arg.Any<string>())
+			refreshTokenRepository.RetrieveForUserAsync(Arg.Any<ulong>(), Arg.Any<string>())
 				.Returns(new RefreshTokenEntity(Rnd.Str, DateTime.Now.AddDays(1), userEntity.Id));
 
 			jwtTokenGenerator.GenerateRefreshToken(Arg.Any<UserEntity>())
@@ -133,7 +133,7 @@ namespace Tests.Strasnote.Auth
 		public async Task Existing_Refresh_Token_Not_Found_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
 			// Arrange
-			refreshTokenRepository.RetrieveForUserAsync(Arg.Any<long>(), Arg.Any<string>())
+			refreshTokenRepository.RetrieveForUserAsync(Arg.Any<ulong>(), Arg.Any<string>())
 				.ReturnsNull();
 
 			var jwtTokenIssuer = new JwtTokenIssuer(
@@ -156,7 +156,7 @@ namespace Tests.Strasnote.Auth
 		public async Task Existing_Refresh_Token_Expired_Returns_TokenResponse_With_Success_False_And_Error_Message()
 		{
 			// Arrange
-			refreshTokenRepository.RetrieveForUserAsync(Arg.Any<long>(), Arg.Any<string>())
+			refreshTokenRepository.RetrieveForUserAsync(Arg.Any<ulong>(), Arg.Any<string>())
 				.Returns(new RefreshTokenEntity()
 				{
 					RefreshTokenExpires = DateTime.Now.AddDays(-1)
@@ -193,7 +193,7 @@ namespace Tests.Strasnote.Auth
 			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
-			await refreshTokenRepository.Received().DeleteByUserIdAsync(Arg.Any<long>());
+			await refreshTokenRepository.Received().DeleteByUserIdAsync(Arg.Any<ulong>());
 		}
 
 		[Fact]

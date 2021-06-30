@@ -22,7 +22,7 @@ namespace Strasnote.Notes.Data
 		public TagSqlRepository(ISqlClient client, ILog<TagSqlRepository> log) : base(client, log, client.Tables.Tag) { }
 
 		/// <inheritdoc/>
-		public override Task<long> CreateAsync(TagEntity entity) =>
+		public override Task<ulong> CreateAsync(TagEntity entity) =>
 			base.CreateAsync(entity with
 			{
 				TagCreated = DateTime.Now,

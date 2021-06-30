@@ -16,7 +16,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Folder ID
 		/// </summary>
-		public long Id { get; init; }
+		public ulong Id { get; init; }
 
 		/// <summary>
 		/// Folder Name
@@ -26,7 +26,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// Folder ID (of parent Folder) - null means it is top-level
 		/// </summary>
-		public long? FolderParentId { get; init; }
+		public ulong? FolderParentId { get; init; }
 
 		/// <summary>
 		/// When the Folder was created
@@ -59,7 +59,7 @@ namespace Strasnote.Data.Entities.Notes
 		/// <summary>
 		/// The ID of the User who owns this Folder
 		/// </summary>
-		public long UserId { get; init; }
+		public ulong UserId { get; init; }
 
 		#endregion
 

@@ -17,7 +17,7 @@ namespace Strasnote.AppBase
 		public bool IsAuthenticated { get; init; }
 
 		/// <inheritdoc/>
-		public long? CurrentUserId { get; init; }
+		public ulong? CurrentUserId { get; init; }
 
 		/// <summary>
 		/// Set context information
@@ -36,11 +36,11 @@ namespace Strasnote.AppBase
 		/// Get Current User ID from Claims
 		/// </summary>
 		/// <param name="claims">List of Claims</param>
-		static internal long? GetCurrentUserId(IEnumerable<Claim> claims) =>
+		static internal ulong? GetCurrentUserId(IEnumerable<Claim> claims) =>
 			claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier) switch
 			{
 				Claim idClaim =>
-					long.TryParse(idClaim.Value, out long id) switch
+					ulong.TryParse(idClaim.Value, out ulong id) switch
 					{
 						true =>
 							id,
@@ -58,7 +58,7 @@ namespace Strasnote.AppBase
 		/// </summary>
 		/// <param name="userId">User ID</param>
 		/// <param name="identity">IIdentity</param>
-		static internal bool GetUserIsAuthenticated(long? userId, IIdentity? identity) =>
-			userId is long && (identity?.IsAuthenticated ?? false);
+		static internal bool GetUserIsAuthenticated(ulong? userId, IIdentity? identity) =>
+			userId is ulong && (identity?.IsAuthenticated ?? false);
 	}
 }
