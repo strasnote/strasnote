@@ -2,7 +2,11 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Strasnote.Data;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Entities.Notes;
@@ -30,5 +34,31 @@ namespace Strasnote.Notes.Data
 				TagCreated = DateTime.Now,
 				TagUpdated = DateTime.Now
 			});
+
+		/// <inheritdoc/>
+		public async Task<IEnumerable<TTag>> GetForNote<TTag>(ulong noteId, ulong? userId)
+		{
+			// Create new connection
+			using var connection = Client.Connect();
+
+			// Get tag IDs for this note
+			var ids = await connection.QueryAsync<ulong>(
+				sql: StoredProcedure.GetTagIdsForNote,
+				param: new { noteId, userId },
+				commandType: CommandType.StoredProcedure
+			).ConfigureAwait(false);
+
+			// If there are no Tags, return empty list
+			if (!ids.Any())
+			{
+				return new List<TTag>();
+			}
+
+			// Get matching tags
+			return await QueryAsync<TTag>(
+				userId: null,
+				(t => t.Id, SearchOperator.In, ids)
+			).ConfigureAwait(false);
+		}
 	}
 }

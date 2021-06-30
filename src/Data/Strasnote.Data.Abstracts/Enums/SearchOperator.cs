@@ -46,6 +46,16 @@ namespace Strasnote.Data.Abstracts
 		/// <summary>
 		/// More Than or Equal
 		/// </summary>
-		MoreThanOrEqual
+		MoreThanOrEqual,
+
+		/// <summary>
+		/// In (array of items)
+		/// </summary>
+		In,
+
+		/// <summary>
+		/// Not In (array of items)
+		/// </summary>
+		NotIn,
 	}
 }

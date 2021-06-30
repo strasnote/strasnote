@@ -23,14 +23,17 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 
 			var notes = Substitute.For<INoteRepository>();
 
-			return (new(ctx, log, notes), new(ctx, log, userId, notes));
+			var tags = Substitute.For<ITagRepository>();
+
+			return (new(ctx, log, notes, tags), new(ctx, log, userId, notes, tags));
 		}
 
 		public sealed record Vars(
 			IAppContext AppContext,
 			ILog<NoteController> Log,
 			ulong UserId,
-			INoteRepository Notes
+			INoteRepository Notes,
+			ITagRepository Tags
 		);
 	}
 }
