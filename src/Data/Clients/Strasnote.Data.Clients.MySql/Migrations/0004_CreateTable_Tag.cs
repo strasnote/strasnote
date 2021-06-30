@@ -12,12 +12,12 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		{
 			Execute(@"
 				CREATE TABLE `main.tag` (
-					`Id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+					`Id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					`TagName` VARCHAR(128) NOT NULL COLLATE 'utf8_general_ci',
 					`TagNameNormalised` VARCHAR(128) NOT NULL COLLATE 'utf8_general_ci',
 					`TagCreated` DATETIME NOT NULL,
 					`TagUpdated` DATETIME NOT NULL,
-					`UserId` BIGINT(20) NOT NULL DEFAULT '0',
+					`UserId` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
 					PRIMARY KEY (`Id`) USING BTREE,
 					UNIQUE INDEX `TagNameNormalised_UserId` (`TagNameNormalised`, `UserId`) USING BTREE,
 					INDEX `UserId` (`UserId`) USING BTREE,

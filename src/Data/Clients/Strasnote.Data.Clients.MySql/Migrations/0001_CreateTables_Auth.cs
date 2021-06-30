@@ -12,7 +12,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		{
 			Execute(@"
 				CREATE TABLE `auth.user` (
-					`Id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+					`Id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					`UserName` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
 					`NormalizedUserName` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
 					`PasswordHash` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
@@ -42,10 +42,10 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 
 			Execute(@"
 				CREATE TABLE `auth.refresh_token` (
-					`RefreshTokenId` BIGINT(20) NOT NULL AUTO_INCREMENT,
+					`RefreshTokenId` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					`RefreshTokenExpires` DATETIME NOT NULL,
 					`RefreshTokenValue` VARCHAR(255) NOT NULL COLLATE 'utf8_general_ci',
-					`UserId` BIGINT(20) NOT NULL,
+					`UserId` BIGINT(20) UNSIGNED NOT NULL,
 					PRIMARY KEY (`RefreshTokenId`) USING BTREE
 				)
 				COLLATE='utf8_general_ci'

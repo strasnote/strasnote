@@ -12,12 +12,12 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		{
 			Execute(@"
 				CREATE TABLE `main.folder` (
-					`Id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+					`Id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					`FolderName` VARCHAR(128) NOT NULL COLLATE 'utf8_general_ci',
-					`FolderParentId` BIGINT(20) NULL DEFAULT NULL,
+					`FolderParentId` BIGINT(20) UNSIGNED NULL DEFAULT NULL,
 					`FolderCreated` DATETIME NOT NULL DEFAULT current_timestamp(),
 					`FolderUpdated` DATETIME NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-					`UserId` BIGINT(20) NOT NULL,
+					`UserId` BIGINT(20) UNSIGNED NOT NULL,
 					PRIMARY KEY (`Id`) USING BTREE,
 					INDEX `FolderParentId` (`FolderParentId`) USING BTREE,
 					INDEX `UserId` (`UserId`) USING BTREE
