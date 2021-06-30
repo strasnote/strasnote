@@ -79,6 +79,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[HttpGet("{noteId}")]
 		[ProducesResponseType(typeof(GetByIdModel), 200)]
 		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> GetById(ulong noteId) =>
 			IsAuthenticatedUserAsync(
@@ -99,6 +100,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[HttpPut("{noteId}")]
 		[ProducesResponseType(typeof(SaveContentModel), 200)]
 		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> SaveContent(ulong noteId, [FromBody] SaveContentModel model) =>
 			IsAuthenticatedUserAsync(
