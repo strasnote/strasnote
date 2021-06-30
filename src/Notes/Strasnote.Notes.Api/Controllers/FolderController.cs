@@ -41,7 +41,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <returns>The ID of the new Folder</returns>
 		[HttpPost]
-		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(typeof(ulong), 201)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> Create([FromBody] CreateModel model) =>
@@ -83,7 +83,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(typeof(GetByIdModel), 200)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> GetById(long folderId) =>
+		public Task<IActionResult> GetById(ulong folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.RetrieveAsync<GetByIdModel?>(folderId, userId)
 			);
@@ -103,7 +103,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(typeof(SaveNameModel), 200)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> SaveName(long folderId, SaveNameModel model) =>
+		public Task<IActionResult> SaveName(ulong folderId, SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.UpdateAsync(folderId, model, userId)
 			);
@@ -120,7 +120,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> Delete(long folderId) =>
+		public Task<IActionResult> Delete(ulong folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.DeleteAsync(folderId, userId),
 				result: affected => affected switch

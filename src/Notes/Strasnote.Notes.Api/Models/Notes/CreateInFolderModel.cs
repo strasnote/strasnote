@@ -9,5 +9,5 @@ namespace Strasnote.Notes.Api.Models.Notes
 	/// See <see cref="Strasnote.Notes.Api.Controllers.NoteController.CreateInFolder(CreateInFolderModel)"/>
 	/// </summary>
 	/// <param name="FolderId">ID of parent folder</param>
-	public sealed record CreateInFolderModel(long FolderId);
+	public sealed record CreateInFolderModel(ulong FolderId);
 }

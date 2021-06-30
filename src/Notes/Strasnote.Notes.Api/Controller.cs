@@ -41,7 +41,7 @@ namespace Strasnote.Notes.Api
 		/// <param name="result">[Optional] If set, will return this IActionResult instead of JSON model</param>
 		/// <param name="otherwise">[Optional] If set, will return if user is not authenticated, instead of Unauthorized</param>
 		protected Task<IActionResult> IsAuthenticatedUserAsync<T>(
-			Func<long, Task<T>> then,
+			Func<ulong, Task<T>> then,
 			Func<T, IActionResult>? result = null,
 			Func<IActionResult>? otherwise = null
 		)

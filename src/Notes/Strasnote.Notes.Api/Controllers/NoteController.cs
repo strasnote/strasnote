@@ -38,7 +38,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <returns>The ID of the new Note</returns>
 		[HttpPost]
-		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(typeof(ulong), 201)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> Create() =>
@@ -59,7 +59,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="model">CreateInFolderModel</param>
 		/// <returns>The ID of the new Note</returns>
 		[HttpPost("InFolder")]
-		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(typeof(ulong), 201)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
@@ -79,7 +79,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(typeof(GetByIdModel), 200)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> GetById(long noteId) =>
+		public Task<IActionResult> GetById(ulong noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.RetrieveAsync<GetByIdModel?>(noteId, userId)
 			);
@@ -99,7 +99,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(typeof(SaveContentModel), 200)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> SaveContent(long noteId, [FromBody] SaveContentModel model) =>
+		public Task<IActionResult> SaveContent(ulong noteId, [FromBody] SaveContentModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.UpdateAsync<SaveContentModel?>(noteId, model, userId)
 			);
@@ -116,7 +116,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> Delete(long noteId) =>
+		public Task<IActionResult> Delete(ulong noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.DeleteAsync(noteId, userId),
 				result: affected => affected switch
