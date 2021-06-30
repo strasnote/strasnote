@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  restore-build-test-publish-push:
+  auth-restore-build-test-publish-push:
     runs-on: ubuntu-latest
     steps:
     - 
