@@ -3,6 +3,7 @@ name: Publish Auth (Prod)
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   auth-restore-build-test-publish-push:

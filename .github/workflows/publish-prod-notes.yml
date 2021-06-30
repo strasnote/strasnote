@@ -3,6 +3,7 @@ name: Publish Notes (Prod)
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   notes-restore-build-test-publish-push:
