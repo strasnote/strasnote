@@ -27,7 +27,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 		public TestRepository(ISqlClient client, ILog log, string table) : base(client, log, table) { }
 	}
 
-	public sealed record TestEntity(long Id, string Foo, int Bar) : IEntity
+	public sealed record TestEntity(ulong Id, string Foo, int Bar) : IEntity
 	{
 		[Ignore]
 		public bool AlwaysIgnore { get; set; }

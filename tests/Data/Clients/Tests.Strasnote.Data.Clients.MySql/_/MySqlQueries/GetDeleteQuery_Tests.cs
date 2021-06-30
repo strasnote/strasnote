@@ -14,7 +14,7 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 		{
 			// Arrange
 			var table = Rnd.Str;
-			var entityId = Rnd.Lng;
+			var entityId = Rnd.Ulng;
 
 			var expected = $"DELETE FROM `{table}` WHERE `{nameof(IEntity.Id)}` = {entityId};";
 
@@ -32,8 +32,8 @@ namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 		{
 			// Arrange
 			var table = Rnd.Str;
-			var entityId = Rnd.Lng;
-			var userId = Rnd.Lng;
+			var entityId = Rnd.Ulng;
+			var userId = Rnd.Ulng;
 
 			var expected = $"DELETE FROM `{table}` WHERE `{nameof(IEntity.Id)}` = {entityId} " +
 				$"AND `{nameof(IEntityWithUserId.UserId)}` = {userId};";

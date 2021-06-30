@@ -42,7 +42,7 @@ namespace Strasnote.AppBase.AppContext_Tests
 		public void Returns_Id_Value()
 		{
 			// Arrange
-			var id = Rnd.Lng;
+			var id = Rnd.Ulng;
 			var idClaim = new Claim(ClaimTypes.NameIdentifier, id.ToString());
 			var claims = new List<Claim> { idClaim };
 

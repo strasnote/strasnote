@@ -15,7 +15,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var id = Rnd.Lng;
+			var id = Rnd.Ulng;
 
 			// Act
 			await controller.Delete(id);

@@ -16,7 +16,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var ctx = Substitute.For<IAppContext>();
 			ctx.IsAuthenticated.Returns(true);
 
-			var userId = Rnd.Lng;
+			var userId = Rnd.Ulng;
 			ctx.CurrentUserId.Returns(userId);
 
 			var log = Substitute.For<ILog<FolderController>>();
@@ -29,7 +29,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 		public sealed record Vars(
 			IAppContext AppContext,
 			ILog<FolderController> Log,
-			long UserId,
+			ulong UserId,
 			IFolderRepository Folders
 		);
 	}

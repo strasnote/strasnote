@@ -31,7 +31,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 				( e => e.Bar, p1Operator, p1Value )
 			};
 
-			var userId = Rnd.Lng;
+			var userId = Rnd.Ulng;
 
 			// Act
 			repo.QuerySingleAsync<TestEntity>(userId, predicates);
@@ -55,7 +55,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 				( e => e.Foo, SearchOperator.Like, Rnd.Str )
 			};
 
-			var userId = Rnd.Lng;
+			var userId = Rnd.Ulng;
 
 			// Act
 			repo.QuerySingleAsync<TestEntity>(userId, predicates);
