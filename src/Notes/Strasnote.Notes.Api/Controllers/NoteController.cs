@@ -157,21 +157,14 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
 		[HttpDelete("{noteId}")]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(204)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> Delete(ulong noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.DeleteAsync(noteId, userId),
-				result: affected => affected switch
-				{
-					1 =>
-						Ok(true),
-
-					_ =>
-						NotFound()
-				}
+				result: _ => NoContent()
 			);
 	}
 }
