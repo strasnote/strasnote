@@ -45,20 +45,20 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 				WHERE 
 					# The note belongs to the user
 					1 = (
-						SELECT COUNT(*) 
+						SELECT COUNT(*)
 						FROM `main.note`
 						WHERE `Id` = NoteId AND `UserId` = UserId
 					)
 					# The tag belongs to the user
 					AND 1 = (
-						SELECT COUNT(*) 
+						SELECT COUNT(*)
 						FROM `main.tag`
 						WHERE `Id` = TagId AND `UserId` = UserId
-					) = 1
+					)
 					# The tag has not already been added to the note
 					AND 0 = (
 						SELECT COUNT(*)
-						FROM `main.note_tag` AS `nt`
+						FROM `main.note_tag`
 						WHERE `NoteId` = NoteId
 						AND `TagId` = TagId
 					)
@@ -67,7 +67,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 				# Return whether or not the tag has been added to the note
 				# (if the note already has the tag and nothing is inserted,
 				# the procedure will still return 1)
-				SELECT COUNT(*) FROM `main.note_tag` 
+				SELECT COUNT(*) FROM `main.note_tag`
 				WHERE `NoteId` = NoteId AND `TagId` = TagId;
 
 				END
@@ -95,6 +95,85 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 
 				END
 			");
+
+			Execute(@"
+				CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveTagFromNote`(
+					IN `TagId` BIGINT,
+					IN `NoteId` BIGINT,
+					IN `UserId` BIGINT
+				)
+				LANGUAGE SQL
+				NOT DETERMINISTIC
+				CONTAINS SQL
+				SQL SECURITY DEFINER
+				COMMENT ''
+				BEGIN
+
+				# Delete if:
+				#	the note belongs to the user
+				#	the tag belongs to the user
+				#	the tag has been added to the note
+				DELETE FROM `main.note_tag`
+				WHERE `NoteId` = NoteId AND `TagId` = TagId
+					# The note belongs to the user
+					AND 1 = (
+						SELECT COUNT(*)
+						FROM `main.note`
+						WHERE `Id` = NoteId AND `UserId` = UserId
+					)
+					# The tag belongs to the user
+					AND 1 = (
+						SELECT COUNT(*)
+						FROM `main.tag`
+						WHERE `Id` = TagId AND `UserId` = UserId
+					)
+					# The tag has been added to the note
+					AND 1 = (
+						SELECT COUNT(*)
+						FROM `main.note_tag`
+						WHERE `NoteId` = NoteId AND `TagId` = TagId
+					)
+				;
+
+				# Return whether or not the tag has been removed from the note
+				# (if the note didn't have the tag and nothing is deleted,
+				# the procedure will still return 0)
+				SELECT COUNT(*) FROM `main.note_tag`
+				WHERE `NoteId` = NoteId AND `TagId` = TagId;
+
+				END
+			");
+
+			Execute(@"
+				CREATE DEFINER=`root`@`localhost` PROCEDURE `RemoveTagFromNotes`(
+					IN `TagId` BIGINT,
+					IN `UserId` BIGINT
+				)
+				LANGUAGE SQL
+				NOT DETERMINISTIC
+				CONTAINS SQL
+				SQL SECURITY DEFINER
+				COMMENT ''
+				BEGIN
+
+				# Only delete if the tag belongs to the user
+				DELETE FROM `main.note_tag`
+				WHERE `TagId` = TagId
+					AND 1 = (
+						SELECT COUNT(*)
+						FROM `main.tag`
+						WHERE `Id` = TagId AND `UserId` = UserId
+					)
+				;
+
+				# Return whether or not the tag has been removed from all notes
+				# (if the tag does not exist and nothing is deleted,
+				# the procedure will still return 0)
+				SELECT COUNT(*) FROM `main.note_tag`
+				WHERE `TagId` = TagId;
+
+				END
+			");
 		}
 
 		protected override void Down()
@@ -102,6 +181,8 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 			Execute("DROP TABLE IF EXISTS `main.note_tag`;");
 			Execute("DROP PROCEDURE IF EXISTS `AddTagToNote`;");
 			Execute("DROP PROCEDURE IF EXISTS `GetTagIdsForNote`;");
+			Execute("DROP PROCEDURE IF EXISTS `RemoveTagFromNote`;");
+			Execute("DROP PROCEDURE IF EXISTS `RemoveTagFromNotes`;");
 		}
 	}
 }
