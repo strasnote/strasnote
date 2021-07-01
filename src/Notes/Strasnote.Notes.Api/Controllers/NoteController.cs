@@ -150,6 +150,25 @@ namespace Strasnote.Notes.Api.Controllers
 			);
 
 		/// <summary>
+		/// Removes a Tag from a Note.
+		/// </summary>
+		/// <remarks>
+		/// DELETE /note/42/tag/42
+		/// </remarks>
+		/// <param name="noteId">The Note ID</param>
+		/// <param name="tagId">The Tag ID</param>
+		[HttpDelete("{noteId}/tag/{tagId}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> RemoveTag(ulong noteId, ulong tagId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => tags.RemoveFromNote(tagId, noteId, userId),
+				result: _ => NoContent()
+			);
+
+		/// <summary>
 		/// Deletes a Note by ID.
 		/// </summary>
 		/// <remarks>
