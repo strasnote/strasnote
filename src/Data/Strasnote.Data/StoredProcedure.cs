@@ -9,15 +9,27 @@ namespace Strasnote.Data
 	public static class StoredProcedure
 	{
 		/// <summary>
-		/// Add a tag to a note
+		/// Add a Tag to a Note
 		/// </summary>
 		public static string AddTagToNote =>
 			nameof(AddTagToNote);
 
 		/// <summary>
-		/// Get tag Ids for a note
+		/// Get Tag Ids for a Note
 		/// </summary>
 		public static string GetTagIdsForNote =>
 			nameof(GetTagIdsForNote);
+
+		/// <summary>
+		/// Remove tag from a Note
+		/// </summary>
+		public static string RemoveTagFromNote =>
+			nameof(RemoveTagFromNote);
+
+		/// <summary>
+		/// Remove tag from all Notes
+		/// </summary>
+		public static string RemoveTagFromNotes =>
+			nameof(RemoveTagFromNotes);
 	}
 }
