@@ -34,7 +34,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var userId = Rnd.Ulng;
 
 			// Act
-			repo.QueryAsync<TestEntity>(userId, predicates);
+			_ = repo.QueryAsync<TestEntity>(userId, predicates);
 
 			// Assert
 			queries.Received().GetRetrieveQuery(table, Arg.Is<List<string>>(c =>
@@ -56,7 +56,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			};
 
 			// Act
-			repo.QueryAsync<TestEntity>(Rnd.Ulng, predicates);
+			_ = repo.QueryAsync<TestEntity>(Rnd.Ulng, predicates);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

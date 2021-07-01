@@ -30,7 +30,7 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 
 		protected override void Down()
 		{
-			Execute("DROP TABLE `main.folder`;");
+			Execute("DROP TABLE IF EXISTS `main.folder`;");
 		}
 	}
 }

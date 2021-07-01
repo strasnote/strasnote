@@ -17,7 +17,7 @@ namespace Strasnote.Notes.Api.Controllers
 	[Authorize]
 	[ApiController]
 	[ApiVersion("1.0")]
-	[Route("api/v{version:apiVersion}/[controller]")]
+	[Route("api/v{version:apiVersion}/tag")]
 	public class TagController : Controller
 	{
 		private readonly ITagRepository tags;
@@ -81,7 +81,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> SaveContent(ulong tagId, [FromBody] SaveNameModel model) =>
+		public Task<IActionResult> SaveName(ulong tagId, [FromBody] SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.UpdateAsync<SaveNameModel?>(tagId, model, userId)
 			);

@@ -39,7 +39,7 @@ namespace Tests.Strasnote.Auth
 			}
 		});
 
-		private UserEntity userEntity = new()
+		private readonly UserEntity userEntity = new()
 		{
 			Id = 1,
 			UserName = Rnd.Str
@@ -190,7 +190,7 @@ namespace Tests.Strasnote.Auth
 				jwtTokenGenerator);
 
 			// Act
-			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
+			_ = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
 			await refreshTokenRepository.Received().DeleteByUserIdAsync(Arg.Any<ulong>());
@@ -208,7 +208,7 @@ namespace Tests.Strasnote.Auth
 				jwtTokenGenerator);
 
 			// Act
-			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
+			_ = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
 			await refreshTokenRepository.Received().CreateAsync(Arg.Any<RefreshTokenEntity>());
@@ -226,7 +226,7 @@ namespace Tests.Strasnote.Auth
 				jwtTokenGenerator);
 
 			// Act
-			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
+			_ = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
 			jwtTokenGenerator.Received().GenerateRefreshToken(Arg.Any<UserEntity>());
@@ -244,7 +244,7 @@ namespace Tests.Strasnote.Auth
 				jwtTokenGenerator);
 
 			// Act
-			var result = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
+			_ = await jwtTokenIssuer.GetRefreshTokenAsync(Rnd.Str, Rnd.Str);
 
 			// Assert
 			await jwtTokenGenerator.Received().GenerateAccessTokenAsync(Arg.Any<UserEntity>());

@@ -18,7 +18,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var entity = new TestEntity(0, Rnd.Str, Rnd.Int);
 
 			// Act
-			repo.CreateAsync(entity);
+			_ = repo.CreateAsync(entity);
 
 			// Assert
 			queries.Received().GetCreateQuery(table, Arg.Is<List<string>>(c =>
@@ -34,7 +34,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var entity = new TestEntity(0, Rnd.Str, Rnd.Int);
 
 			// Act
-			repo.CreateAsync(entity);
+			_ = repo.CreateAsync(entity);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

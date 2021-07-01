@@ -45,7 +45,7 @@ namespace Strasnote.Auth.Api.Controllers
 		}
 
 		[HttpPost("refresh")]
-		public async Task<IActionResult> GetRefreshToken()
+		public Task<IActionResult> GetRefreshToken()
 		{
 			throw new NotImplementedException();
 		}

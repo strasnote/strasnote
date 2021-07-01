@@ -36,7 +36,24 @@ namespace Strasnote.Notes.Data
 			});
 
 		/// <inheritdoc/>
-		public async Task<IEnumerable<TTag>> GetForNote<TTag>(ulong noteId, ulong? userId)
+		public async Task<bool> AddToNote(ulong tagId, ulong noteId, ulong userId)
+		{
+			// Create new connection
+			using var connection = Client.Connect();
+
+			// Add tag to the note
+			var result = await connection.ExecuteScalarAsync<int>(
+				sql: StoredProcedure.AddTagToNote,
+				param: new { tagId, noteId, userId },
+				commandType: CommandType.StoredProcedure
+			).ConfigureAwait(false);
+
+			// Return result
+			return result == 1;
+		}
+
+		/// <inheritdoc/>
+		public async Task<IEnumerable<TTag>> GetForNote<TTag>(ulong noteId, ulong userId)
 		{
 			// Create new connection
 			using var connection = Client.Connect();

@@ -56,8 +56,8 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 
 		protected override void Down()
 		{
-			Execute("DROP TABLE `auth.user`;");
-			Execute("DROP TABLE `auth.refresh_token`;");
+			Execute("DROP TABLE IF EXISTS `auth.user`;");
+			Execute("DROP TABLE IF EXISTS `auth.refresh_token`;");
 		}
 	}
 }

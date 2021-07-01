@@ -3,24 +3,26 @@
 
 using System.Threading.Tasks;
 using NSubstitute;
-using Strasnote.Data.Entities.Notes;
+using Strasnote.Util;
 using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {
-	public class Create_Tests : NoteController_Tests
+	public class AddTag_Tests : NoteController_Tests
 	{
 		[Fact]
-		public async Task Calls_Notes_CreateAsync()
+		public async Task Calls_Tags_AddToNote()
 		{
 			// Arrange
 			var (controller, v) = Setup();
+			var noteId = Rnd.Ulng;
+			var tagId = Rnd.Ulng;
 
 			// Act
-			await controller.Create();
+			await controller.AddTag(noteId, new(tagId));
 
 			// Assert
-			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId));
+			await v.Tags.Received().AddToNote(tagId, noteId, v.UserId);
 		}
 	}
 }

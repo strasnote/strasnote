@@ -18,7 +18,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var userId = Rnd.Ulng;
 
 			// Act
-			repo.DeleteAsync(entityId, userId);
+			_ = repo.DeleteAsync(entityId, userId);
 
 			// Assert
 			queries.Received().GetDeleteQuery(table, entityId, userId);
@@ -31,7 +31,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var (repo, _, _, log, _) = SqlRepository_Setup.Get();
 
 			// Act
-			repo.DeleteAsync(Rnd.Ulng, Rnd.Ulng);
+			_ = repo.DeleteAsync(Rnd.Ulng, Rnd.Ulng);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());

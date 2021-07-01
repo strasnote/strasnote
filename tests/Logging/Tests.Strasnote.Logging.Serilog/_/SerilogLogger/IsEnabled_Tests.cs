@@ -17,7 +17,7 @@ namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 			// Arrange
 			var serilog = Substitute.For<ILogger>();
 			var logger = new SerilogLogger(serilog);
-			var level = Microsoft.Extensions.Logging.LogLevel.Information;
+			const Microsoft.Extensions.Logging.LogLevel level = Microsoft.Extensions.Logging.LogLevel.Information;
 
 			// Act
 			logger.IsEnabled(level);

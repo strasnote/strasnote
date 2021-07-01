@@ -18,7 +18,7 @@ namespace Strasnote.Notes.Api.Controllers
 	[Authorize]
 	[ApiController]
 	[ApiVersion("1.0")]
-	[Route("api/v{version:apiVersion}/[controller]")]
+	[Route("api/v{version:apiVersion}/note")]
 	public class NoteController : Controller
 	{
 		private readonly INoteRepository notes;
@@ -53,7 +53,7 @@ namespace Strasnote.Notes.Api.Controllers
 			);
 
 		/// <summary>
-		/// Creates a Note within a folder.
+		/// Creates a Note within a Folder.
 		/// </summary>
 		/// <remarks>
 		/// POST /note/in-folder
@@ -117,7 +117,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// }
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
-		/// <param name="model">Updated Note values</param>
+		/// <param name="model">Updated Note model</param>
 		[HttpPut("{noteId}")]
 		[ProducesResponseType(typeof(SaveContentModel), 200)]
 		[ProducesResponseType(401)]
@@ -126,6 +126,27 @@ namespace Strasnote.Notes.Api.Controllers
 		public Task<IActionResult> SaveContent(ulong noteId, [FromBody] SaveContentModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.UpdateAsync<SaveContentModel?>(noteId, model, userId)
+			);
+
+		/// <summary>
+		/// Adds a Tag to a Note.
+		/// </summary>
+		/// <remarks>
+		/// POST /note/42/tag
+		/// {
+		///     "tagId": 42
+		/// }
+		/// </remarks>
+		/// <param name="noteId">The Note ID</param>
+		/// <param name="model">Tag model</param>
+		[HttpPost("{noteId}/tag")]
+		[ProducesResponseType(typeof(bool), 200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> AddTag(ulong noteId, [FromBody] AddTagModel model) =>
+			IsAuthenticatedUserAsync(
+				then: userId => tags.AddToNote(model.TagId, noteId, userId)
 			);
 
 		/// <summary>
