@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Data.Abstracts;
 using Strasnote.Util;
@@ -15,7 +14,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 	public class QuerySingleAsync_Tests
 	{
 		[Fact]
-		public async Task Calls_Get_Retrieve_Query_With_Correct_Values()
+		public void Calls_Get_Retrieve_Query_With_Correct_Values()
 		{
 			// Arrange
 			var (repo, _, queries, _, table) = SqlRepository_Setup.Get();
@@ -35,7 +34,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var userId = Rnd.Ulng;
 
 			// Act
-			await repo.QuerySingleAsync<TestEntity>(userId, predicates);
+			_ = repo.QuerySingleAsync<TestEntity>(userId, predicates);
 
 			// Assert
 			queries.Received().GetRetrieveQuery(table, Arg.Is<List<string>>(c =>
@@ -47,7 +46,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 		}
 
 		[Fact]
-		public async Task Logs_Operation()
+		public void Logs_Operation()
 		{
 			// Arrange
 			var (repo, _, _, log, _) = SqlRepository_Setup.Get();
@@ -59,7 +58,7 @@ namespace Strasnote.Data.SqlRepository_Tests
 			var userId = Rnd.Ulng;
 
 			// Act
-			await repo.QuerySingleAsync<TestEntity>(userId, predicates);
+			_ = repo.QuerySingleAsync<TestEntity>(userId, predicates);
 
 			// Assert
 			log.Received().Trace(Arg.Any<string>(), Arg.Any<object[]>());
