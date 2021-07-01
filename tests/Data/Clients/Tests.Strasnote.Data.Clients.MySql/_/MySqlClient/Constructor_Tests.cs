@@ -33,7 +33,7 @@ namespace Strasnote.Data.Clients.MySql.MySqlClient_Tests
 			options.Value.Returns(new DbConfig());
 
 			// Act
-			void action() => new MySqlClient(options);
+			void action() => _ = new MySqlClient(options);
 
 			// Assert
 			Assert.Throws<DbConfigMissingException<MySqlDbConfig>>(action);
@@ -48,7 +48,7 @@ namespace Strasnote.Data.Clients.MySql.MySqlClient_Tests
 			options.Value.Returns(config);
 
 			// Act
-			void action() => new MySqlClient(options);
+			void action() => _ = new MySqlClient(options);
 
 			// Assert
 			Assert.Throws<DbConfigInvalidException<MySqlDbConfig>>(action);

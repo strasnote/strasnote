@@ -4,7 +4,6 @@
 using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Data.Entities.Notes;
-using Strasnote.Util;
 using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests

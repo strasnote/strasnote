@@ -33,7 +33,7 @@ namespace Tests.Strasnote.Auth
 
 		private readonly IUserManager userManager = Substitute.For<IUserManager>();
 
-		private UserEntity userEntity = new()
+		private readonly UserEntity userEntity = new()
 		{
 			UserName = Rnd.Str,
 			Id = Rnd.Ulng

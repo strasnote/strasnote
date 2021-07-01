@@ -16,7 +16,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			// Arrange
 			var (controller, v) = Setup();
 			var noteId = Rnd.Ulng;
-			var tagId =  Rnd.Ulng;
+			var tagId = Rnd.Ulng;
 
 			// Act
 			await controller.AddTag(noteId, new(tagId));
