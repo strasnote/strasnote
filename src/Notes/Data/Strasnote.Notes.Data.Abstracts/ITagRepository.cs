@@ -28,5 +28,13 @@ namespace Strasnote.Notes.Data.Abstracts
 		/// <param name="noteId">Note ID</param>
 		/// <param name="userId">User ID</param>
 		Task<IEnumerable<TTag>> GetForNote<TTag>(ulong noteId, ulong userId);
+
+		/// <summary>
+		/// Remove a tag from the specified note
+		/// </summary>
+		/// <param name="tagId">Tag ID</param>
+		/// <param name="noteId">Note ID</param>
+		/// <param name="userId">User ID</param>
+		Task<bool> RemoveFromNote(ulong tagId, ulong noteId, ulong userId);
 	}
 }
