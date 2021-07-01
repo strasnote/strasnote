@@ -17,7 +17,7 @@ namespace Strasnote.Notes.Api.Controllers
 	[Authorize]
 	[ApiController]
 	[ApiVersion("1.0")]
-	[Route("api/v{version:apiVersion}/[controller]")]
+	[Route("api/v{version:apiVersion}/folder")]
 	public class FolderController : Controller
 	{
 		private readonly IFolderRepository folders;
