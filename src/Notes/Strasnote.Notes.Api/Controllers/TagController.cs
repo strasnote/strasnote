@@ -81,7 +81,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> SaveContent(ulong tagId, [FromBody] SaveNameModel model) =>
+		public Task<IActionResult> SaveName(ulong tagId, [FromBody] SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.UpdateAsync<SaveNameModel?>(tagId, model, userId)
 			);
