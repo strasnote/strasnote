@@ -129,6 +129,24 @@ namespace Strasnote.Notes.Api.Controllers
 			);
 
 		/// <summary>
+		/// Add Tag to a Note.
+		/// </summary>
+		/// <remarks>
+		/// POST /note/42/tag/42
+		/// </remarks>
+		/// <param name="noteId">The Note ID</param>
+		/// <param name="tagId">The Tag ID</param>
+		[HttpPost("{noteId}/tag/{tagId}")]
+		[ProducesResponseType(typeof(bool), 200)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> AddTag(ulong noteId, ulong tagId) =>
+			IsAuthenticatedUserAsync(
+				then: userId => tags.AddToNote(tagId, noteId, userId)
+			);
+
+		/// <summary>
 		/// Deletes a Note by ID.
 		/// </summary>
 		/// <remarks>
