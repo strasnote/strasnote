@@ -119,21 +119,14 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpDelete("{folderId}")]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(204)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> Delete(ulong folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.DeleteAsync(folderId, userId),
-				result: affected => affected switch
-				{
-					1 =>
-						Ok(true),
-
-					_ =>
-						NotFound()
-				}
+				result: _ => NoContent()
 			);
 	}
 }

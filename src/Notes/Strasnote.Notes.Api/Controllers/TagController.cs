@@ -94,21 +94,14 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="tagId">The Tag ID</param>
 		[HttpDelete("{tagId}")]
-		[ProducesResponseType(200)]
+		[ProducesResponseType(204)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> Delete(ulong tagId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.DeleteAsync(tagId, userId),
-				result: affected => affected switch
-				{
-					1 =>
-						Ok(true),
-
-					_ =>
-						NotFound()
-				}
+				result: _ => NoContent()
 			);
 	}
 }
