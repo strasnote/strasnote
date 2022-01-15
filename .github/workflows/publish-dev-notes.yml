@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v2
     -
       name: Prepare - Read image version
-      uses: bfren/read-file-action@v1
+      uses: bfren/action-read-file@v1
       with:
         path: ./Version
       id: version
