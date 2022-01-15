@@ -47,7 +47,8 @@ jobs:
         dotnet publish ./src/Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
-          --output ./publish
+          --output ./publish \
+          --no-self-contained
     -
       name: B - Push
       id: docker_build

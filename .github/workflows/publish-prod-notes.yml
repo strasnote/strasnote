@@ -58,7 +58,8 @@ jobs:
         dotnet publish ./src/Notes/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
-          --output ./publish
+          --output ./publish \
+          --no-self-contained
     -
       name: E - Push
       id: docker_build
