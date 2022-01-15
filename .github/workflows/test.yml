@@ -1,5 +1,6 @@
 name: Test
 
+#Note: as this is on: push, you have to push to trigger this, you can't just re-run the GitHub actions
 on:
   push:
     branches-ignore:
@@ -23,7 +24,7 @@ jobs:
       name: Prepare - Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
     - 
       name: A - Restore
       run: |

@@ -39,7 +39,7 @@ namespace Strasnote.Util
 			/// Thanks to https://stackoverflow.com/users/11178549/theodor-zoulias for comments and suggested improvements
 			/// - see https://stackoverflow.com/a/64264895/8199362
 			/// </remarks>
-			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RandomNumberGenerator"/></param>
 			public static double Get(RandomNumberGenerator? generator = null)
 			{
 				// Get 8 random bytes to convert into a 64-bit integer
@@ -58,7 +58,7 @@ namespace Strasnote.Util
 			/// </remarks>
 			/// <param name="min">Minimum acceptable value</param>
 			/// <param name="max">Maximum acceptable value</param>
-			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RandomNumberGenerator"/></param>
 			public static int GetInt32(int min = 0, int max = int.MaxValue, RandomNumberGenerator? generator = null)
 			{
 				// Check arguments
@@ -88,7 +88,7 @@ namespace Strasnote.Util
 			/// </remarks>
 			/// <param name="min">Minimum acceptable value</param>
 			/// <param name="max">Maximum acceptable value</param>
-			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RandomNumberGenerator"/></param>
 			public static uint GetUInt32(uint min = 0, uint max = uint.MaxValue, RandomNumberGenerator? generator = null)
 			{
 				// Check arguments
@@ -113,7 +113,7 @@ namespace Strasnote.Util
 			/// </remarks>
 			/// <param name="min">Minimum acceptable value</param>
 			/// <param name="max">Maximum acceptable value</param>
-			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RandomNumberGenerator"/></param>
 			public static long GetInt64(long min = 0, long max = long.MaxValue, RandomNumberGenerator? generator = null)
 			{
 				// Check arguments
@@ -143,7 +143,7 @@ namespace Strasnote.Util
 			/// </remarks>
 			/// <param name="min">Minimum acceptable value</param>
 			/// <param name="max">Maximum acceptable value</param>
-			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RandomNumberGenerator"/></param>
 			public static ulong GetUInt64(ulong min = 0, ulong max = ulong.MaxValue, RandomNumberGenerator? generator = null)
 			{
 				// Check arguments

@@ -20,9 +20,9 @@ jobs:
       uses: actions/checkout@v2
     -
       name: Prepare - Read image version
-      uses: bfren/read-file-action@v1
+      uses: bfren/read-file@v1
       with:
-        path: ./Version
+        file: ./VERSION
       id: version
     -
       name: Prepare - Set up QEMU
@@ -40,14 +40,15 @@ jobs:
       name: Prepare - Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
     -
       name: A - Publish
       run: |
         dotnet publish ./src/Auth/Strasnote.Auth.Api/Strasnote.Auth.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
-          --output ./publish
+          --output ./publish \
+          --no-self-contained
     -
       name: B - Push
       id: docker_build
@@ -59,7 +60,7 @@ jobs:
         platforms: linux/amd64
         tags: |
           strasnote/auth:dev
-          strasnote/auth:${{ steps.version.outputs.content }}-dev
+          strasnote/auth:${{ steps.version.outputs.content }}dev
     -
       name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}

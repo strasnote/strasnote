@@ -93,7 +93,7 @@ namespace Tests.Strasnote.Auth.Api
 			// Act
 			var result = await tokenController.GetToken(tokenRequest);
 			var okResult = (OkObjectResult)result;
-			var tokenResponseViewModel = (TokenResponseViewModel)okResult.Value;
+			var tokenResponseViewModel = (TokenResponseViewModel)okResult.Value!;
 
 			// Assert
 			Assert.False(string.IsNullOrWhiteSpace(tokenResponseViewModel.AccessToken));
@@ -143,7 +143,7 @@ namespace Tests.Strasnote.Auth.Api
 			// Act
 			var result = await tokenController.GetToken(tokenRequest);
 			var unauthorizedResult = (UnauthorizedObjectResult)result;
-			var tokenResponseViewModel = (TokenResponseViewModel)unauthorizedResult.Value;
+			var tokenResponseViewModel = (TokenResponseViewModel)unauthorizedResult.Value!;
 
 			// Assert
 			Assert.False(tokenResponseViewModel.Success);
