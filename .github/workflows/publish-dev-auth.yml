@@ -59,7 +59,7 @@ jobs:
         platforms: linux/amd64
         tags: |
           strasnote/auth:dev
-          strasnote/auth:${{ steps.version.outputs.content }}-dev
+          strasnote/auth:${{ steps.version.outputs.content }}dev
     -
       name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
