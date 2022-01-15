@@ -1,5 +1,6 @@
 name: Test
 
+#Note: as this is on: push, you have to push to trigger this, you can't just re-run the GitHub actions
 on:
   push:
     branches-ignore:
