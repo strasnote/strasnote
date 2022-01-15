@@ -31,14 +31,14 @@ namespace Strasnote.Util
 			/// Return an array of random bytes
 			/// </summary>
 			/// <param name="length">The length of the byte array</param>
-			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RandomNumberGenerator"/></param>
 			public static byte[] Get(int length, RandomNumberGenerator? generator = null)
 			{
 				byte[] b = new byte[length];
 
 				if (generator is null)
 				{
-					using var csp = new RNGCryptoServiceProvider();
+					using var csp = RandomNumberGenerator.Create();
 					csp.GetBytes(b);
 				}
 				else

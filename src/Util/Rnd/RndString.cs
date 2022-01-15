@@ -95,7 +95,7 @@ namespace Strasnote.Util
 			/// <param name="upper">If true (default) uppercase letters will be included</param>
 			/// <param name="numbers">If true numbers will be included</param>
 			/// <param name="special">If true special characters will be included</param>
-			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RNGCryptoServiceProvider"/></param>
+			/// <param name="generator">[Optional] Random Number Generator - if null will use <see cref="RandomNumberGenerator"/></param>
 			/// <returns>Random string including specified character groups</returns>
 			public static string Get(int length, bool upper = true, bool numbers = false, bool special = false, RandomNumberGenerator? generator = null)
 			{
