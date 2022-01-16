@@ -74,6 +74,26 @@ namespace Strasnote.Notes.Api.Controllers
 			);
 
 		/// <summary>
+		/// Moves a note to a folder. Set FolderId to null to remove the note from all folders.
+		/// </summary>
+		/// <remarks>
+		/// {
+		///		"FolderId": 42
+		///	}
+		/// </remarks>
+		/// <param name="noteId">The ID of the note we're working with</param>
+		/// <param name="model">MoveToFolderModel</param>
+		/// <returns>The ID of the new folder</returns>
+		[HttpPut("{noteId}/move")]
+		[ProducesResponseType(typeof(ulong?), 201)]
+		[ProducesResponseType(401)]
+		[ProducesResponseType(500)]
+		public Task<IActionResult> MoveToFolder(ulong noteId, [FromBody] MoveToFolderModel model) =>
+			IsAuthenticatedUserAsync(
+				then: userId => notes.UpdateAsync(noteId, model, userId)
+			);
+
+		/// <summary>
 		/// Retrieves a Note by ID.
 		/// </summary>
 		/// <remarks>
