@@ -3,7 +3,7 @@
 
 using System.Data;
 using Microsoft.Extensions.Options;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Exceptions;
