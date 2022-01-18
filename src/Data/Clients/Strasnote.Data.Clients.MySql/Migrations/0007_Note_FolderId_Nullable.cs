@@ -14,6 +14,8 @@ namespace Strasnote.Data.Clients.MySql.Migrations
 		");
 
 		protected override void Down() => Execute(@"
+			UPDATE `strasnote-dev`.`main.note` SET `FolderId`='0' WHERE `FolderId` IS NULL;
+
 			ALTER TABLE `main.note`
 			CHANGE COLUMN `FolderId` `FolderId` BIGINT(20) NOT NULL DEFAULT '0' AFTER `NoteUpdated`;
 		");
