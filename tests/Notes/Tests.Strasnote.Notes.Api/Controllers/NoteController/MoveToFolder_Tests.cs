@@ -1,10 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NSubstitute;
 using Strasnote.Notes.Api.Models.Notes;
@@ -20,7 +16,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var noteId = Rnd.Ulng;
+			var noteId = new NoteIdModel { Value = Rnd.Ulng };
 			var folderId = Rnd.Ulng;
 
 			var model = new MoveToFolderModel
@@ -32,7 +28,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			await controller.MoveToFolder(noteId, model);
 
 			// Assert
-			await v.Notes.Received().UpdateAsync(noteId, model, v.UserId);
+			await v.Notes.Received().UpdateAsync(noteId.Value, model, v.UserId);
 		}
 	}
 }

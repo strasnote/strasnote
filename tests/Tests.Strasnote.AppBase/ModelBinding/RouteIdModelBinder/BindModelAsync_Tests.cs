@@ -115,7 +115,7 @@ namespace Strasnote.AppBase.ModelBinding.RouteIdModelBinder_Tests
 			// Assert
 			Assert.True(context.Result.IsModelSet);
 			var model = Assert.IsType<IdType>(context.Result.Model);
-			Assert.Equal(id, model.Id);
+			Assert.Equal(id, model.Value);
 		}
 
 		public sealed record class IdType : RouteId;

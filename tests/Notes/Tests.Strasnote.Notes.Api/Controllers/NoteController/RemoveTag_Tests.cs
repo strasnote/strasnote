@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using NSubstitute;
+using Strasnote.Notes.Api.Models.Notes;
 using Strasnote.Util;
 using Xunit;
 
@@ -15,14 +16,14 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var noteId = Rnd.Ulng;
-			var tagId = Rnd.Ulng;
+			var noteId = new NoteIdModel { Value = Rnd.Ulng };
+			var tagId = new TagIdModel { Value = Rnd.Ulng };
 
 			// Act
 			await controller.RemoveTag(noteId, tagId);
 
 			// Assert
-			await v.Tags.Received().RemoveFromNote(tagId, noteId, v.UserId);
+			await v.Tags.Received().RemoveFromNote(tagId.Value, noteId.Value, v.UserId);
 		}
 	}
 }

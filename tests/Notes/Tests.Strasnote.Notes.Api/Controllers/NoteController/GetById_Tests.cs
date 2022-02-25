@@ -16,13 +16,13 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var noteId = Rnd.Ulng;
+			var noteId = new NoteIdModel { Value = Rnd.Ulng };
 
 			// Act
 			await controller.GetById(noteId);
 
 			// Assert
-			await v.Notes.Received().RetrieveAsync<GetByIdModel?>(noteId, v.UserId);
+			await v.Notes.Received().RetrieveAsync<GetByIdModel?>(noteId.Value, v.UserId);
 		}
 	}
 }
