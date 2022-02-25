@@ -23,7 +23,7 @@ namespace Strasnote.Encryption.Keys_Tests
 			// Assert
 			var some = result.AssertSome();
 			Assert.Equal(some.PublicKey, some.PublicKey);
-			Assert.NotEqual(some.PrivateKey, some.PrivateKey);
+			Assert.NotEqual(keyPair.PrivateKey, some.PrivateKey);
 			Assert.NotEmpty(some.Nonce);
 		}
 
