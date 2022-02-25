@@ -19,9 +19,9 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="password">Password string</param>
 		static internal Option<byte[]> PasswordGeneric(string password) =>
-			Return(
+			Some(
 				() => GenericHash.Hash(Encoding.UTF8.GetBytes(password), null, 32), // must be 32 bytes
-				e => new Msg.GenericPasswordHashFailedException(e)
+				e => new M.GenericPasswordHashFailedException(e)
 			);
 
 		/// <summary>
@@ -29,19 +29,19 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="password">Password string</param>
 		public static Option<string> PasswordArgon(string password) =>
-			Return(
+			Some(
 				() => PasswordHash.ArgonHashString(password, PasswordHash.StrengthArgon.Moderate),
-				e => new Msg.ArgonPasswordHashFailedException(e)
+				e => new M.ArgonPasswordHashFailedException(e)
 			);
 
 		/// <summary>Messages</summary>
-		public static class Msg
+		public static class M
 		{
 			/// <summary>Failed to hash password using generic hash</summary>
-			public sealed record GenericPasswordHashFailedException(Exception Exception) : IExceptionMsg { }
+			public sealed record GenericPasswordHashFailedException(Exception Value) : ExceptionMsg { }
 
 			/// <summary>Failed to hash password using Argon</summary>
-			public sealed record ArgonPasswordHashFailedException(Exception Exception) : IExceptionMsg { }
+			public sealed record ArgonPasswordHashFailedException(Exception Value) : ExceptionMsg { }
 		}
 	}
 }

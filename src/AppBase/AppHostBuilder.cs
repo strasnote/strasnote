@@ -47,7 +47,7 @@ namespace Strasnote.AppBase
 		/// </summary>
 		/// <param name="host">IHostEnvironment</param>
 		/// <param name="config">IConfigurationBuilder</param>
-		protected virtual void ConfigureAppConfiguration(THost host, IConfigurationBuilder config)
+		protected virtual void ConfigureAppConfiguration(IHostEnvironment host, IConfigurationBuilder config)
 		{
 			// Add JSON secrets
 			config.AddJsonFile($"{host.ContentRootPath}/appsettings.Secrets.json", optional: true);
@@ -61,7 +61,7 @@ namespace Strasnote.AppBase
 		/// </summary>
 		/// <param name="host">IHostEnvironment</param>
 		/// <param name="config">IConfiguration</param>
-		protected virtual void ConfigureSerilog(THost host, IConfiguration config, LoggerConfiguration loggerConfig) =>
+		protected virtual void ConfigureSerilog(IHostEnvironment host, IConfiguration config, LoggerConfiguration loggerConfig) =>
 			loggerConfig
 				.ReadFrom.Configuration(config)
 				.Enrich.FromLogContext()
