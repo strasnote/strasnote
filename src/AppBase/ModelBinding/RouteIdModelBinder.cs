@@ -15,7 +15,7 @@ namespace Strasnote.AppBase.ModelBinding
 		where T : RouteId, new()
 	{
 		/// <summary>
-		/// Get value and attempt to parse as a long
+		/// Get value and attempt to parse as a ulong, before returning as a <typeparamref name="T"/>
 		/// </summary>
 		/// <param name="bindingContext">ModelBindingContext</param>
 		public Task BindModelAsync(ModelBindingContext bindingContext)
@@ -33,17 +33,13 @@ namespace Strasnote.AppBase.ModelBinding
 			bindingContext.Result = ulong.TryParse(valueProviderResult.FirstValue, out ulong id) switch
 			{
 				true =>
-					success(id),
+					ModelBindingResult.Success(new T { Id = id }),
 
 				false =>
-					success(0)
+					ModelBindingResult.Failed()
 			};
 
 			return Task.CompletedTask;
-
-			// Set the model value using the parsed ID
-			static ModelBindingResult success(ulong id) =>
-				ModelBindingResult.Success(new T { Id = id });
 		}
 	}
 }

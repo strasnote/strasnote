@@ -6,6 +6,11 @@ namespace Strasnote.AppBase.Abstracts
 	/// <summary>
 	/// Used to wrap IDs in URL routes, to enable Fluent Validation.
 	/// </summary>
-	/// <param name="Id">Id value</param>
-	public abstract record class RouteId(ulong Id);
+	public abstract record class RouteId(ulong Id)
+	{
+		/// <summary>
+		/// Define a parameterless constructor to suppor MVC model binding
+		/// </summary>
+		protected RouteId() : this(0UL) { }
+	}
 }
