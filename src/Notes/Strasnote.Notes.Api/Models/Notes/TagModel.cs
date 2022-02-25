@@ -4,7 +4,7 @@
 namespace Strasnote.Notes.Api.Models.Notes
 {
 	/// <summary>
-	/// See <see cref="Strasnote.Notes.Api.Controllers.NoteController.GetTags(ulong)"/>
+	/// See <see cref="Controllers.NoteController.GetTags(NoteIdModel)"/>
 	/// </summary>
 	/// <param name="Id">Tag ID</param>
 	/// <param name="TagName">Tag name</param>

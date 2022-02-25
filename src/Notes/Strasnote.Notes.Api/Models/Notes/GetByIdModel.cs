@@ -6,7 +6,7 @@ using System;
 namespace Strasnote.Notes.Api.Models.Notes
 {
 	/// <summary>
-	/// See <see cref="Strasnote.Notes.Api.Controllers.NoteController.GetById(ulong)"/>
+	/// See <see cref="Controllers.NoteController.GetById(NoteIdModel)"/>
 	/// </summary>
 	/// <param name="Id">Note ID</param>
 	/// <param name="NoteContent">Note content</param>

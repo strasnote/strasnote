@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Strasnote.AppBase;
+using Strasnote.AppBase.ModelBinding;
 using Strasnote.Auth.Data.Extensions;
 using Strasnote.Auth.Extensions;
 using Strasnote.Data.Clients.MySql;
@@ -26,7 +27,7 @@ namespace Strasnote.Notes.Api
 			base.ConfigureServices(host, services, config);
 
 			// MVC
-			services.AddControllers();
+			services.AddControllers(opt => opt.ModelBinderProviders.Insert(0, new RouteIdModelBinderProvider()));
 
 			// Auth
 			services.AddAuth(config);

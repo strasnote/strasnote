@@ -64,7 +64,7 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="model">CreateInFolderModel</param>
 		/// <returns>The ID of the new Folder</returns>
 		[HttpPost("in-folder")]
-		[ProducesResponseType(typeof(long), 201)]
+		[ProducesResponseType(typeof(ulong), 201)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
 		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
@@ -85,9 +85,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> GetById(ulong folderId) =>
+		public Task<IActionResult> GetById([FromRoute] FolderIdModel folderId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => folders.RetrieveAsync<GetByIdModel?>(folderId, userId)
+				then: userId => folders.RetrieveAsync<GetByIdModel?>(folderId.Value, userId)
 			);
 
 		/// <summary>
@@ -106,9 +106,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> SaveName(ulong folderId, SaveNameModel model) =>
+		public Task<IActionResult> SaveName([FromRoute] FolderIdModel folderId, SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
-				then: userId => folders.UpdateAsync(folderId, model, userId)
+				then: userId => folders.UpdateAsync(folderId.Value, model, userId)
 			);
 
 		/// <summary>
@@ -123,9 +123,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> Delete(ulong folderId) =>
+		public Task<IActionResult> Delete([FromRoute] FolderIdModel folderId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => folders.DeleteAsync(folderId, userId),
+				then: userId => folders.DeleteAsync(folderId.Value, userId),
 				result: _ => NoContent()
 			);
 	}

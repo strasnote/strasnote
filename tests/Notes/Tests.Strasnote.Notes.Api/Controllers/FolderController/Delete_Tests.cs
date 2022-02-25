@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using NSubstitute;
+using Strasnote.Notes.Api.Models.Folders;
 using Strasnote.Util;
 using Xunit;
 
@@ -15,13 +16,13 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var id = Rnd.Ulng;
+			var id = new FolderIdModel { Value = Rnd.Ulng };
 
 			// Act
 			await controller.Delete(id);
 
 			// Assert
-			await v.Folders.Received().DeleteAsync(id, v.UserId);
+			await v.Folders.Received().DeleteAsync(id.Value, v.UserId);
 		}
 	}
 }

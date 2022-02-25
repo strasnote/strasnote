@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using Strasnote.AppBase.Abstracts;
+
 namespace Strasnote.Notes.Api.Models.Tags
 {
 	/// <summary>
-	/// See <see cref="Controllers.TagController.Create"/>
+	/// Tag ID (wrapped for fluent validation)
 	/// </summary>
-	public sealed record CreateModel(string TagName);
+	public sealed record class TagIdModel : RouteId;
 }

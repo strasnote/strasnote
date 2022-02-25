@@ -16,13 +16,13 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var id = Rnd.Ulng;
+			var id = new FolderIdModel { Value = Rnd.Ulng };
 
 			// Act
 			await controller.GetById(id);
 
 			// Assert
-			await v.Folders.Received().RetrieveAsync<GetByIdModel?>(id, v.UserId);
+			await v.Folders.Received().RetrieveAsync<GetByIdModel?>(id.Value, v.UserId);
 		}
 	}
 }
