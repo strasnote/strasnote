@@ -29,18 +29,18 @@ namespace Strasnote.AppBase
 				config => ConfigureHostConfiguration(config, args)
 			)
 
+			// Configure App
+			.ConfigureAppConfiguration(
+				(host, config) => ConfigureAppConfiguration(host.HostingEnvironment, config)
+			)
+
+			// Configure Serilog
+			.UseSerilog(
+				(host, config) => ConfigureSerilog(host.HostingEnvironment, host.Configuration, config)
+			)
+
 			// Configure Web Host with defaults
 			.ConfigureWebHostDefaults(builder => builder
-
-				// Configure App
-				.ConfigureAppConfiguration(
-					(host, config) => ConfigureAppConfiguration(host.HostingEnvironment, config)
-				)
-
-				// Configure Serilog
-				.UseSerilog(
-					(host, config) => ConfigureSerilog(host.HostingEnvironment, host.Configuration, config)
-				)
 
 				// Configure Services
 				.ConfigureServices(
