@@ -88,9 +88,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(typeof(ulong?), 201)]
 		[ProducesResponseType(401)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> MoveToFolder(ulong noteId, [FromBody] MoveToFolderModel model) =>
+		public Task<IActionResult> MoveToFolder([FromRoute] NoteIdModel noteId, [FromBody] MoveToFolderModel model) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.UpdateAsync(noteId, model, userId)
+				then: userId => notes.UpdateAsync(noteId.Value, model, userId)
 			);
 
 		/// <summary>
@@ -105,9 +105,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> GetById(ulong noteId) =>
+		public Task<IActionResult> GetById([FromRoute] NoteIdModel noteId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.RetrieveAsync<GetByIdModel?>(noteId, userId)
+				then: userId => notes.RetrieveAsync<GetByIdModel?>(noteId.Value, userId)
 			);
 
 		/// <summary>
@@ -122,9 +122,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> GetTags(ulong noteId) =>
+		public Task<IActionResult> GetTags([FromRoute] NoteIdModel noteId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => tags.GetForNote<TagModel>(noteId, userId)
+				then: userId => tags.GetForNote<TagModel>(noteId.Value, userId)
 			);
 
 		/// <summary>
@@ -143,9 +143,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> SaveContent(ulong noteId, [FromBody] SaveContentModel model) =>
+		public Task<IActionResult> SaveContent([FromRoute] NoteIdModel noteId, [FromBody] SaveContentModel model) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.UpdateAsync<SaveContentModel?>(noteId, model, userId)
+				then: userId => notes.UpdateAsync<SaveContentModel?>(noteId.Value, model, userId)
 			);
 
 		/// <summary>
@@ -164,9 +164,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> AddTag(ulong noteId, [FromBody] AddTagModel model) =>
+		public Task<IActionResult> AddTag([FromRoute] NoteIdModel noteId, [FromBody] AddTagModel model) =>
 			IsAuthenticatedUserAsync(
-				then: userId => tags.AddToNote(model.TagId, noteId, userId)
+				then: userId => tags.AddToNote(model.TagId, noteId.Value, userId)
 			);
 
 		/// <summary>
@@ -182,9 +182,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> RemoveTag(ulong noteId, ulong tagId) =>
+		public Task<IActionResult> RemoveTag([FromRoute] NoteIdModel noteId, TagIdModel tagId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => tags.RemoveFromNote(tagId, noteId, userId),
+				then: userId => tags.RemoveFromNote(tagId.Value, noteId.Value, userId),
 				result: _ => NoContent()
 			);
 
@@ -200,9 +200,9 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> Delete(ulong noteId) =>
+		public Task<IActionResult> Delete([FromRoute] NoteIdModel noteId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.DeleteAsync(noteId, userId),
+				then: userId => notes.DeleteAsync(noteId.Value, userId),
 				result: _ => NoContent()
 			);
 	}

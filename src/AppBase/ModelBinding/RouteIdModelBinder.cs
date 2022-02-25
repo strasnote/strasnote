@@ -33,7 +33,7 @@ namespace Strasnote.AppBase.ModelBinding
 			bindingContext.Result = ulong.TryParse(valueProviderResult.FirstValue, out ulong id) switch
 			{
 				true =>
-					ModelBindingResult.Success(new T { Id = id }),
+					ModelBindingResult.Success(new T { Value = id }),
 
 				false =>
 					ModelBindingResult.Failed()

@@ -6,7 +6,7 @@ using System;
 namespace Strasnote.Notes.Api.Models.Tags
 {
 	/// <summary>
-	/// See <see cref="Strasnote.Notes.Api.Controllers.TagController.GetById(ulong)"/>
+	/// See <see cref="Controllers.TagController.GetById(TagIdModel)"/>
 	/// </summary>
 	/// <param name="Id">Note ID</param>
 	/// <param name="TagCreated">When the tag was created</param>
