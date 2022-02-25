@@ -4,7 +4,7 @@
 using Jeebs;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Encryption.Decrypt.Msg;
+using static Strasnote.Encryption.Decrypt.M;
 
 namespace Strasnote.Encryption.Decrypt_Tests
 {

@@ -8,7 +8,7 @@ using Strasnote.Data.Entities.Auth;
 using Strasnote.Data.Migrate;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Data.Migrate.DefaultUser.Msg;
+using static Strasnote.Data.Migrate.DefaultUser.M;
 
 namespace Strasnote.Data.DefaultUser_Tests
 {

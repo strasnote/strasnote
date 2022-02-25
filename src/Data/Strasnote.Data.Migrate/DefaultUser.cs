@@ -61,19 +61,19 @@ namespace Strasnote.Data.Migrate
 				var hasher = new PasswordHasher<UserEntity>();
 				var hashed = hasher.HashPassword(new(), password);
 
-				return Return(
+				return Some(
 					(email, hashed)
 				);
 			}
 
-			return None<(string, string), Msg.EmailAndPasswordMustBothBeSetMsg>();
+			return None<(string, string), M.EmailAndPasswordMustBothBeSetMsg>();
 		}
 
 		/// <summary>Messages</summary>
-		public static class Msg
+		public static class M
 		{
 			/// <summary>Email and password must both be set to automatically create a user</summary>
-			public sealed record EmailAndPasswordMustBothBeSetMsg : IMsg { }
+			public sealed record EmailAndPasswordMustBothBeSetMsg : Msg { }
 		}
 	}
 }

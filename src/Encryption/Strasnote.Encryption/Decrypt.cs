@@ -21,7 +21,7 @@ namespace Strasnote.Encryption
 		/// <param name="keyPair">Encrypted key pair</param>Hash
 		/// <param name="password">User's password</param>
 		static internal Option<byte[]> PrivateKey(EncryptedKeyPair keyPair, string password) =>
-			Return(
+			Some(
 				password
 			)
 			.Bind(
@@ -29,7 +29,7 @@ namespace Strasnote.Encryption
 			)
 			.Map(
 				h => SecretBox.Open(keyPair.PrivateKey, keyPair.Nonce, h),
-				e => new Msg.UnableToDecryptPrivateKeyExceptionMsg(e)
+				e => new M.UnableToDecryptPrivateKeyExceptionMsg(e)
 			);
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace Strasnote.Encryption
 			PrivateKey(recipientKeyPair, password)
 			.Map(
 				k => SealedPublicKeyBox.Open(cipherText, k, recipientKeyPair.PublicKey),
-				e => new Msg.UnableToDecryptValueExceptionMsg(e)
+				e => new M.UnableToDecryptValueExceptionMsg(e)
 			);
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Strasnote.Encryption
 			AsBytes(cipherText, recipientKeyPair, password)
 			.Map(
 				b => Encoding.UTF8.GetString(b),
-				e => new Msg.UnableToConvertBytesToStringExceptionMsg(e)
+				e => new M.UnableToConvertBytesToStringExceptionMsg(e)
 			);
 
 		/// <summary>
@@ -65,36 +65,36 @@ namespace Strasnote.Encryption
 			AsString(cipherText, recipientKeyPair, password)
 			.Map(
 				j => JsonSerializer.Deserialize<T>(j),
-				e => new Msg.JsonDeserialiseExceptionMsg(e)
+				e => new M.JsonDeserialiseExceptionMsg(e)
 			)
 			.Bind(
 				o => o switch
 				{
 					T =>
-						Return(o),
+						Some(o),
 
 					_ =>
-						None<T, Msg.JsonDeserialisedToNullMsg>()
+						None<T, M.JsonDeserialisedToNullMsg>()
 				}
 			);
 
 		/// <summary>Message</summary>
-		public static class Msg
+		public static class M
 		{
 			/// <summary><see cref="JsonSerializer.Deserialize{TValue}(string, JsonSerializerOptions?)"/> returned null</summary>
-			public sealed record JsonDeserialisedToNullMsg : IMsg { }
+			public sealed record JsonDeserialisedToNullMsg : Msg { }
 
 			/// <summary>Deserialising JSON failed</summary>
-			public sealed record JsonDeserialiseExceptionMsg(Exception Exception) : IExceptionMsg { }
+			public sealed record JsonDeserialiseExceptionMsg(Exception Value) : ExceptionMsg { }
 
 			/// <summary><see cref="Encoding.UTF8"/> failed to get string from the decrypted byte array</summary>
-			public sealed record UnableToConvertBytesToStringExceptionMsg(Exception Exception) : IExceptionMsg { }
+			public sealed record UnableToConvertBytesToStringExceptionMsg(Exception Value) : ExceptionMsg { }
 
 			/// <summary>The private key is corrupted, the nonce is wrong, or (most likely) the password is incorrect</summary>
-			public sealed record UnableToDecryptPrivateKeyExceptionMsg(Exception Exception) : IExceptionMsg { }
+			public sealed record UnableToDecryptPrivateKeyExceptionMsg(Exception Value) : ExceptionMsg { }
 
 			/// <summary>The nonce is wrong, or (most likely) the password is incorrect</summary>
-			public sealed record UnableToDecryptValueExceptionMsg(Exception Exception) : IExceptionMsg { }
+			public sealed record UnableToDecryptValueExceptionMsg(Exception Value) : ExceptionMsg { }
 		}
 	}
 }

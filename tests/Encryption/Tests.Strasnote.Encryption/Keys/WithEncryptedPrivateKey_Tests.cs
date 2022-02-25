@@ -21,9 +21,9 @@ namespace Strasnote.Encryption.Keys_Tests
 			var result = Keys.WithEncryptedPrivateKey(keyPair, password);
 
 			// Assert
-			var some = Assert.IsType<Some<EncryptedKeyPair>>(result).Value;
-			Assert.Equal(keyPair.PublicKey, some.PublicKey);
-			Assert.NotEqual(keyPair.PrivateKey, some.PrivateKey);
+			var some = result.AssertSome();
+			Assert.Equal(some.PublicKey, some.PublicKey);
+			Assert.NotEqual(some.PrivateKey, some.PrivateKey);
 			Assert.NotEmpty(some.Nonce);
 		}
 

@@ -7,7 +7,7 @@ using Jeebs;
 using Jeebs.Linq;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Encryption.Hash.Msg;
+using static Strasnote.Encryption.Hash.M;
 
 namespace Strasnote.Encryption.Hash_Tests
 {
