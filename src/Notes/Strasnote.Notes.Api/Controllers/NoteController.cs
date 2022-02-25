@@ -182,7 +182,7 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(401)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(500)]
-		public Task<IActionResult> RemoveTag([FromRoute] NoteIdModel noteId, TagIdModel tagId) =>
+		public Task<IActionResult> RemoveTag([FromRoute] NoteIdModel noteId, [FromRoute] TagIdModel tagId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.RemoveFromNote(tagId.Value, noteId.Value, userId),
 				result: _ => NoContent()
