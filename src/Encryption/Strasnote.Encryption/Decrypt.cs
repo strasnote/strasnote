@@ -4,9 +4,8 @@
 using System;
 using System.Text;
 using System.Text.Json;
-using Jeebs;
+using MaybeF;
 using Sodium;
-using static F.OptionF;
 
 namespace Strasnote.Encryption
 {
@@ -20,8 +19,8 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="keyPair">Encrypted key pair</param>Hash
 		/// <param name="password">User's password</param>
-		static internal Option<byte[]> PrivateKey(EncryptedKeyPair keyPair, string password) =>
-			Some(
+		static internal Maybe<byte[]> PrivateKey(EncryptedKeyPair keyPair, string password) =>
+			F.Some(
 				password
 			)
 			.Bind(
@@ -29,7 +28,7 @@ namespace Strasnote.Encryption
 			)
 			.Map(
 				h => SecretBox.Open(keyPair.PrivateKey, keyPair.Nonce, h),
-				e => new M.UnableToDecryptPrivateKeyExceptionMsg(e)
+				e => new R.UnableToDecryptPrivateKeyExceptionReason(e)
 			);
 
 		/// <summary>
@@ -38,22 +37,26 @@ namespace Strasnote.Encryption
 		/// <param name="cipherText">Encrypted contents</param>
 		/// <param name="recipientKeyPair">The recipient's key pair</param>
 		/// <param name="password">The recipient's public key</param>
-		static internal Option<byte[]> AsBytes(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
-			PrivateKey(recipientKeyPair, password)
+		static internal Maybe<byte[]> AsBytes(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
+			PrivateKey(
+				recipientKeyPair, password
+			)
 			.Map(
 				k => SealedPublicKeyBox.Open(cipherText, k, recipientKeyPair.PublicKey),
-				e => new M.UnableToDecryptValueExceptionMsg(e)
+				e => new R.UnableToDecryptValueExceptionReason(e)
 			);
 
 		/// <summary>
 		/// Decrypt and return as a string (usually JSON)
 		/// </summary>
 		/// <inheritdoc cref="AsBytes(byte[], EncryptedKeyPair, string)"/>
-		public static Option<string> AsString(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
-			AsBytes(cipherText, recipientKeyPair, password)
+		public static Maybe<string> AsString(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
+			AsBytes(
+				cipherText, recipientKeyPair, password
+			)
 			.Map(
 				b => Encoding.UTF8.GetString(b),
-				e => new M.UnableToConvertBytesToStringExceptionMsg(e)
+				e => new R.UnableToConvertBytesToStringExceptionReason(e)
 			);
 
 		/// <summary>
@@ -61,40 +64,42 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <typeparam name="T">Object type</typeparam>
 		/// <inheritdoc cref="AsBytes(byte[], EncryptedKeyPair, string)"/>
-		public static Option<T> AsObject<T>(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
-			AsString(cipherText, recipientKeyPair, password)
+		public static Maybe<T> AsObject<T>(byte[] cipherText, EncryptedKeyPair recipientKeyPair, string password) =>
+			AsString(
+				cipherText, recipientKeyPair, password
+			)
 			.Map(
 				j => JsonSerializer.Deserialize<T>(j),
-				e => new M.JsonDeserialiseExceptionMsg(e)
+				e => new R.JsonDeserialiseExceptionReason(e)
 			)
 			.Bind(
 				o => o switch
 				{
 					T =>
-						Some(o),
+						F.Some(o),
 
 					_ =>
-						None<T, M.JsonDeserialisedToNullMsg>()
+						F.None<T, R.JsonDeserialisedToNullReason>()
 				}
 			);
 
-		/// <summary>Message</summary>
-		public static class M
+		/// <summary>Reasons</summary>
+		public static class R
 		{
 			/// <summary><see cref="JsonSerializer.Deserialize{TValue}(string, JsonSerializerOptions?)"/> returned null</summary>
-			public sealed record JsonDeserialisedToNullMsg : Msg { }
+			public sealed record class JsonDeserialisedToNullReason : IReason;
 
 			/// <summary>Deserialising JSON failed</summary>
-			public sealed record JsonDeserialiseExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class JsonDeserialiseExceptionReason(Exception Value) : IExceptionReason;
 
 			/// <summary><see cref="Encoding.UTF8"/> failed to get string from the decrypted byte array</summary>
-			public sealed record UnableToConvertBytesToStringExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class UnableToConvertBytesToStringExceptionReason(Exception Value) : IExceptionReason;
 
 			/// <summary>The private key is corrupted, the nonce is wrong, or (most likely) the password is incorrect</summary>
-			public sealed record UnableToDecryptPrivateKeyExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class UnableToDecryptPrivateKeyExceptionReason(Exception Value) : IExceptionReason;
 
 			/// <summary>The nonce is wrong, or (most likely) the password is incorrect</summary>
-			public sealed record UnableToDecryptValueExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class UnableToDecryptValueExceptionReason(Exception Value) : IExceptionReason;
 		}
 	}
 }

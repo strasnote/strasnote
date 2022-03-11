@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Jeebs;
-using Jeebs.Linq;
+using MaybeF.Linq;
+using MaybeF.Testing;
 using Strasnote.Util;
 using Xunit;
 

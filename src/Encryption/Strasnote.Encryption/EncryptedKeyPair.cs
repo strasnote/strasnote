@@ -9,5 +9,5 @@ namespace Strasnote.Encryption
 	/// <param name="PublicKey">Public Key</param>
 	/// <param name="PrivateKey">Private Key</param>
 	/// <param name="Nonce">Nonce used for encrypting the private key</param>
-	public sealed record EncryptedKeyPair(byte[] PublicKey, byte[] PrivateKey, byte[] Nonce);
+	public sealed record class EncryptedKeyPair(byte[] PublicKey, byte[] PrivateKey, byte[] Nonce);
 }

@@ -3,17 +3,17 @@
 
 using System;
 using System.Text;
-using Jeebs;
+using MaybeF.Testing;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Encryption.Decrypt.M;
+using static Strasnote.Encryption.Decrypt.R;
 
 namespace Strasnote.Encryption.Decrypt_Tests
 {
 	public class AsBytes_Tests
 	{
 		[Fact]
-		public void Empty_Encrypted_Contents_Returns_None_With_UnableToDecryptValueExceptionMsg()
+		public void Empty_Encrypted_Contents_Returns_None_With_UnableToDecryptValueExceptionReason()
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -25,11 +25,11 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptValueExceptionMsg>(none);
+			Assert.IsType<UnableToDecryptValueExceptionReason>(none);
 		}
 
 		[Fact]
-		public void Invalid_Encrypted_Contents_Returns_None_With_UnableToDecryptValueExceptionMsg()
+		public void Invalid_Encrypted_Contents_Returns_None_With_UnableToDecryptValueExceptionReason()
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -41,11 +41,11 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptValueExceptionMsg>(none);
+			Assert.IsType<UnableToDecryptValueExceptionReason>(none);
 		}
 
 		[Fact]
-		public void Invalid_Public_Key_Returns_None_With_UnableToDecryptValueExceptionMsg()
+		public void Invalid_Public_Key_Returns_None_With_UnableToDecryptValueExceptionReason()
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -58,7 +58,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptValueExceptionMsg>(none);
+			Assert.IsType<UnableToDecryptValueExceptionReason>(none);
 		}
 
 		[Fact]

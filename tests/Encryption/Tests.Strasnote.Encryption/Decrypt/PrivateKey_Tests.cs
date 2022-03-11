@@ -1,18 +1,18 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Jeebs;
+using MaybeF.Testing;
 using Sodium;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Encryption.Decrypt.M;
+using static Strasnote.Encryption.Decrypt.R;
 
 namespace Strasnote.Encryption.Decrypt_Tests
 {
 	public class PrivateKey_Tests
 	{
 		[Fact]
-		public void Incorrect_Password_Returns_None_With_UnableToDecryptPrivateKeyExceptionMsg()
+		public void Incorrect_Password_Returns_None_With_UnableToDecryptPrivateKeyExceptionReason()
 		{
 			// Arrange
 			var encryptedKeyPair = Keys.Generate(Rnd.Str).UnsafeUnwrap();
@@ -22,11 +22,11 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptPrivateKeyExceptionMsg>(none);
+			Assert.IsType<UnableToDecryptPrivateKeyExceptionReason>(none);
 		}
 
 		[Fact]
-		public void Invalid_Encrypted_Key_Returns_None_With_UnableToDecryptPrivateKeyExceptionMsg()
+		public void Invalid_Encrypted_Key_Returns_None_With_UnableToDecryptPrivateKeyExceptionReason()
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -37,11 +37,11 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptPrivateKeyExceptionMsg>(none);
+			Assert.IsType<UnableToDecryptPrivateKeyExceptionReason>(none);
 		}
 
 		[Fact]
-		public void Incorrect_Nonce_Returns_None_With_UnableToDecryptPrivateKeyExceptionMsg()
+		public void Incorrect_Nonce_Returns_None_With_UnableToDecryptPrivateKeyExceptionReason()
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -52,7 +52,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptPrivateKeyExceptionMsg>(none);
+			Assert.IsType<UnableToDecryptPrivateKeyExceptionReason>(none);
 		}
 
 		[Fact]

@@ -3,9 +3,8 @@
 
 using System;
 using System.Text;
-using Jeebs;
+using MaybeF;
 using Sodium;
-using static F.OptionF;
 
 namespace Strasnote.Encryption
 {
@@ -18,30 +17,30 @@ namespace Strasnote.Encryption
 		/// Quickly hash a password so any length can be used to encrypt a private key
 		/// </summary>
 		/// <param name="password">Password string</param>
-		static internal Option<byte[]> PasswordGeneric(string password) =>
-			Some(
+		static internal Maybe<byte[]> PasswordGeneric(string password) =>
+			F.Some(
 				() => GenericHash.Hash(Encoding.UTF8.GetBytes(password), null, 32), // must be 32 bytes
-				e => new M.GenericPasswordHashFailedException(e)
+				e => new R.GenericPasswordHashFailedExceptionReason(e)
 			);
 
 		/// <summary>
 		/// Hash a password securely using the Argon algorithm
 		/// </summary>
 		/// <param name="password">Password string</param>
-		public static Option<string> PasswordArgon(string password) =>
-			Some(
+		public static Maybe<string> PasswordArgon(string password) =>
+			F.Some(
 				() => PasswordHash.ArgonHashString(password, PasswordHash.StrengthArgon.Moderate),
-				e => new M.ArgonPasswordHashFailedException(e)
+				e => new R.ArgonPasswordHashFailedExceptionReason(e)
 			);
 
-		/// <summary>Messages</summary>
-		public static class M
+		/// <summary>Reasons</summary>
+		public static class R
 		{
 			/// <summary>Failed to hash password using generic hash</summary>
-			public sealed record GenericPasswordHashFailedException(Exception Value) : ExceptionMsg { }
+			public sealed record class GenericPasswordHashFailedExceptionReason(Exception Value) : IExceptionReason { }
 
 			/// <summary>Failed to hash password using Argon</summary>
-			public sealed record ArgonPasswordHashFailedException(Exception Value) : ExceptionMsg { }
+			public sealed record class ArgonPasswordHashFailedExceptionReason(Exception Value) : IExceptionReason { }
 		}
 	}
 }
