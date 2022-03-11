@@ -3,11 +3,11 @@
 
 using System;
 using System.Linq;
-using Jeebs;
-using Jeebs.Linq;
+using MaybeF.Linq;
+using MaybeF.Testing;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Encryption.Hash.M;
+using static Strasnote.Encryption.Hash.R;
 
 namespace Strasnote.Encryption.Hash_Tests
 {
@@ -24,7 +24,7 @@ namespace Strasnote.Encryption.Hash_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<GenericPasswordHashFailedException>(none);
+			Assert.IsType<GenericPasswordHashFailedExceptionReason>(none);
 		}
 
 		[Fact]

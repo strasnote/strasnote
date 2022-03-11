@@ -2,15 +2,14 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
-using Jeebs;
-using Jeebs.Linq;
+using MaybeF;
+using MaybeF.Linq;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Encryption;
 using Strasnote.Logging;
-using static F.OptionF;
 
 namespace Strasnote.Data.Migrate
 {
@@ -54,26 +53,26 @@ namespace Strasnote.Data.Migrate
 		/// Check email and password are both set before returning them
 		/// </summary>
 		/// <param name="config">UserConfig</param>
-		static internal Option<(string email, string password)> GetEmailAndPassword(UserConfig config)
+		static internal Maybe<(string email, string password)> GetEmailAndPassword(UserConfig config)
 		{
 			if (config.Email is string email && config.Password is string password)
 			{
 				var hasher = new PasswordHasher<UserEntity>();
 				var hashed = hasher.HashPassword(new(), password);
 
-				return Some(
+				return F.Some(
 					(email, hashed)
 				);
 			}
 
-			return None<(string, string), M.EmailAndPasswordMustBothBeSetMsg>();
+			return F.None<(string, string), R.EmailAndPasswordMustBothBeSetReason>();
 		}
 
-		/// <summary>Messages</summary>
-		public static class M
+		/// <summary>Reasons</summary>
+		public static class R
 		{
 			/// <summary>Email and password must both be set to automatically create a user</summary>
-			public sealed record EmailAndPasswordMustBothBeSetMsg : Msg { }
+			public sealed record EmailAndPasswordMustBothBeSetReason : IReason { }
 		}
 	}
 }

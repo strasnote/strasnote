@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Jeebs;
+using MaybeF.Testing;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Data.Migrate;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Data.Migrate.DefaultUser.M;
+using static Strasnote.Data.Migrate.DefaultUser.R;
 
 namespace Strasnote.Data.DefaultUser_Tests
 {
@@ -25,7 +25,7 @@ namespace Strasnote.Data.DefaultUser_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<EmailAndPasswordMustBothBeSetMsg>(none);
+			Assert.IsType<EmailAndPasswordMustBothBeSetReason>(none);
 		}
 
 		[Fact]
@@ -39,7 +39,7 @@ namespace Strasnote.Data.DefaultUser_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<EmailAndPasswordMustBothBeSetMsg>(none);
+			Assert.IsType<EmailAndPasswordMustBothBeSetReason>(none);
 		}
 
 		[Fact]

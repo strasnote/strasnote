@@ -2,10 +2,10 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
-using Jeebs;
+using MaybeF.Testing;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Encryption.Encrypt.M;
+using static Strasnote.Encryption.Encrypt.R;
 
 namespace Strasnote.Encryption.Encrypt_Tests
 {
@@ -24,7 +24,7 @@ namespace Strasnote.Encryption.Encrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToEncryptStringExceptionMsg>(none);
+			Assert.IsType<UnableToEncryptStringExceptionReason>(none);
 		}
 
 		[Fact]

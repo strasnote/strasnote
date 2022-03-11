@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Jeebs;
+using MaybeF.Testing;
 using Strasnote.Util;
 using Xunit;
-using static Strasnote.Encryption.Decrypt.M;
+using static Strasnote.Encryption.Decrypt.R;
 
 namespace Strasnote.Encryption.Decrypt_Tests
 {
@@ -12,7 +12,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 	{
 		[Theory]
 		[InlineData(null)]
-		public void Null_Json_Returns_None_With_JsonDeserialiseExceptionMsg(TestObject input)
+		public void Null_Json_Returns_None_With_JsonDeserialiseExceptionReason(TestObject input)
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -24,11 +24,11 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<JsonDeserialiseExceptionMsg>(none);
+			Assert.IsType<JsonDeserialiseExceptionReason>(none);
 		}
 
 		[Fact]
-		public void Empty_Json_Returns_None_With_JsonDeserialiseExceptionMsg()
+		public void Empty_Json_Returns_None_With_JsonDeserialiseExceptionReason()
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -40,11 +40,11 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<JsonDeserialiseExceptionMsg>(none);
+			Assert.IsType<JsonDeserialiseExceptionReason>(none);
 		}
 
 		[Fact]
-		public void Incorrect_Type_With_Matching_Parameters_Returns_None_With_JsonDeserialiseExceptionMsg()
+		public void Incorrect_Type_With_Matching_Parameters_Returns_None_With_JsonDeserialiseExceptionReason()
 		{
 			// Arrange
 			var password = Rnd.Str;
@@ -57,7 +57,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<JsonDeserialiseExceptionMsg>(none);
+			Assert.IsType<JsonDeserialiseExceptionReason>(none);
 		}
 
 		[Fact]

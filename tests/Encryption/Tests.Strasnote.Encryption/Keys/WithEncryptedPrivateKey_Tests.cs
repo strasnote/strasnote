@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Jeebs;
+using MaybeF.Testing;
 using Sodium;
 using Strasnote.Util;
 using Xunit;

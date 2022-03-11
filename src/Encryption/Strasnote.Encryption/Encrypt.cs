@@ -3,10 +3,9 @@
 
 using System;
 using System.Text.Json;
-using Jeebs;
-using Jeebs.Linq;
+using MaybeF;
+using MaybeF.Linq;
 using Sodium;
-using static F.OptionF;
 
 namespace Strasnote.Encryption
 {
@@ -20,17 +19,17 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="privateKey">Private key</param>
 		/// <param name="password">User's password</param>
-		static internal Option<(byte[] key, byte[] nonce)> PrivateKey(byte[] privateKey, string password) =>
-			Some(
+		static internal Maybe<(byte[] key, byte[] nonce)> PrivateKey(byte[] privateKey, string password) =>
+			F.Some(
 				SecretBox.GenerateNonce,
-				e => new M.UnableToGenerateNonceToEncryptPrivateKeyExceptionMsg(e)
+				e => new R.UnableToGenerateNonceToEncryptPrivateKeyExceptionReason(e)
 			)
 			.Bind(
 				nonce => from hash in Hash.PasswordGeneric(password) select (nonce, hash)
 			)
 			.Map(
 				p => (SecretBox.Create(privateKey, p.nonce, p.hash), p.nonce),
-				e => new M.UnableToEncryptPrivateKeyExceptionMsg(e)
+				e => new R.UnableToEncryptPrivateKeyExceptionReason(e)
 			);
 
 		/// <summary>
@@ -38,10 +37,10 @@ namespace Strasnote.Encryption
 		/// </summary>
 		/// <param name="json">JSON string</param>
 		/// <param name="recipientKeyPair">The recipient's key pair</param>
-		public static Option<byte[]> String(string json, EncryptedKeyPair recipientKeyPair) =>
-			Some(
+		public static Maybe<byte[]> String(string json, EncryptedKeyPair recipientKeyPair) =>
+			F.Some(
 				() => SealedPublicKeyBox.Create(json, recipientKeyPair.PublicKey),
-				e => new M.UnableToEncryptStringExceptionMsg(e)
+				e => new R.UnableToEncryptStringExceptionReason(e)
 			);
 
 		/// <summary>
@@ -50,10 +49,10 @@ namespace Strasnote.Encryption
 		/// <typeparam name="T">Object type</typeparam>
 		/// <param name="obj">Object value</param>
 		/// <param name="recipientKeyPair">The recipient's key pair</param>
-		public static Option<byte[]> Object<T>(T obj, EncryptedKeyPair recipientKeyPair) =>
-			Some(
+		public static Maybe<byte[]> Object<T>(T obj, EncryptedKeyPair recipientKeyPair) =>
+			F.Some(
 				() => JsonSerializer.Serialize(obj),
-				e => new M.JsonSerialiseExceptionMsg(e)
+				e => new R.JsonSerialiseExceptionReason(e)
 			)
 			.Bind(
 				x => obj switch
@@ -66,20 +65,20 @@ namespace Strasnote.Encryption
 				}
 			);
 
-		/// <summary>Messages</summary>
-		public static class M
+		/// <summary>Reasons</summary>
+		public static class R
 		{
 			/// <summary>Serilising object as JSON failed</summary>
-			public sealed record JsonSerialiseExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class JsonSerialiseExceptionReason(Exception Value) : IExceptionReason;
 
 			/// <summary>Encrypting the private key failed</summary>
-			public sealed record UnableToEncryptPrivateKeyExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class UnableToEncryptPrivateKeyExceptionReason(Exception Value) : IExceptionReason;
 
 			/// <summary>Encrypting the (JSON) string failed</summary>
-			public sealed record UnableToEncryptStringExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class UnableToEncryptStringExceptionReason(Exception Value) : IExceptionReason;
 
 			/// <summary>Generating a nonce to encrypt the private key failed</summary>
-			public sealed record UnableToGenerateNonceToEncryptPrivateKeyExceptionMsg(Exception Value) : ExceptionMsg { }
+			public sealed record class UnableToGenerateNonceToEncryptPrivateKeyExceptionReason(Exception Value) : IExceptionReason;
 		}
 	}
 }
