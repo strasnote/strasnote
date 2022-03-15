@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.IO;
+using Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,7 @@ using Strasnote.AppBase.ModelBinding;
 using Strasnote.Auth.Data.Extensions;
 using Strasnote.Auth.Extensions;
 using Strasnote.Data.Clients.MySql;
+using Strasnote.Data.TypeHandlers;
 using Strasnote.Notes.Data;
 
 namespace Strasnote.Notes.Api
@@ -47,6 +49,9 @@ namespace Strasnote.Notes.Api
 				var filePath = Path.Combine(System.AppContext.BaseDirectory, "Strasnote.Notes.Api.xml");
 				c.IncludeXmlComments(filePath);
 			});
+
+			// Add DateTime handler
+			SqlMapper.AddTypeHandler(new DateTimeTypeHandler());
 		}
 
 		/// <inheritdoc/>
