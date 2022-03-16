@@ -16,7 +16,7 @@ namespace Strasnote.Data.Migrate
 		/// <param name="log">ILog</param>
 		/// <param name="repo">INoteRepository</param>
 		/// <param name="folderId">Folder ID</param>
-		public static async Task InsertAsync(ILog log, INoteRepository repo, ulong folderId)
+		public static async Task<ulong> InsertAsync(ILog log, INoteRepository repo, ulong folderId)
 		{
 			var noteId = await repo.CreateAsync(new NoteEntity
 			{
@@ -26,6 +26,8 @@ namespace Strasnote.Data.Migrate
 			}).ConfigureAwait(false);
 
 			log.Debug("Inserted test note {NoteId}.", noteId);
+
+			return noteId;
 		}
 	}
 }
