@@ -31,6 +31,7 @@ namespace Strasnote.Data.Migrator_Tests
 			var repos = new Repos(
 				Substitute.For<IFolderRepository>(),
 				Substitute.For<INoteRepository>(),
+				Substitute.For<INoteTagRepository>(),
 				Substitute.For<ITagRepository>(),
 				Substitute.For<IUserRepository>()
 			);
@@ -43,6 +44,7 @@ namespace Strasnote.Data.Migrator_Tests
 			provider.GetService(typeof(ILog<Migrator>)).Returns(log);
 			provider.GetService(typeof(IFolderRepository)).Returns(repos.Folder);
 			provider.GetService(typeof(INoteRepository)).Returns(repos.Note);
+			provider.GetService(typeof(INoteTagRepository)).Returns(repos.NoteTag);
 			provider.GetService(typeof(ITagRepository)).Returns(repos.Tag);
 			provider.GetService(typeof(IUserRepository)).Returns(repos.User);
 
@@ -53,6 +55,7 @@ namespace Strasnote.Data.Migrator_Tests
 		public sealed record Repos(
 			IFolderRepository Folder,
 			INoteRepository Note,
+			INoteTagRepository NoteTag,
 			ITagRepository Tag,
 			IUserRepository User
 		);

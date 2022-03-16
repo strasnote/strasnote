@@ -16,16 +16,25 @@ namespace Strasnote.Data.Migrate
 		/// <param name="repo">ITagRepository</param>
 		public static async Task<ulong> InsertAsync(ILog log, ITagRepository repo)
 		{
-			const string name = "1. Tag Tester!";
-			var tagId = await repo.CreateAsync(new()
+			const string tag0Name = "1. Tag Tester!";
+			var tag0 = await repo.CreateAsync(new()
 			{
 				UserId = 1,
-				TagName = name
+				TagName = tag0Name
 			}).ConfigureAwait(false);
 
-			log.Debug("Inserted test tag {Tag}.", tagId);
+			log.Debug("Inserted test tag {Tag}.", tag0);
 
-			return tagId;
+			const string tag1Name = "Linked tag";
+			var tag1 = await repo.CreateAsync(new()
+			{
+				UserId = 1,
+				TagName = tag1Name
+			}).ConfigureAwait(false);
+
+			log.Debug("Inserted test tag {Tag}.", tag1);
+
+			return tag1;
 		}
 	}
 }
