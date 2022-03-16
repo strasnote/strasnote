@@ -5,6 +5,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
+using MySqlConnector.Logging;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Exceptions;
@@ -16,6 +17,12 @@ namespace Strasnote.Data.Clients.MySql
 	/// </summary>
 	public sealed class MySqlClient : ClientMigrator, ISqlClient
 	{
+		/// <summary>
+		/// Use Serilog for logging
+		/// </summary>
+		static MySqlClient() =>
+			MySqlConnectorLogManager.Provider = new SerilogLoggerProvider();
+
 		/// <inheritdoc/>
 		public string ConnectionString { get; }
 
