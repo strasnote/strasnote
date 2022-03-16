@@ -41,7 +41,7 @@ namespace Strasnote.Notes.Data
 		public override async Task<int> DeleteAsync(ulong id, ulong? userId)
 		{
 			// Create new connection
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Remove tag from all notes
 			var result = await connection.ExecuteScalarAsync<int>(
@@ -62,7 +62,7 @@ namespace Strasnote.Notes.Data
 		public async Task<bool> AddToNote(ulong tagId, ulong noteId, ulong userId)
 		{
 			// Create new connection
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Add tag to the note
 			var result = await connection.ExecuteScalarAsync<int>(
@@ -79,7 +79,7 @@ namespace Strasnote.Notes.Data
 		public async Task<IEnumerable<TTag>> GetForNote<TTag>(ulong noteId, ulong userId)
 		{
 			// Create new connection
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Get tag IDs for this note
 			var ids = await connection.QueryAsync<ulong>(
@@ -105,7 +105,7 @@ namespace Strasnote.Notes.Data
 		public async Task<bool> RemoveFromNote(ulong tagId, ulong noteId, ulong userId)
 		{
 			// Create new connection
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Remove tag from the note
 			var result = await connection.ExecuteScalarAsync<int>(
