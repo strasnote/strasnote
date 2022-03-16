@@ -31,6 +31,10 @@ namespace Strasnote.Data.Clients.MySql
 			"main.note";
 
 		/// <inheritdoc/>
+		public string NoteTag =>
+			"main.note_tag";
+
+		/// <inheritdoc/>
 		public string Tag =>
 			"main.tag";
 
