@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="MySqlConnector" Version="2.1.7" />
+    <PackageReference Include="MySqlConnector" Version="2.1.8" />
 		<PackageReference Include="Simple.Migrations" Version="0.9.21" />
   </ItemGroup>
   <ItemGroup>
