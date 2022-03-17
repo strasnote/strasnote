@@ -35,6 +35,11 @@ namespace Strasnote.Data.Abstracts
 		string Note { get; }
 
 		/// <summary>
+		/// Note table name
+		/// </summary>
+		string NoteTag { get; }
+
+		/// <summary>
 		/// Tag table name
 		/// </summary>
 		string Tag { get; }
