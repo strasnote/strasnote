@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Strasnote.Data.Abstracts
 {
@@ -16,8 +17,8 @@ namespace Strasnote.Data.Abstracts
 		ISqlQueries Queries { get; }
 
 		/// <summary>
-		/// Connect to the database
+		/// Create and open a database connection
 		/// </summary>
-		IDbConnection Connect();
+		ValueTask<IDbConnection> ConnectAsync();
 	}
 }

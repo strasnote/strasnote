@@ -26,7 +26,7 @@ namespace Strasnote.Auth.Data
 		public async Task<int> DeleteByUserIdAsync(ulong userId)
 		{
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Custom query
 			var sql = $"DELETE FROM `auth.refresh_token` WHERE `auth.refresh_token`.`UserId` = @{nameof(userId)};";

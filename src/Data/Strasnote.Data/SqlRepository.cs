@@ -163,7 +163,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.Query, "{Type}: {Query} - {@Parameters}", type, query, param);
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform retrieve and map to TModel
 			return await connection.QueryAsync<TModel>(
@@ -187,7 +187,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.QuerySingle, "{Type}: {Query} - {@Parameters}", type, query, param);
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform retrieve and map to TModel
 			return await connection.QuerySingleOrDefaultAsync<TModel>(
@@ -245,7 +245,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.Retrieve, "{Query} - {@Parameters}", query, param);
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform retrieve and map to TModel
 			return await connection.QueryAsync<TModel>(
@@ -266,7 +266,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.RetrieveSingle, "{Query} - {@Parameters}", query, param);
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform retrieve and map to TModel
 			return await connection.QuerySingleOrDefaultAsync<TModel>(
@@ -288,7 +288,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.Create, "{Query} {@Entity}", query, entity);
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform create and return created entity ID
 			return await connection.ExecuteScalarAsync<ulong>(
@@ -306,7 +306,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.RetrieveById, "{Query} | Entity: {EntityId} | User: {UserId}", query, entityId, userId ?? 0);
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform retrieve and map to model
 			return await connection.QuerySingleOrDefaultAsync<TModel>(
@@ -323,7 +323,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.Update, "{Query} | Entity: {EntityId} | User: {UserId} | Model: {@Model}", query, entityId, userId ?? 0, model ?? new object());
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform update
 			var updated = await connection.ExecuteAsync(
@@ -353,7 +353,7 @@ namespace Strasnote.Data
 			LogOperation(Operation.Delete, "{Query} | Entity: {Id} | User: {UserId}", query, id, userId ?? 0);
 
 			// Connect to the database
-			using var connection = Client.Connect();
+			using var connection = await Client.ConnectAsync();
 
 			// Perform delete and return the number of affected rows
 			return await connection.ExecuteAsync(

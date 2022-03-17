@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Data;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using Strasnote.Data.Abstracts;
@@ -62,8 +63,12 @@ namespace Strasnote.Data.Clients.MySql
 			ConnectionString = connectionString;
 
 		/// <inheritdoc/>
-		public IDbConnection Connect() =>
-			new MySqlConnection(ConnectionString);
+		public async ValueTask<IDbConnection> ConnectAsync()
+		{
+			var connection = new MySqlConnection(ConnectionString);
+			await connection.OpenAsync();
+			return connection;
+		}
 
 		/// <inheritdoc/>
 		public bool MigrateToLatest() =>
