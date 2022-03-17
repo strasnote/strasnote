@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
+using Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using Strasnote.AppBase;
 using Strasnote.Auth.Data.Extensions;
 using Strasnote.Auth.Extensions;
 using Strasnote.Data.Clients.MySql;
+using Strasnote.Data.TypeHandlers;
 using Strasnote.Notes.Data;
 
 namespace Strasnote.Auth.Api
@@ -31,6 +33,9 @@ namespace Strasnote.Auth.Api
 
 			// Notes (required for migrator)
 			services.AddNotesData<MySqlClient>();
+
+			// Add DateTime handler
+			SqlMapper.AddTypeHandler(new DateTimeTypeHandler());
 		}
 
 		/// <inheritdoc/>
