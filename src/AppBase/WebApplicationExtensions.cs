@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 using Strasnote.Data.Migrate;
 using Strasnote.Logging;
 
@@ -49,9 +48,6 @@ namespace Strasnote.AppBase
 		public static async Task RunStrasnoteAsync(this WebApplication app)
 		{
 			// Ready to go
-			ConsoleLog.Enable();
-			Log.Information("{AppName}: application ready.", app.Environment.ApplicationName);
-
 			var log = app.Services.GetRequiredService<ILog<int>>();
 			log.Information("Application ready.");
 
