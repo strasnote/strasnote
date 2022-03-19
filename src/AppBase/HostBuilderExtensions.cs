@@ -56,19 +56,6 @@ namespace Strasnote.AppBase
 					.AddCommandLine(args);
 			});
 
-			/** Register Serilog
-			 * ========================================================================== */
-			_ = builder.UseSerilog((ctx, config) =>
-			{
-				_ = config
-					// Add from app configuration
-					.ReadFrom.Configuration(ctx.Configuration)
-
-					// Enrich with application name
-					.Enrich.FromLogContext()
-					.Enrich.WithProperty("Application", ctx.HostingEnvironment.ApplicationName);
-			});
-
 			/** Add default services
 			 * ========================================================================== */
 			_ = builder.ConfigureServices((ctx, services) =>
@@ -102,6 +89,19 @@ namespace Strasnote.AppBase
 
 				// Add custom services configuration
 				configureServices(ctx, services);
+			});
+
+			/** Register Serilog
+			 * ========================================================================== */
+			_ = builder.UseSerilog((ctx, logger) =>
+			{
+				_ = logger
+					// Load from configuration values
+					.ReadFrom.Configuration(ctx.Configuration)
+
+					// Enrich with application name
+					.Enrich.FromLogContext()
+					.Enrich.WithProperty("Application", ctx.HostingEnvironment.ApplicationName);
 			});
 
 			/** Return
