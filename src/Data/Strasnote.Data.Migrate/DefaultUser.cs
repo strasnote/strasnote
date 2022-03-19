@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System;
+using System.Threading.Tasks;
 using MaybeF;
 using MaybeF.Linq;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace Strasnote.Data.Migrate
 		/// <param name="log">ILog</param>
 		/// <param name="repo">IUserRepository</param>
 		/// <param name="config">UserConfig</param>
-		public static void Insert(ILog log, IUserRepository repo, UserConfig config)
+		public static async Task InsertAsync(ILog log, IUserRepository repo, UserConfig config)
 		{
 			var user = from ep in GetEmailAndPassword(config)
 					   from keys in Keys.Generate(ep.password)
@@ -43,10 +44,15 @@ namespace Strasnote.Data.Migrate
 						   ConcurrencyStamp = Guid.NewGuid().ToString()
 					   };
 
-			user.Switch(
-				some: async x => await repo.CreateAsync(x).ConfigureAwait(false),
-				none: r => log.Error("Unable to create user: {Reason}", r)
-			);
+			if (user.IsSome(out var value))
+			{
+				var userId = await repo.CreateAsync(value);
+				log.Debug("Inserted default user {User}", userId);
+			}
+			else if (user.IsNone(out var reason))
+			{
+				log.Error("Unable to create user: {Reason}", reason);
+			}
 		}
 
 		/// <summary>

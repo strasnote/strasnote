@@ -16,7 +16,7 @@ namespace Strasnote.Logging
 		/// </summary>
 		public static ILogger CreateConsoleLogger =>
 			new LoggerConfiguration()
-				.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+				.MinimumLevel.Override("Microsoft", LogEventLevel.Verbose)
 				.WriteTo.Console()
 				.CreateLogger();
 

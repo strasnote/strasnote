@@ -106,7 +106,7 @@ namespace Strasnote.Data.Migrate
 			log.Information("Inserting test data.");
 
 			// Insert default user
-			await Task.Run(() => DefaultUser.Insert(log, user, userConfig)).ConfigureAwait(false);
+			await DefaultUser.InsertAsync(log, user, userConfig).ConfigureAwait(false);
 
 			// Insert test folders
 			var folderId = await TestFolder.InsertAsync(log, folder).ConfigureAwait(false);
@@ -119,6 +119,8 @@ namespace Strasnote.Data.Migrate
 
 			// Insert test note tags
 			await TestNoteTag.InsertAsync(log, noteTag, noteId, linkedTagId);
+
+			log.Information("Test data inserted.");
 		}
 	}
 }
