@@ -21,9 +21,8 @@ namespace Strasnote.AppBase
 		/// Add default configuration for Strasnote apps
 		/// </summary>
 		/// <param name="builder">IHostBuilder</param>
-		/// <param name="args">Command-line Arguments</param>
-		public static IHostBuilder ConfigureStrasnote(this IHostBuilder builder, string[] args) =>
-			ConfigureStrasnote(builder, args, (_, _) => { });
+		public static IHostBuilder ConfigureStrasnote(this IHostBuilder builder) =>
+			ConfigureStrasnote(builder, (_, _) => { });
 
 		/// <summary>
 		/// Add default configuration for Strasnote apps<br/>
@@ -33,27 +32,18 @@ namespace Strasnote.AppBase
 		///		- from Command Line
 		/// </summary>
 		/// <param name="builder">IHostBuilder</param>
-		/// <param name="args">Command-line Arguments</param>
 		/// <param name="configureServices">Register custom services</param>
 		public static IHostBuilder ConfigureStrasnote(
 			this IHostBuilder builder,
-			string[] args,
 			Action<HostBuilderContext, IServiceCollection> configureServices
 		)
 		{
-			/** Load configuration values
+			/** Load configuration secrets
 			 * ========================================================================== */
 			_ = builder.ConfigureAppConfiguration((ctx, config) =>
 			{
 				_ = config
-					// Add secrets configuration from JSON file
-					.AddJsonFile($"{ctx.HostingEnvironment.ContentRootPath}/appsettings.Secrets.json", optional: true)
-
-					// Add environment variables
-					.AddEnvironmentVariables()
-
-					// Allow command line arguments to override settings
-					.AddCommandLine(args);
+					.AddJsonFile($"{ctx.HostingEnvironment.ContentRootPath}/appsettings.Secrets.json", optional: true);
 			});
 
 			/** Add default services

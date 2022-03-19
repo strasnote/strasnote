@@ -20,26 +20,23 @@ namespace Strasnote.AppBase
 		/// Add default configuration for Strasnote web apps
 		/// </summary>
 		/// <param name="builder">WebApplicationBuilder</param>
-		/// <param name="args">Command-line Arguments</param>
-		public static WebApplicationBuilder ConfigureStrasnote(this WebApplicationBuilder builder, string[] args) =>
-			ConfigureStrasnote(builder, args, (_, _) => { });
+		public static WebApplicationBuilder ConfigureStrasnote(this WebApplicationBuilder builder) =>
+			ConfigureStrasnote(builder, (_, _) => { });
 
 		/// <summary>
 		/// Add default configuration for Strasnote web apps, with additional configuration options
 		/// for services and the application
 		/// </summary>
 		/// <param name="builder">WebApplicationBuilder</param>
-		/// <param name="args">Command-line Arguments</param>
 		/// <param name="configure">Register custom services</param>
 		public static WebApplicationBuilder ConfigureStrasnote(
 			this WebApplicationBuilder builder,
-			string[] args,
 			Action<WebHostBuilderContext, IServiceCollection> configure
 		)
 		{
 			/** Add default Strasnote configuration
 			 * ========================================================================== */
-			_ = builder.Host.ConfigureStrasnote(args);
+			_ = builder.Host.ConfigureStrasnote();
 
 			/** Add default web services
 			 * ========================================================================== */

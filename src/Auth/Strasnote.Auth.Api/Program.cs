@@ -13,8 +13,8 @@ using Strasnote.Notes.Data;
 // BUILD
 // =========================================================================
 
-var builder = WebApplication.CreateBuilder();
-builder.ConfigureStrasnote(args, (ctx, services) =>
+var builder = WebApplication.CreateBuilder(args);
+builder.ConfigureStrasnote((ctx, services) =>
 {
 	// MVC
 	services.AddControllers();
