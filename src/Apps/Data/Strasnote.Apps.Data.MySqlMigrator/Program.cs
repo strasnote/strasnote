@@ -17,7 +17,7 @@ using Strasnote.Notes.Data;
 // =========================================================================
 
 var builder = Host.CreateDefaultBuilder();
-builder.ConfigureStrasnote(args, (ctx, services) =>
+builder.ConfigureStrasnote(args, (_, services) =>
 {
 	services.AddAuthData<MySqlClient>();
 	services.AddNotesData<MySqlClient>();
