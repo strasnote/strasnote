@@ -1,8 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<RootNamespace>Strasnote.Notes.Data</RootNamespace>
-	</PropertyGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\src\Notes\Data\Strasnote.Notes.Data\Strasnote.Notes.Data.csproj" />
-	</ItemGroup>
-</Project>
