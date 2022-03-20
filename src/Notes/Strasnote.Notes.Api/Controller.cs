@@ -46,9 +46,8 @@ namespace Strasnote.Notes.Api
 			Func<T, IActionResult>? result = null,
 			Func<IActionResult>? ifNull = null,
 			Func<IActionResult>? otherwise = null
-		)
-		{
-			return Is.AuthenticatedUser(
+		) =>
+			Is.AuthenticatedUser(
 				ctx: Context,
 
 				//
@@ -115,6 +114,5 @@ namespace Strasnote.Notes.Api
 					}
 				}
 			);
-		}
 	}
 }

@@ -1,7 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-namespace Strasnote.Data.Migrator_Tests
+using NSubstitute;
+using Xunit;
+
+namespace Strasnote.Data.Migrate.Migrator_Tests
 {
 	public class ExecuteAsync_Tests
 	{

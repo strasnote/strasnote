@@ -5,11 +5,10 @@ using Microsoft.Extensions.Options;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;
-using Strasnote.Data.Migrate;
 using Strasnote.Logging;
 using Strasnote.Notes.Data.Abstracts;
 
-namespace Strasnote.Data.Migrator_Tests
+namespace Strasnote.Data.Migrate.Migrator_Tests
 {
 	public static class Migrator_Setup
 	{

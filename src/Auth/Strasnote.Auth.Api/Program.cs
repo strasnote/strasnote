@@ -1,6 +1,43 @@
 // Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Strasnote.Auth.Api;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Strasnote.AppBase;
+using Strasnote.Auth.Data.Extensions;
+using Strasnote.Auth.Extensions;
+using Strasnote.Data.Clients.MySql;
+using Strasnote.Notes.Data;
 
-await Strasnote.AppBase.Program.MainAsync<HostBuilder>(args);
+// =========================================================================
+// BUILD
+// =========================================================================
+
+var builder = WebApplication.CreateBuilder(args);
+builder.ConfigureStrasnote((ctx, services) =>
+{
+	// MVC
+	services.AddControllers();
+	services.AddApiVersioning();
+
+	// Auth
+	services.AddAuth(ctx.Configuration);
+	services.AddAuthData<MySqlClient>();
+
+	// Notes (required for migrator)
+	services.AddNotesData<MySqlClient>();
+});
+var app = builder.Build();
+
+// =========================================================================
+// CONFIGURE
+// =========================================================================
+
+app.UseAppDefaults();
+app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+// =========================================================================
+// RUN
+// =========================================================================
+
+await app.RunAppAsync();
