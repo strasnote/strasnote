@@ -16,7 +16,7 @@ jobs:
       name: Prepare - Read image version
       uses: bfren/read-file@v1
       with:
-        file: ./VERSION
+        file: ./Version
       id: version
     -
       name: Prepare - Set up QEMU
