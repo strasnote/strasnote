@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<ProjectReference Include="..\Strasnote.Data\Strasnote.Data.csproj" />
+		<ProjectReference Include="..\Strasnote.Notes.Data.Abstracts\Strasnote.Notes.Data.Abstracts.csproj" />
+	</ItemGroup>
+</Project>

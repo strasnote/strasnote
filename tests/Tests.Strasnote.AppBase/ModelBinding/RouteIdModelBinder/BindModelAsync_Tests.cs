@@ -1,12 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using NSubstitute;
 using Strasnote.AppBase.Abstracts;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.AppBase.ModelBinding.RouteIdModelBinder_Tests
 {

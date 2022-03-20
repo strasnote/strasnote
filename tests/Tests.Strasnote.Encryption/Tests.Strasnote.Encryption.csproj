@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Strasnote.Encryption</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="MaybeF.Testing" Version="8.0.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Strasnote.Encryption\Strasnote.Encryption.csproj" />
+	</ItemGroup>
+</Project>

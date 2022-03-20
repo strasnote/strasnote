@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Xunit;
-
 namespace Strasnote.Util.StringExtensions_Tests
 {
 	public class Normalise_Tests

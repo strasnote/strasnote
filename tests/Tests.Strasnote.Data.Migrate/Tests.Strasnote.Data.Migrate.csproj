@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Strasnote.Data.Migrate</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="MaybeF.Testing" Version="8.0.1" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
+	</ItemGroup>
+</Project>

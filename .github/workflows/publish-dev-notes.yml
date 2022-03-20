@@ -44,7 +44,7 @@ jobs:
     -
       name: A - Publish
       run: |
-        dotnet publish ./src/Notes/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
+        dotnet publish ./src/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
           --output ./publish \
@@ -55,7 +55,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./src/Notes/Strasnote.Notes.Api/Dockerfile-automated
+        file: ./src/Strasnote.Notes.Api/Dockerfile-automated
         push: true
         platforms: linux/amd64
         tags: |

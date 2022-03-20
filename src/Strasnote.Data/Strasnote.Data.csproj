@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.0.123" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Strasnote.Logging.Abstracts\Strasnote.Logging.Abstracts.csproj" />
+		<ProjectReference Include="..\Strasnote.Util\Strasnote.Util.csproj" />
+		<ProjectReference Include="..\Strasnote.Data.Abstracts\Strasnote.Data.Abstracts.csproj" />
+		<ProjectReference Include="..\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
+	</ItemGroup>
+</Project>

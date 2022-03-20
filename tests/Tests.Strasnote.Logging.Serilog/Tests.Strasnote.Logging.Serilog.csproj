@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Strasnote.Logging.Serilog</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
+	</ItemGroup>
+</Project>

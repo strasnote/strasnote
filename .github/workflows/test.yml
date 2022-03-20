@@ -3,14 +3,8 @@ name: Test
 #Note: as this is on: push, you have to push to trigger this, you can't just re-run the GitHub actions
 on:
   push:
-    branches-ignore:
-      - 'main'
-    tags-ignore:
-      - '**'
-    paths:
-      - '.github/workflows/test.yml'
-      - 'src/**'
-      - 'tests/**'
+    branches: ['**']
+    tags-ignore: ['**']
   workflow_dispatch:
 
 jobs:
@@ -28,17 +22,17 @@ jobs:
     - 
       name: A - Restore
       run: |
-        dotnet restore ./tests/Test.csproj
+        dotnet restore Test.csproj
     - 
       name: B - Build
       run: |
-        dotnet build ./tests/Test.csproj \
+        dotnet build Test.csproj \
           --no-restore \
           --configuration Release
     - 
       name: C - Test
       run: |
-        dotnet test ./tests/Test.csproj \
+        dotnet test Test.csproj \
           --no-restore \
           --no-build \
           --configuration Release

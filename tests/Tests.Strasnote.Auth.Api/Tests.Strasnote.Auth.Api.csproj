@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Strasnote.Auth.Api</RootNamespace>
+	</PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Strasnote.Auth.Api\Strasnote.Auth.Api.csproj" />
+  </ItemGroup>
+</Project>

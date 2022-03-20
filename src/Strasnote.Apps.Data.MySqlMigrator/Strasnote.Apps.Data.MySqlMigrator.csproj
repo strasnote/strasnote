@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="appsettings.json" />
+		<None Remove="appsettings.Secrets.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Include="appsettings.Secrets.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Strasnote.AppBase\Strasnote.AppBase.csproj" />
+		<ProjectReference Include="..\Strasnote.Auth.Data\Strasnote.Auth.Data.csproj" />
+		<ProjectReference Include="..\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj" />
+		<ProjectReference Include="..\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
+		<ProjectReference Include="..\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
+		<ProjectReference Include="..\Strasnote.Encryption\Strasnote.Encryption.csproj" />
+		<ProjectReference Include="..\Strasnote.Notes.Data\Strasnote.Notes.Data.csproj" />
+		<ProjectReference Include="..\Strasnote.Util\Strasnote.Util.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+</Project>

@@ -1,10 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Collections.Generic;
 using System.Security.Claims;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.AppBase.AppContext_Tests
 {
