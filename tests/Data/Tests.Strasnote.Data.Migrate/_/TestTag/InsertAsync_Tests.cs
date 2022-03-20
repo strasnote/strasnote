@@ -1,13 +1,9 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Threading.Tasks;
-using NSubstitute;
 using Strasnote.Data.Entities.Notes;
 using Strasnote.Logging;
 using Strasnote.Notes.Data.Abstracts;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Data.Migrate.TestTag_Tests
 {

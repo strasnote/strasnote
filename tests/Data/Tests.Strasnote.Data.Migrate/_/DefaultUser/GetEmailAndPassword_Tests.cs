@@ -5,8 +5,6 @@ using MaybeF.Testing;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
-using Strasnote.Util;
-using Xunit;
 using static Strasnote.Data.Migrate.DefaultUser.R;
 
 namespace Strasnote.Data.Migrate.DefaultUser_Tests
