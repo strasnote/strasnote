@@ -19,7 +19,7 @@ namespace Strasnote.AppBase
 		/// Use default application configuration
 		/// </summary>
 		/// <param name="app">WebApplication</param>
-		public static WebApplication UseStrasnoteDefaults(this WebApplication app)
+		public static WebApplication UseAppDefaults(this WebApplication app)
 		{
 			// Add development exception handling
 			if (app.Environment.IsDevelopment())
@@ -45,7 +45,7 @@ namespace Strasnote.AppBase
 		/// Output application name and run database migration before running the app itself
 		/// </summary>
 		/// <param name="app">WebApplication</param>
-		public static async Task RunStrasnoteAsync(this WebApplication app)
+		public static async Task RunAppAsync(this WebApplication app)
 		{
 			// Ready to go
 			var log = app.Services.GetRequiredService<ILog<int>>();

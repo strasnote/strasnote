@@ -33,11 +33,11 @@ var app = builder.Build();
 // CONFIGURE
 // =========================================================================
 
-app.UseStrasnoteDefaults();
+app.UseAppDefaults();
 app.UseEndpoints(endpoints => endpoints.MapControllers());
 
 // =========================================================================
 // RUN
 // =========================================================================
 
-await app.RunStrasnoteAsync();
+await app.RunAppAsync();
