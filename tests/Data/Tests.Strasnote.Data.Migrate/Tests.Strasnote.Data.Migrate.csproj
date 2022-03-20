@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<RootNamespace>Strasnote.Data</RootNamespace>
+		<RootNamespace>Strasnote.Data.Migrate</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

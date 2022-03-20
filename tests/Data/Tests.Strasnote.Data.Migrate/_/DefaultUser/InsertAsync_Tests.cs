@@ -6,17 +6,16 @@ using NSubstitute;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
-using Strasnote.Data.Migrate;
 using Strasnote.Logging;
 using Strasnote.Util;
 using Xunit;
 
-namespace Strasnote.Data.DefaultUser_Tests
+namespace Strasnote.Data.Migrate.DefaultUser_Tests
 {
-	public class Insert_Tests
+	public class InsertAsync_Tests
 	{
 		[Fact]
-		public void Logs_Error_To_Error_Log()
+		public async Task Logs_Error_To_Error_Log()
 		{
 			// Arrange
 			var log = Substitute.For<ILog>();
@@ -24,7 +23,7 @@ namespace Strasnote.Data.DefaultUser_Tests
 			var config = new UserConfig();
 
 			// Act
-			DefaultUser.Insert(log, user, config);
+			await DefaultUser.InsertAsync(log, user, config);
 
 			// Assert
 			log.Received().Error(Arg.Any<string>(), Arg.Any<object[]>());
@@ -39,7 +38,7 @@ namespace Strasnote.Data.DefaultUser_Tests
 			var config = new UserConfig { Email = Rnd.Str, Password = Rnd.Str };
 
 			// Act
-			DefaultUser.Insert(log, user, config);
+			await DefaultUser.InsertAsync(log, user, config);
 
 			// Assert
 			await user.Received().CreateAsync(Arg.Any<UserEntity>());
