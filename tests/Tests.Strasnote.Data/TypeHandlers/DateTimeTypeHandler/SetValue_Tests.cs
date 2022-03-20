@@ -14,7 +14,7 @@ namespace Strasnote.Data.TypeHandlers.DateTimeTypeHandler_Tests
 			var handler = new DateTimeTypeHandler();
 			var parameter = Substitute.For<IDbDataParameter>();
 			var hour = Rnd.RndNumber.GetInt32(0, 23);
-			var offset = Rnd.RndNumber.GetInt32(4, 16);
+			var offset = Rnd.RndNumber.GetInt32(1, 14);
 			var value = new DateTimeOffset(
 				year: Rnd.RndNumber.GetInt32(2, 9998),
 				month: Rnd.RndNumber.GetInt32(1, 12),
