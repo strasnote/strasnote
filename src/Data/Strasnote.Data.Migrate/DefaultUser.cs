@@ -1,4 +1,4 @@
-﻿// Copyright (c) Strasnote
+// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
 using System;
