@@ -44,14 +44,18 @@ namespace Strasnote.Data.Migrate
 						   ConcurrencyStamp = Guid.NewGuid().ToString()
 					   };
 
-			return await user.MapAsync(
+			return await user.SwitchAsync(
 				async x =>
 				{
 					var userId = await repo.CreateAsync(x);
 					log.Debug("Inserted default user {User}", userId);
-					return userId;
+					return F.Some(userId);
 				},
-				F.DefaultHandler
+				none: r =>
+				{
+					log.Error("Unable to create user: {Reason}", r);
+					return F.None<ulong>(r);
+				}
 			);
 		}
 
