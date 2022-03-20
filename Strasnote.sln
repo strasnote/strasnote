@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		run.bat = run.bat
 		Test.csproj = Test.csproj
 		.github\workflows\test.yml = .github\workflows\test.yml
-		Version = Version
+		VERSION = VERSION
 		.github\workflows\workflow-cleanup.yml = .github\workflows\workflow-cleanup.yml
 	EndProjectSection
 EndProject
