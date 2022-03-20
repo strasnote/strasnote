@@ -11,12 +11,12 @@ namespace Strasnote.Data.TypeHandlers.DateTimeTypeHandler_Tests
 			// Arrange
 			var handler = new DateTimeTypeHandler();
 			var date = new DateTime(
-				year: Rnd.RndNumber.GetInt32(2, 9998),
-				month: Rnd.RndNumber.GetInt32(1, 12),
-				day: Rnd.RndNumber.GetInt32(1, 28),
-				hour: Rnd.RndNumber.GetInt32(0, 23),
-				minute: Rnd.RndNumber.GetInt32(0, 59),
-				second: Rnd.RndNumber.GetInt32(0, 59)
+				year: Rnd.RndNumber.GetInt32(1000, 5000),
+				month: Rnd.RndNumber.GetInt32(3, 8),
+				day: Rnd.RndNumber.GetInt32(5, 20),
+				hour: Rnd.RndNumber.GetInt32(5, 20),
+				minute: Rnd.RndNumber.GetInt32(5, 20),
+				second: Rnd.RndNumber.GetInt32(5, 20)
 			);
 			var input = date.ToLocalTime().ToString();
 

@@ -28,17 +28,17 @@ jobs:
     - 
       name: A - Restore
       run: |
-        dotnet restore ./tests/Test.csproj
+        dotnet restore Test.csproj
     - 
       name: B - Build
       run: |
-        dotnet build ./tests/Test.csproj \
+        dotnet build Test.csproj \
           --no-restore \
           --configuration Release
     - 
       name: C - Test
       run: |
-        dotnet test ./tests/Test.csproj \
+        dotnet test Test.csproj \
           --no-restore \
           --no-build \
           --configuration Release

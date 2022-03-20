@@ -25,7 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0155C170
 	ProjectSection(SolutionItems) = preProject
 		tests\.editorconfig = tests\.editorconfig
 		tests\Directory.Build.props = tests\Directory.Build.props
-		tests\Test.csproj = tests\Test.csproj
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A28AE92F-C1C8-4DA0-941A-1E1EF086B3AD}"
@@ -40,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\publish-prod-notes.yml = .github\workflows\publish-prod-notes.yml
 		README.md = README.md
 		run.bat = run.bat
+		Test.csproj = Test.csproj
 		.github\workflows\test.yml = .github\workflows\test.yml
 		Version = Version
 		.github\workflows\workflow-cleanup.yml = .github\workflows\workflow-cleanup.yml
