@@ -4,7 +4,7 @@
 using NSubstitute;
 using Xunit;
 
-namespace Strasnote.Data.Migrator_Tests
+namespace Strasnote.Data.Migrate.Migrator_Tests
 {
 	public class ExecuteAsync_Tests
 	{

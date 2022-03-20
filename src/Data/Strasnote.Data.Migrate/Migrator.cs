@@ -126,7 +126,7 @@ namespace Strasnote.Data.Migrate
 
 					log.Information("Test data inserted.");
 				},
-				none: r => log.Error("Unable to create user: {Reason}", r)
+				none: _ => log.Critical("Unable to insert data as inserting user failed.")
 			);
 		}
 	}
