@@ -11,7 +11,7 @@ namespace Strasnote.Data.TypeHandlers.DateTimeTypeHandler_Tests
 			// Arrange
 			var handler = new DateTimeTypeHandler();
 			var date = new DateTime(
-				year: Rnd.RndNumber.GetInt32(1, 9999),
+				year: Rnd.RndNumber.GetInt32(2, 9998),
 				month: Rnd.RndNumber.GetInt32(1, 12),
 				day: Rnd.RndNumber.GetInt32(1, 28),
 				hour: Rnd.RndNumber.GetInt32(0, 23),
