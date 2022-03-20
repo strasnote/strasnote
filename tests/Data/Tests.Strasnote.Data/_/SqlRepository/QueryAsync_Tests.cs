@@ -1,13 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using NSubstitute;
 using Strasnote.Data.Abstracts;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Data.SqlRepository_Tests
 {

@@ -1,10 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using Strasnote.Util;
-using Xunit;
-
 namespace Strasnote.Data.TypeHandlers.DateTimeTypeHandler_Tests
 {
 	public class Parse_Tests

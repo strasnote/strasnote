@@ -1,10 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using NSubstitute;
-using Strasnote.Util;
-using Xunit;
-
 namespace Strasnote.Data.SqlRepository_Tests
 {
 	public class LogTrace_Tests

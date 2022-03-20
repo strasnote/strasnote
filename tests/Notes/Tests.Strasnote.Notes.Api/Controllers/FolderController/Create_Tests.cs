@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Threading.Tasks;
-using NSubstitute;
 using Strasnote.Data.Entities.Notes;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 {

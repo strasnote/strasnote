@@ -1,15 +1,10 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using NSubstitute;
 using Strasnote.Auth.Data;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
-using Strasnote.Util;
-using Xunit;
 
 namespace Tests.Strasnote.Auth.Data
 {

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Data.Migrate;
-using Strasnote.Util;
-using Xunit;
 using static Strasnote.Data.Migrate.DefaultUser.R;
 
 namespace Strasnote.Data.DefaultUser_Tests

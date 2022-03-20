@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Xunit;
-
 namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 {
 	public class SelectAll_Tests

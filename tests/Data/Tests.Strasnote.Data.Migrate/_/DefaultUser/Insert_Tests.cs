@@ -1,15 +1,11 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Threading.Tasks;
-using NSubstitute;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
 using Strasnote.Data.Migrate;
 using Strasnote.Logging;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Data.DefaultUser_Tests
 {

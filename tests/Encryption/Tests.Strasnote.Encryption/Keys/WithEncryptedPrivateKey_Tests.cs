@@ -3,8 +3,6 @@
 
 using MaybeF.Testing;
 using Sodium;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Encryption.Keys_Tests
 {

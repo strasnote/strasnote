@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using System.Threading.Tasks;
-using NSubstitute;
 using Strasnote.AppBase.Abstracts;
-using Xunit;
 
 namespace Strasnote.Util.Is_Tests
 {

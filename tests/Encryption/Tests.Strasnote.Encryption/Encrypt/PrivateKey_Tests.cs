@@ -3,8 +3,6 @@
 
 using MaybeF.Linq;
 using MaybeF.Testing;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Encryption.Encrypt_Tests
 {

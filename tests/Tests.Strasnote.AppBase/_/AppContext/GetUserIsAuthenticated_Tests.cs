@@ -2,9 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Security.Principal;
-using NSubstitute;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.AppBase.AppContext_Tests
 {

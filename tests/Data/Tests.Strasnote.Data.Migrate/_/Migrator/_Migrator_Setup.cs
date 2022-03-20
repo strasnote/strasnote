@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Abstracts;
 using Strasnote.Data.Config;

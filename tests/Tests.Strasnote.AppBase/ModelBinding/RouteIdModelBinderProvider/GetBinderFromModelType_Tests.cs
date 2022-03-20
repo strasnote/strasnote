@@ -3,7 +3,6 @@
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Strasnote.AppBase.Abstracts;
-using Xunit;
 
 namespace Strasnote.AppBase.ModelBinding.RouteIdModelBinderProvider_Tests
 {

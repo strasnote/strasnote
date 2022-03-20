@@ -2,11 +2,8 @@
 // Licensed under https://strasnote.com/licence
 
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using Strasnote.Data.Config;
 using Strasnote.Data.Exceptions;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Data.Clients.MySql.MySqlClient_Tests
 {

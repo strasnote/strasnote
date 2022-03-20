@@ -1,10 +1,7 @@
 // Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
-using System.Linq;
 using Strasnote.Data.Entities.Tests;
-using Xunit;
 
 namespace Strasnote.Data.Entities_Tests
 {

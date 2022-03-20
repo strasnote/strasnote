@@ -2,8 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using MaybeF.Testing;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Encryption.Keys_Tests
 {

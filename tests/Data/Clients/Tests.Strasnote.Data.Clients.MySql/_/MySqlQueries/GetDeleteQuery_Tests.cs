@@ -2,8 +2,6 @@
 // Licensed under https://strasnote.com/licence
 
 using Strasnote.Data.Abstracts;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Data.Clients.MySql.MySqlQueries_Tests
 {

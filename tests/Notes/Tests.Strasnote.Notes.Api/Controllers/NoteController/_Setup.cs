@@ -1,11 +1,9 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using NSubstitute;
 using Strasnote.AppBase.Abstracts;
 using Strasnote.Logging;
 using Strasnote.Notes.Data.Abstracts;
-using Strasnote.Util;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {

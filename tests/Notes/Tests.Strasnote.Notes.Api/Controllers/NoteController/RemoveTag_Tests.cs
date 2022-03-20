@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System.Threading.Tasks;
-using NSubstitute;
 using Strasnote.Notes.Api.Models.Notes;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {

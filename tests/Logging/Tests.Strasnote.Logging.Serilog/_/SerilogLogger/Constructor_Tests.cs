@@ -1,11 +1,8 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using NSubstitute;
 using Serilog;
 using Strasnote.Logging;
-using Strasnote.Util;
-using Xunit;
 
 namespace Tests.Strasnote.Logging.SerilogLogger_Tests
 {

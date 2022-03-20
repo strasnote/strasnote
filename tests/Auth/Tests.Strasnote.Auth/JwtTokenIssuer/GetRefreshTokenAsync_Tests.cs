@@ -1,21 +1,16 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Strasnote.Auth;
 using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Config;
 using Strasnote.Auth.Data.Abstracts;
 using Strasnote.Data.Entities.Auth;
-using Strasnote.Util;
-using Xunit;
 
 namespace Tests.Strasnote.Auth
 {

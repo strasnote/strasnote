@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Xunit;
-
 namespace Strasnote.Data.Clients.MySql.DbTables_Tests
 {
 	public class NoteTag_Tests

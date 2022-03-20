@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Xunit;
-
 namespace Strasnote.Data.SqlRepository_Tests
 {
 	public class Constructor_Tests

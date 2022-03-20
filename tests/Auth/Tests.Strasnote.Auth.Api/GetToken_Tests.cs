@@ -2,15 +2,11 @@
 // Licensed under https://strasnote.com/licence
 
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
 using Strasnote.Auth.Abstracts;
 using Strasnote.Auth.Api.Controllers;
 using Strasnote.Auth.Models;
 using Strasnote.Logging;
-using Strasnote.Util;
-using Xunit;
 using static Strasnote.Auth.Api.Controllers.TokenController;
 
 namespace Tests.Strasnote.Auth.Api

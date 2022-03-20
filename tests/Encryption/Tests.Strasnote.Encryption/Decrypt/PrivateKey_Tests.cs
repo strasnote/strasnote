@@ -3,8 +3,6 @@
 
 using MaybeF.Testing;
 using Sodium;
-using Strasnote.Util;
-using Xunit;
 using static Strasnote.Encryption.Decrypt.R;
 
 namespace Strasnote.Encryption.Decrypt_Tests

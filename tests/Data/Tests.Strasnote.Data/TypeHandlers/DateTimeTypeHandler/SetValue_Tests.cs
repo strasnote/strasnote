@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using System;
 using System.Data;
-using NSubstitute;
-using Strasnote.Util;
-using Xunit;
 
 namespace Strasnote.Data.TypeHandlers.DateTimeTypeHandler_Tests
 {

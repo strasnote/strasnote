@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Strasnote
 // Licensed under https://strasnote.com/licence
 
-using Strasnote.Notes.Api.Models.Folders;
-
 namespace Strasnote.Notes.Api.Models.Folders
 {
 	/// <summary>
