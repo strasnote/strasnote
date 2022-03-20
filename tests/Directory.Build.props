@@ -29,6 +29,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Util\Strasnote.Util.csproj" />
+		<ProjectReference Include="..\..\src\Strasnote.Util\Strasnote.Util.csproj" />
 	</ItemGroup>
 </Project>

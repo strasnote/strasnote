@@ -6,6 +6,6 @@
 		<PackageReference Include="MaybeF.Testing" Version="8.0.1" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Encryption\Strasnote.Encryption\Strasnote.Encryption.csproj" />
+		<ProjectReference Include="..\..\src\Strasnote.Encryption\Strasnote.Encryption.csproj" />
 	</ItemGroup>
 </Project>

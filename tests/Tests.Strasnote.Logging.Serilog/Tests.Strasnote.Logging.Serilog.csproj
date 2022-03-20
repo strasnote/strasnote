@@ -3,6 +3,6 @@
 		<RootNamespace>Strasnote.Logging.Serilog</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Logging\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
+		<ProjectReference Include="..\..\src\Strasnote.Logging.Serilog\Strasnote.Logging.Serilog.csproj" />
 	</ItemGroup>
 </Project>

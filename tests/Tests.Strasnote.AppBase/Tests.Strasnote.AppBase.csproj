@@ -3,6 +3,6 @@
 		<RootNamespace>Strasnote.AppBase</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\AppBase\Strasnote.AppBase.csproj" />
+		<ProjectReference Include="..\..\src\Strasnote.AppBase\Strasnote.AppBase.csproj" />
 	</ItemGroup>
 </Project>

@@ -3,6 +3,6 @@
 		<RootNamespace>Strasnote.Notes.Api</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Notes\Strasnote.Notes.Api\Strasnote.Notes.Api.csproj" />
+		<ProjectReference Include="..\..\src\Strasnote.Notes.Api\Strasnote.Notes.Api.csproj" />
 	</ItemGroup>
 </Project>

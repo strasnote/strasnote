@@ -6,6 +6,6 @@
 		<PackageReference Include="MaybeF.Testing" Version="8.0.1" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Data\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
+	  <ProjectReference Include="..\..\src\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
 	</ItemGroup>
 </Project>
