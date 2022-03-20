@@ -25,7 +25,7 @@ namespace Strasnote.Data.Migrate
 		/// <param name="log">ILog</param>
 		/// <param name="repo">IUserRepository</param>
 		/// <param name="config">UserConfig</param>
-		public static async Task InsertAsync(ILog log, IUserRepository repo, UserConfig config)
+		public static async Task<Maybe<ulong>> InsertAsync(ILog log, IUserRepository repo, UserConfig config)
 		{
 			var user = from ep in GetEmailAndPassword(config)
 					   from keys in Keys.Generate(ep.password)
@@ -44,15 +44,15 @@ namespace Strasnote.Data.Migrate
 						   ConcurrencyStamp = Guid.NewGuid().ToString()
 					   };
 
-			if (user.IsSome(out var value))
-			{
-				var userId = await repo.CreateAsync(value);
-				log.Debug("Inserted default user {User}", userId);
-			}
-			else if (user.IsNone(out var reason))
-			{
-				log.Error("Unable to create user: {Reason}", reason);
-			}
+			return await user.MapAsync(
+				async x =>
+				{
+					var userId = await repo.CreateAsync(x);
+					log.Debug("Inserted default user {User}", userId);
+					return userId;
+				},
+				F.DefaultHandler
+			);
 		}
 
 		/// <summary>

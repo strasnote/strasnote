@@ -106,21 +106,28 @@ namespace Strasnote.Data.Migrate
 			log.Information("Inserting test data.");
 
 			// Insert default user
-			await DefaultUser.InsertAsync(log, user, userConfig).ConfigureAwait(false);
+			var userId = await DefaultUser.InsertAsync(log, user, userConfig).ConfigureAwait(false);
 
-			// Insert test folders
-			var folderId = await TestFolder.InsertAsync(log, folder).ConfigureAwait(false);
+			// Insert other test data
+			userId.Switch(
+				some: async x =>
+				{
+					// Insert test folders
+					var folderId = await TestFolder.InsertAsync(log, folder, x).ConfigureAwait(false);
 
-			// Insert test notes
-			var noteId = await TestNote.InsertAsync(log, note, folderId).ConfigureAwait(false);
+					// Insert test notes
+					var noteId = await TestNote.InsertAsync(log, note, x, folderId).ConfigureAwait(false);
 
-			// Insert test tags
-			var linkedTagId = await TestTag.InsertAsync(log, tag).ConfigureAwait(false);
+					// Insert test tags
+					var linkedTagId = await TestTag.InsertAsync(log, tag, x).ConfigureAwait(false);
 
-			// Insert test note tags
-			await TestNoteTag.InsertAsync(log, noteTag, noteId, linkedTagId);
+					// Insert test note tags
+					await TestNoteTag.InsertAsync(log, noteTag, noteId, linkedTagId);
 
-			log.Information("Test data inserted.");
+					log.Information("Test data inserted.");
+				},
+				none: r => log.Error("Unable to create user: {Reason}", r)
+			);
 		}
 	}
 }
