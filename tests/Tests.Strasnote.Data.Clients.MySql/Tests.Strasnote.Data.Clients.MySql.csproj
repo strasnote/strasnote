@@ -3,6 +3,6 @@
 		<RootNamespace>Strasnote.Data.Clients.MySql</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\src\Data\Clients\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj" />
+		<ProjectReference Include="..\..\src\Data\Clients\Strasnote.Data.Clients.MySql\Strasnote.Data.Clients.MySql.csproj" />
 	</ItemGroup>
 </Project>

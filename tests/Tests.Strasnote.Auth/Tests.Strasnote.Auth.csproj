@@ -3,6 +3,6 @@
 		<RootNamespace>Strasnote.Auth</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\src\Auth\Strasnote.Auth\Strasnote.Auth.csproj" />
+		<ProjectReference Include="..\..\src\Auth\Strasnote.Auth\Strasnote.Auth.csproj" />
 	</ItemGroup>
 </Project>

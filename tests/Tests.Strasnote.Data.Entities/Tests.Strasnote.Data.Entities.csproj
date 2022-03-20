@@ -3,6 +3,6 @@
 		<RootNamespace>Strasnote.Data.Entities</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\src\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
+		<ProjectReference Include="..\..\src\Data\Strasnote.Data.Entities\Strasnote.Data.Entities.csproj" />
 	</ItemGroup>
 </Project>
