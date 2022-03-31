@@ -3,7 +3,7 @@
 
 using MaybeF.Testing;
 using Sodium;
-using static Strasnote.Encryption.Decrypt.R;
+using static Strasnote.Encryption.Decrypt.M;
 
 namespace Strasnote.Encryption.Decrypt_Tests
 {
@@ -20,7 +20,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptPrivateKeyExceptionReason>(none);
+			Assert.IsType<UnableToDecryptPrivateKeyExceptionMsg>(none);
 		}
 
 		[Fact]
@@ -35,7 +35,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptPrivateKeyExceptionReason>(none);
+			Assert.IsType<UnableToDecryptPrivateKeyExceptionMsg>(none);
 		}
 
 		[Fact]
@@ -50,7 +50,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptPrivateKeyExceptionReason>(none);
+			Assert.IsType<UnableToDecryptPrivateKeyExceptionMsg>(none);
 		}
 
 		[Fact]

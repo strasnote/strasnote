@@ -20,7 +20,7 @@ namespace Strasnote.Encryption
 		static internal Maybe<byte[]> PasswordGeneric(string password) =>
 			F.Some(
 				() => GenericHash.Hash(Encoding.UTF8.GetBytes(password), null, 32), // must be 32 bytes
-				e => new R.GenericPasswordHashFailedExceptionReason(e)
+				e => new M.GenericPasswordHashFailedExceptionMsg(e)
 			);
 
 		/// <summary>
@@ -30,17 +30,17 @@ namespace Strasnote.Encryption
 		public static Maybe<string> PasswordArgon(string password) =>
 			F.Some(
 				() => PasswordHash.ArgonHashString(password, PasswordHash.StrengthArgon.Moderate),
-				e => new R.ArgonPasswordHashFailedExceptionReason(e)
+				e => new M.ArgonPasswordHashFailedExceptionMsg(e)
 			);
 
-		/// <summary>Reasons</summary>
-		public static class R
+		/// <summary>Messages</summary>
+		public static class M
 		{
 			/// <summary>Failed to hash password using generic hash</summary>
-			public sealed record class GenericPasswordHashFailedExceptionReason(Exception Value) : IExceptionReason { }
+			public sealed record class GenericPasswordHashFailedExceptionMsg(Exception Value) : IExceptionMsg { }
 
 			/// <summary>Failed to hash password using Argon</summary>
-			public sealed record class ArgonPasswordHashFailedExceptionReason(Exception Value) : IExceptionReason { }
+			public sealed record class ArgonPasswordHashFailedExceptionMsg(Exception Value) : IExceptionMsg { }
 		}
 	}
 }

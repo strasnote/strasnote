@@ -22,14 +22,14 @@ namespace Strasnote.Encryption
 		static internal Maybe<(byte[] key, byte[] nonce)> PrivateKey(byte[] privateKey, string password) =>
 			F.Some(
 				SecretBox.GenerateNonce,
-				e => new R.UnableToGenerateNonceToEncryptPrivateKeyExceptionReason(e)
+				e => new M.UnableToGenerateNonceToEncryptPrivateKeyExceptionMsg(e)
 			)
 			.Bind(
 				nonce => from hash in Hash.PasswordGeneric(password) select (nonce, hash)
 			)
 			.Map(
 				p => (SecretBox.Create(privateKey, p.nonce, p.hash), p.nonce),
-				e => new R.UnableToEncryptPrivateKeyExceptionReason(e)
+				e => new M.UnableToEncryptPrivateKeyExceptionMsg(e)
 			);
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace Strasnote.Encryption
 		public static Maybe<byte[]> String(string json, EncryptedKeyPair recipientKeyPair) =>
 			F.Some(
 				() => SealedPublicKeyBox.Create(json, recipientKeyPair.PublicKey),
-				e => new R.UnableToEncryptStringExceptionReason(e)
+				e => new M.UnableToEncryptStringExceptionMsg(e)
 			);
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace Strasnote.Encryption
 		public static Maybe<byte[]> Object<T>(T obj, EncryptedKeyPair recipientKeyPair) =>
 			F.Some(
 				() => JsonSerializer.Serialize(obj),
-				e => new R.JsonSerialiseExceptionReason(e)
+				e => new M.JsonSerialiseExceptionMsg(e)
 			)
 			.Bind(
 				x => obj switch
@@ -65,20 +65,20 @@ namespace Strasnote.Encryption
 				}
 			);
 
-		/// <summary>Reasons</summary>
-		public static class R
+		/// <summary>Messages</summary>
+		public static class M
 		{
 			/// <summary>Serilising object as JSON failed</summary>
-			public sealed record class JsonSerialiseExceptionReason(Exception Value) : IExceptionReason;
+			public sealed record class JsonSerialiseExceptionMsg(Exception Value) : IExceptionMsg;
 
 			/// <summary>Encrypting the private key failed</summary>
-			public sealed record class UnableToEncryptPrivateKeyExceptionReason(Exception Value) : IExceptionReason;
+			public sealed record class UnableToEncryptPrivateKeyExceptionMsg(Exception Value) : IExceptionMsg;
 
 			/// <summary>Encrypting the (JSON) string failed</summary>
-			public sealed record class UnableToEncryptStringExceptionReason(Exception Value) : IExceptionReason;
+			public sealed record class UnableToEncryptStringExceptionMsg(Exception Value) : IExceptionMsg;
 
 			/// <summary>Generating a nonce to encrypt the private key failed</summary>
-			public sealed record class UnableToGenerateNonceToEncryptPrivateKeyExceptionReason(Exception Value) : IExceptionReason;
+			public sealed record class UnableToGenerateNonceToEncryptPrivateKeyExceptionMsg(Exception Value) : IExceptionMsg;
 		}
 	}
 }

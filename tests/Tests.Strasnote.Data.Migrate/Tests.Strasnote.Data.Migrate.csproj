@@ -3,7 +3,7 @@
 		<RootNamespace>Strasnote.Data.Migrate</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="MaybeF.Testing" Version="8.0.1" />
+		<PackageReference Include="MaybeF.Testing" Version="8.2.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\src\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />

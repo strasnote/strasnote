@@ -5,7 +5,7 @@ using MaybeF.Testing;
 using Microsoft.AspNetCore.Identity;
 using Strasnote.Data.Config;
 using Strasnote.Data.Entities.Auth;
-using static Strasnote.Data.Migrate.DefaultUser.R;
+using static Strasnote.Data.Migrate.DefaultUser.M;
 
 namespace Strasnote.Data.Migrate.DefaultUser_Tests
 {
@@ -22,7 +22,7 @@ namespace Strasnote.Data.Migrate.DefaultUser_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<EmailAndPasswordMustBothBeSetReason>(none);
+			Assert.IsType<EmailAndPasswordMustBothBeSetMsg>(none);
 		}
 
 		[Fact]
@@ -36,7 +36,7 @@ namespace Strasnote.Data.Migrate.DefaultUser_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<EmailAndPasswordMustBothBeSetReason>(none);
+			Assert.IsType<EmailAndPasswordMustBothBeSetMsg>(none);
 		}
 
 		[Fact]
