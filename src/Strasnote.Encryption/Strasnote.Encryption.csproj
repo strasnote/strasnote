@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<PackageReference Include="MaybeF" Version="8.0.1" />
+		<PackageReference Include="MaybeF" Version="8.2.0" />
 		<PackageReference Include="Sodium.Core" Version="1.2.3" />
 	</ItemGroup>
 </Project>
