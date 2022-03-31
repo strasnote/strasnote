@@ -3,7 +3,7 @@
 
 using System.Text;
 using MaybeF.Testing;
-using static Strasnote.Encryption.Decrypt.R;
+using static Strasnote.Encryption.Decrypt.M;
 
 namespace Strasnote.Encryption.Decrypt_Tests
 {
@@ -22,7 +22,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptValueExceptionReason>(none);
+			Assert.IsType<UnableToDecryptValueExceptionMsg>(none);
 		}
 
 		[Fact]
@@ -38,7 +38,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptValueExceptionReason>(none);
+			Assert.IsType<UnableToDecryptValueExceptionMsg>(none);
 		}
 
 		[Fact]
@@ -55,7 +55,7 @@ namespace Strasnote.Encryption.Decrypt_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<UnableToDecryptValueExceptionReason>(none);
+			Assert.IsType<UnableToDecryptValueExceptionMsg>(none);
 		}
 
 		[Fact]

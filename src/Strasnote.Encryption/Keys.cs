@@ -19,7 +19,7 @@ namespace Strasnote.Encryption
 		public static Maybe<EncryptedKeyPair> Generate(string password) =>
 			F.Some(
 				PublicKeyBox.GenerateKeyPair,
-				e => new R.UnableToGenerateNewKeyPairExceptionReason(e)
+				e => new M.UnableToGenerateNewKeyPairExceptionMsg(e)
 			)
 			.Bind(
 				k => WithEncryptedPrivateKey(k, password)
@@ -41,11 +41,11 @@ namespace Strasnote.Encryption
 				F.DefaultHandler
 			);
 
-		/// <summary>Reasons</summary>
-		public static class R
+		/// <summary>Messages</summary>
+		public static class M
 		{
 			/// <summary>Unable to generate fresh key pair</summary>
-			public sealed record class UnableToGenerateNewKeyPairExceptionReason(Exception Value) : IExceptionReason;
+			public sealed record class UnableToGenerateNewKeyPairExceptionMsg(Exception Value) : IExceptionMsg;
 		}
 	}
 }

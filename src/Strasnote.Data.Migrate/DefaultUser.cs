@@ -53,7 +53,7 @@ namespace Strasnote.Data.Migrate
 				},
 				none: r =>
 				{
-					log.Error("Unable to create user: {Reason}", r);
+					log.Error("Unable to create user: {Msg}", r);
 					return F.None<ulong>(r);
 				}
 			);
@@ -75,14 +75,14 @@ namespace Strasnote.Data.Migrate
 				);
 			}
 
-			return F.None<(string, string), R.EmailAndPasswordMustBothBeSetReason>();
+			return F.None<(string, string), M.EmailAndPasswordMustBothBeSetMsg>();
 		}
 
-		/// <summary>Reasons</summary>
-		public static class R
+		/// <summary>Messages</summary>
+		public static class M
 		{
 			/// <summary>Email and password must both be set to automatically create a user</summary>
-			public sealed record EmailAndPasswordMustBothBeSetReason : IReason { }
+			public sealed record EmailAndPasswordMustBothBeSetMsg : IMsg { }
 		}
 	}
 }

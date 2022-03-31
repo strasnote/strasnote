@@ -3,7 +3,7 @@
 
 using MaybeF.Linq;
 using MaybeF.Testing;
-using static Strasnote.Encryption.Hash.R;
+using static Strasnote.Encryption.Hash.M;
 
 namespace Strasnote.Encryption.Hash_Tests
 {
@@ -20,7 +20,7 @@ namespace Strasnote.Encryption.Hash_Tests
 
 			// Assert
 			var none = result.AssertNone();
-			Assert.IsType<GenericPasswordHashFailedExceptionReason>(none);
+			Assert.IsType<GenericPasswordHashFailedExceptionMsg>(none);
 		}
 
 		[Fact]
