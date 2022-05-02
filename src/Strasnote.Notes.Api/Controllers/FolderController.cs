@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.AppBase.Abstracts;
 using Strasnote.Logging;
@@ -37,41 +38,28 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <remarks>
 		/// POST /folder
 		/// {
-		///     "folderName": "..."
+		///     "folderName": "...",
+		///     "parentId": 42 (nullable)
 		/// }
 		/// </remarks>
 		/// <returns>The ID of the new Folder</returns>
 		[HttpPost]
-		[ProducesResponseType(typeof(ulong), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> Create([FromBody] CreateModel model) =>
-			IsAuthenticatedUserAsync(
-				then: userId => folders.CreateAsync(new() { FolderName = model.FolderName, UserId = userId }),
-				result: folderId => Created(nameof(GetById), folderId)
-			);
+		[ProducesResponseType(typeof(ulong), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public async Task<IActionResult> Create(CreateModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 
-		/// <summary>
-		/// Creates a Folder within a parent folder.
-		/// </summary>
-		/// <remarks>
-		/// POST /folder/in-folder
-		/// {
-		///     "folderName": "...",
-		///     "parentId": 42
-		/// }
-		/// </remarks>
-		/// <param name="model">CreateInFolderModel</param>
-		/// <returns>The ID of the new Folder</returns>
-		[HttpPost("in-folder")]
-		[ProducesResponseType(typeof(ulong), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
-			IsAuthenticatedUserAsync(
+			return await IsAuthenticatedUserAsync(
 				then: userId => folders.CreateAsync(new() { FolderName = model.FolderName, FolderParentId = model.ParentId, UserId = userId }),
 				result: folderId => Created(nameof(GetById), folderId)
 			);
+		}
 
 		/// <summary>
 		/// Retrieves a Folder by ID.
@@ -81,14 +69,21 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpGet("{folderId}")]
-		[ProducesResponseType(typeof(GetByIdModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> GetById([FromRoute] FolderIdModel folderId) =>
-			IsAuthenticatedUserAsync(
+		[ProducesResponseType(typeof(GetByIdModel), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public async Task<IActionResult> GetById(FolderIdModel folderId)
+		{
+			if(!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			return await IsAuthenticatedUserAsync(
 				then: userId => folders.RetrieveAsync<GetByIdModel?>(folderId.Value, userId)
 			);
+		}
 
 		/// <summary>
 		/// Saves Folder name.
@@ -119,10 +114,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpDelete("{folderId}")]
-		[ProducesResponseType(204)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> Delete([FromRoute] FolderIdModel folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.DeleteAsync(folderId.Value, userId),

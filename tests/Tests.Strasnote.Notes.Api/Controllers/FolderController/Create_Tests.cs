@@ -32,7 +32,7 @@ namespace Strasnote.Notes.Api.Controllers.FolderController_Tests
 			var folderParentId = Rnd.Ulng;
 
 			// Act
-			await controller.CreateInFolder(new(folderName, folderParentId));
+			await controller.Create(new(folderName, folderParentId));
 
 			// Assert
 			await v.Folders.Received().CreateAsync(
