@@ -3,7 +3,7 @@
 		<RootNamespace>Strasnote.Encryption</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="MaybeF.Testing" Version="9.0.0" />
+		<PackageReference Include="MaybeF.Testing" Version="9.0.2" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Strasnote.Encryption\Strasnote.Encryption.csproj" />
