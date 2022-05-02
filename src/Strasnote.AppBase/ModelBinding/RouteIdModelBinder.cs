@@ -36,7 +36,7 @@ namespace Strasnote.AppBase.ModelBinding
 					ModelBindingResult.Success(new T { Value = id }),
 
 				false =>
-					ModelBindingResult.Failed()
+					ModelBindingResult.Success(new T { Value = 0 })
 			};
 
 			return Task.CompletedTask;
