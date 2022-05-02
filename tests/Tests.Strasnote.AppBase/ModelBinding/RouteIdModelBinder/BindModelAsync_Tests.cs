@@ -60,7 +60,7 @@ namespace Strasnote.AppBase.ModelBinding.RouteIdModelBinder_Tests
 		}
 
 		[Fact]
-		public async Task ValueProvider_Result_Is_Not_Valid_Id_Sets_Result_Failed()
+		public async Task ValueProvider_Result_Is_Not_Valid_Id_Sets_Result_Success_With_Zero_Value()
 		{
 			// Arrange
 			var modelName = Rnd.Str;
@@ -82,7 +82,9 @@ namespace Strasnote.AppBase.ModelBinding.RouteIdModelBinder_Tests
 			await binder.BindModelAsync(context);
 
 			// Assert
-			Assert.False(context.Result.IsModelSet);
+			Assert.True(context.Result.IsModelSet);
+			var model = Assert.IsType<IdType>(context.Result.Model);
+			Assert.Equal(0u, model.Value);
 		}
 
 		[Fact]
