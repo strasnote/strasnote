@@ -13,12 +13,7 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 			// Arrange
 			var (controller, v) = Setup();
 			var noteId = new NoteIdModel { Value = Rnd.Ulng };
-			var folderId = Rnd.Ulng;
-
-			var model = new MoveToFolderModel
-			{
-				FolderId = folderId
-			};
+			var model = new MoveToFolderModel(Rnd.Ulng);
 
 			// Act
 			await controller.MoveToFolder(noteId, model);

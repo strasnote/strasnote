@@ -17,7 +17,6 @@ namespace Strasnote.Notes.Api.Models.Folders
 	/// </summary>
 	public sealed class FolderIdModelValidator : AbstractValidator<FolderIdModel>
 	{
-
 		private readonly IFolderRepository folderRepository;
 		private readonly IAppContext appContext;
 
@@ -31,9 +30,10 @@ namespace Strasnote.Notes.Api.Models.Folders
 			this.folderRepository = folderRepository;
 			this.appContext = appContext;
 
-			RuleFor(x => x)
+			RuleFor(x => x.Value)
 				.NotEmpty()
-				.MustAsync(async (id, _) => await folderRepository.RetrieveAsync<GetByIdModel?>(id.Value, appContext.CurrentUserId) != null);
+				.MustAsync(async (id, _) => await folderRepository.RetrieveAsync<GetByIdModel?>(id, appContext.CurrentUserId) != null)
+				.WithMessage("Folder not found");
 		}
 	}
 }

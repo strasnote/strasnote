@@ -48,18 +48,11 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> Create(CreateModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			return await IsAuthenticatedUserAsync(
+		public Task<IActionResult> Create(CreateModel model) => 
+			IsAuthenticatedUserAsync(
 				then: userId => folders.CreateAsync(new() { FolderName = model.FolderName, FolderParentId = model.ParentId, UserId = userId }),
 				result: folderId => Created(nameof(GetById), folderId)
 			);
-		}
 
 		/// <summary>
 		/// Retrieves a Folder by ID.
@@ -73,17 +66,10 @@ namespace Strasnote.Notes.Api.Controllers
 		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<IActionResult> GetById(FolderIdModel folderId)
-		{
-			if(!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			return await IsAuthenticatedUserAsync(
+		public Task<IActionResult> GetById(FolderIdModel folderId) =>
+			IsAuthenticatedUserAsync(
 				then: userId => folders.RetrieveAsync<GetByIdModel?>(folderId.Value, userId)
 			);
-		}
 
 		/// <summary>
 		/// Saves Folder name.
@@ -98,9 +84,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="model">Updated Folder values</param>
 		[HttpPut("{folderId}")]
 		[ProducesResponseType(typeof(SaveNameModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> SaveName([FromRoute] FolderIdModel folderId, SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.UpdateAsync(folderId.Value, model, userId)

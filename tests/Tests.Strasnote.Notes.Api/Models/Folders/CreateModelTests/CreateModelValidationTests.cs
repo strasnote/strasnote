@@ -86,9 +86,22 @@ namespace Strasnote.Notes.Api.Models.Folders.CreateModelTests
 		}
 
 		[Fact]
-		public void No_Error_When_Data_Valid()
+		public void No_Error_When_Data_Valid_Top_Level_Folder()
 		{
 			var createModel = new CreateModel(Rnd.Str, null);
+
+			var result = validator.TestValidate(createModel);
+
+			result.ShouldNotHaveAnyValidationErrors();
+		}
+
+		[Fact]
+		public void No_Error_When_Data_Valid_With_Parent_Folder()
+		{
+			var createModel = new CreateModel(Rnd.Str, Rnd.Ulng);
+
+			folderRepository.RetrieveAsync<GetByIdModel?>(Arg.Any<ulong>(), Arg.Any<ulong?>())
+				.Returns(new GetByIdModel(DateTime.Now, Rnd.Str, DateTime.Now, Rnd.Ulng));
 
 			var result = validator.TestValidate(createModel);
 
