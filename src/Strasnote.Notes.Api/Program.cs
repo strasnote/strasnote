@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using System.IO;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Strasnote.AppBase;
@@ -9,6 +10,7 @@ using Strasnote.AppBase.ModelBinding;
 using Strasnote.Auth.Data.Extensions;
 using Strasnote.Auth.Extensions;
 using Strasnote.Data.Clients.MySql;
+using Strasnote.Notes.Api.Models.Folders;
 using Strasnote.Notes.Data;
 
 // =========================================================================
@@ -38,6 +40,13 @@ builder.ConfigureStrasnote((ctx, services) =>
 
 		var filePath = Path.Combine(System.AppContext.BaseDirectory, "Strasnote.Notes.Api.xml");
 		c.IncludeXmlComments(filePath);
+	});
+
+	// Fluent Validation
+	services.AddFluentValidation(fv =>
+	{
+		fv.DisableDataAnnotationsValidation = true; // disabled built-in model validation
+		fv.RegisterValidatorsFromAssemblyContaining<FolderIdModelValidator>();
 	});
 });
 var app = builder.Build();

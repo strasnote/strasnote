@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using Strasnote.Notes.Api.Models.Notes;
+using Strasnote.Notes.Api.Models.Tags;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {

@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.AppBase.Abstracts;
 using Strasnote.Logging;
@@ -39,9 +40,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <returns>The ID of the new Tag</returns>
 		[HttpPost]
-		[ProducesResponseType(typeof(ulong), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(typeof(ulong), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> Create([FromBody] CreateModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.CreateAsync(new() { TagName = model.TagName, UserId = userId }),
@@ -56,10 +57,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="tagId">The Tag ID</param>
 		[HttpGet("{tagId}")]
-		[ProducesResponseType(typeof(GetByIdModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(typeof(GetByIdModel), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> GetById([FromRoute] TagIdModel tagId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.RetrieveAsync<GetByIdModel?>(tagId.Value, userId)
@@ -77,10 +78,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="tagId">The Tag ID</param>
 		/// <param name="model">Updated Tag values</param>
 		[HttpPut("{tagId}")]
-		[ProducesResponseType(typeof(SaveNameModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(typeof(SaveNameModel), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> SaveName([FromRoute] TagIdModel tagId, [FromBody] SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.UpdateAsync<SaveNameModel?>(tagId.Value, model, userId)
@@ -94,10 +95,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="tagId">The Tag ID</param>
 		[HttpDelete("{tagId}")]
-		[ProducesResponseType(204)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> Delete([FromRoute] TagIdModel tagId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.DeleteAsync(tagId.Value, userId),

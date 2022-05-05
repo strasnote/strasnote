@@ -2,6 +2,7 @@
 // Licensed under https://strasnote.com/licence
 
 using Strasnote.Data.Entities.Notes;
+using Strasnote.Notes.Api.Models.Folders;
 
 namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 {
@@ -12,13 +13,16 @@ namespace Strasnote.Notes.Api.Controllers.NoteController_Tests
 		{
 			// Arrange
 			var (controller, v) = Setup();
-			var folderId = Rnd.Ulng;
+			var folderIdModel = new FolderIdModel
+			{
+				Value = Rnd.Ulng
+			};
 
 			// Act
-			await controller.CreateInFolder(new(folderId));
+			await controller.CreateInFolder(folderIdModel);
 
 			// Assert
-			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId && n.FolderId == folderId));
+			await v.Notes.Received().CreateAsync(Arg.Is<NoteEntity>(n => n.UserId == v.UserId && n.FolderId == folderIdModel.Value));
 		}
 	}
 }

@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.AppBase.Abstracts;
 using Strasnote.Logging;
@@ -43,9 +44,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <returns>The ID of the new Note</returns>
 		[HttpPost]
-		[ProducesResponseType(typeof(ulong), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(typeof(ulong), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> Create() =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.CreateAsync(new() { UserId = userId }),
@@ -56,20 +57,17 @@ namespace Strasnote.Notes.Api.Controllers
 		/// Creates a Note within a Folder.
 		/// </summary>
 		/// <remarks>
-		/// POST /note/in-folder
-		/// {
-		///     "folderId": 42
-		/// }
+		/// POST /note/folder/42
 		/// </remarks>
-		/// <param name="model">CreateInFolderModel</param>
+		/// <param name="folderId"></param>
 		/// <returns>The ID of the new Note</returns>
-		[HttpPost("in-folder")]
-		[ProducesResponseType(typeof(ulong), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
+		[HttpPost("folder/{folderId}")]
+		[ProducesResponseType(typeof(ulong), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public Task<IActionResult> CreateInFolder([FromRoute] Models.Folders.FolderIdModel folderId) =>
 			IsAuthenticatedUserAsync(
-				then: userId => notes.CreateAsync(new() { UserId = userId, FolderId = model.FolderId }),
+				then: userId => notes.CreateAsync(new() { UserId = userId, FolderId = folderId.Value }),
 				result: noteId => Created(nameof(GetById), noteId)
 			);
 
@@ -85,10 +83,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="model">MoveToFolderModel</param>
 		/// <returns>The ID of the new folder</returns>
 		[HttpPut("{noteId}/move")]
-		[ProducesResponseType(typeof(ulong?), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> MoveToFolder([FromRoute] NoteIdModel noteId, [FromBody] MoveToFolderModel model) =>
+		[ProducesResponseType(typeof(ulong?), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public Task<IActionResult> MoveToFolder([FromRoute] NoteIdModel noteId, MoveToFolderModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.UpdateAsync(noteId.Value, model, userId)
 			);
@@ -101,10 +99,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
 		[HttpGet("{noteId}")]
-		[ProducesResponseType(typeof(GetByIdModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(typeof(GetByIdModel), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> GetById([FromRoute] NoteIdModel noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.RetrieveAsync<GetByIdModel?>(noteId.Value, userId)
@@ -118,10 +116,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
 		[HttpGet("{noteId}/tags")]
-		[ProducesResponseType(typeof(IEnumerable<TagModel>), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(typeof(IEnumerable<TagModel>), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> GetTags([FromRoute] NoteIdModel noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.GetForNote<TagModel>(noteId.Value, userId)
@@ -139,11 +137,11 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="noteId">The Note ID</param>
 		/// <param name="model">Updated Note model</param>
 		[HttpPut("{noteId}")]
-		[ProducesResponseType(typeof(SaveContentModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> SaveContent([FromRoute] NoteIdModel noteId, [FromBody] SaveContentModel model) =>
+		[ProducesResponseType(typeof(SaveContentModel), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public Task<IActionResult> SaveContent([FromRoute] NoteIdModel noteId, SaveContentModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.UpdateAsync<SaveContentModel?>(noteId.Value, model, userId)
 			);
@@ -160,11 +158,11 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="noteId">The Note ID</param>
 		/// <param name="model">Tag model</param>
 		[HttpPost("{noteId}/tag")]
-		[ProducesResponseType(typeof(bool), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> AddTag([FromRoute] NoteIdModel noteId, [FromBody] AddTagModel model) =>
+		[ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public Task<IActionResult> AddTag([FromRoute] NoteIdModel noteId, AddTagModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.AddToNote(model.TagId, noteId.Value, userId)
 			);
@@ -178,11 +176,11 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="noteId">The Note ID</param>
 		/// <param name="tagId">The Tag ID</param>
 		[HttpDelete("{noteId}/tag/{tagId}")]
-		[ProducesResponseType(204)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> RemoveTag([FromRoute] NoteIdModel noteId, [FromRoute] TagIdModel tagId) =>
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public Task<IActionResult> RemoveTag([FromRoute] NoteIdModel noteId, [FromRoute] Models.Tags.TagIdModel tagId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => tags.RemoveFromNote(tagId.Value, noteId.Value, userId),
 				result: _ => NoContent()
@@ -196,10 +194,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="noteId">The Note ID</param>
 		[HttpDelete("{noteId}")]
-		[ProducesResponseType(204)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> Delete([FromRoute] NoteIdModel noteId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => notes.DeleteAsync(noteId.Value, userId),

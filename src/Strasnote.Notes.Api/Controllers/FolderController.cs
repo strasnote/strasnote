@@ -3,6 +3,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Strasnote.AppBase.Abstracts;
 using Strasnote.Logging;
@@ -37,37 +38,17 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <remarks>
 		/// POST /folder
 		/// {
-		///     "folderName": "..."
+		///     "folderName": "...",
+		///     "parentId": 42 (nullable)
 		/// }
 		/// </remarks>
 		/// <returns>The ID of the new Folder</returns>
 		[HttpPost]
-		[ProducesResponseType(typeof(ulong), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> Create([FromBody] CreateModel model) =>
-			IsAuthenticatedUserAsync(
-				then: userId => folders.CreateAsync(new() { FolderName = model.FolderName, UserId = userId }),
-				result: folderId => Created(nameof(GetById), folderId)
-			);
-
-		/// <summary>
-		/// Creates a Folder within a parent folder.
-		/// </summary>
-		/// <remarks>
-		/// POST /folder/in-folder
-		/// {
-		///     "folderName": "...",
-		///     "parentId": 42
-		/// }
-		/// </remarks>
-		/// <param name="model">CreateInFolderModel</param>
-		/// <returns>The ID of the new Folder</returns>
-		[HttpPost("in-folder")]
-		[ProducesResponseType(typeof(ulong), 201)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> CreateInFolder([FromBody] CreateInFolderModel model) =>
+		[ProducesResponseType(typeof(ulong), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public Task<IActionResult> Create(CreateModel model) => 
 			IsAuthenticatedUserAsync(
 				then: userId => folders.CreateAsync(new() { FolderName = model.FolderName, FolderParentId = model.ParentId, UserId = userId }),
 				result: folderId => Created(nameof(GetById), folderId)
@@ -81,11 +62,11 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpGet("{folderId}")]
-		[ProducesResponseType(typeof(GetByIdModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
-		public Task<IActionResult> GetById([FromRoute] FolderIdModel folderId) =>
+		[ProducesResponseType(typeof(GetByIdModel), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public Task<IActionResult> GetById(FolderIdModel folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.RetrieveAsync<GetByIdModel?>(folderId.Value, userId)
 			);
@@ -103,9 +84,9 @@ namespace Strasnote.Notes.Api.Controllers
 		/// <param name="model">Updated Folder values</param>
 		[HttpPut("{folderId}")]
 		[ProducesResponseType(typeof(SaveNameModel), 200)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> SaveName([FromRoute] FolderIdModel folderId, SaveNameModel model) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.UpdateAsync(folderId.Value, model, userId)
@@ -119,10 +100,10 @@ namespace Strasnote.Notes.Api.Controllers
 		/// </remarks>
 		/// <param name="folderId">The Folder ID</param>
 		[HttpDelete("{folderId}")]
-		[ProducesResponseType(204)]
-		[ProducesResponseType(401)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(500)]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public Task<IActionResult> Delete([FromRoute] FolderIdModel folderId) =>
 			IsAuthenticatedUserAsync(
 				then: userId => folders.DeleteAsync(folderId.Value, userId),
