@@ -17,7 +17,7 @@ jobs:
     steps:
     - 
       name: Prepare - Checkout Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     -
       name: Prepare - Read image version
       uses: bfren/read-file@v1
@@ -40,11 +40,12 @@ jobs:
       name: Prepare - Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: |
+          6.0.x
     -
       name: A - Publish
       run: |
-        dotnet publish ./src/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
+        dotnet publish src/Strasnote.Notes.Api/Strasnote.Notes.Api.csproj \
           --configuration Release \
           --runtime linux-musl-x64 \
           --output ./publish \
@@ -60,7 +61,7 @@ jobs:
         platforms: linux/amd64
         tags: |
           strasnote/notes:dev
-          strasnote/notes:${{ steps.version.outputs.content }}dev
+          strasnote/notes:${{ steps.version.outputs.contents }}dev
     -
       name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
