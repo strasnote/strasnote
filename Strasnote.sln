@@ -146,6 +146,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{CDF2C874
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encryption", "Encryption", "{0B52870D-3245-42BA-9033-ECCBFBE44DBA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Strasnote.Apps.Web", "src\Strasnote.Apps.Web\Strasnote.Apps.Web.csproj", "{C729E43B-9B19-49EF-902F-E227E379A419}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -296,6 +298,10 @@ Global
 		{5B2DBB02-EEA2-4A8C-9AA6-0B79077AED53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B2DBB02-EEA2-4A8C-9AA6-0B79077AED53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B2DBB02-EEA2-4A8C-9AA6-0B79077AED53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C729E43B-9B19-49EF-902F-E227E379A419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C729E43B-9B19-49EF-902F-E227E379A419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C729E43B-9B19-49EF-902F-E227E379A419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C729E43B-9B19-49EF-902F-E227E379A419}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -353,6 +359,7 @@ Global
 		{5408CE07-D021-496F-933D-00DE3F729608} = {0155C170-BF68-4217-BFC6-B35A82291B42}
 		{CDF2C874-4CDA-4E99-855A-1A30F6747C4D} = {0155C170-BF68-4217-BFC6-B35A82291B42}
 		{0B52870D-3245-42BA-9033-ECCBFBE44DBA} = {0155C170-BF68-4217-BFC6-B35A82291B42}
+		{C729E43B-9B19-49EF-902F-E227E379A419} = {2DE8483E-AE7A-4F2A-8EEB-45CFBD6684EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF05D0DF-D04A-46E8-A71F-775870189F62}
