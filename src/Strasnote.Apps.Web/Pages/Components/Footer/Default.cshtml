@@ -1,0 +1,8 @@
+﻿@model Strasnote.Apps.Web.Pages.Components.Footer.FooterModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+}
+
+<footer class="footer">
+	Copyright &copy; Strasnote @Model.Years (loaded @DateTime.Now.ToString(Formats.DateTimeFull))
+</footer>
