@@ -1,0 +1,8 @@
+﻿@model Strasnote.Apps.Web.Pages.Components.Header.HeaderModel
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+}
+
+<header class="header">
+	@Model.Title (loaded @DateTime.Now.ToString(Formats.DateTimeFull))
+</header>
