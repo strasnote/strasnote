@@ -1,0 +1,15 @@
+﻿@page
+@model Strasnote.Apps.Web.Pages.Home.IndexModel
+
+<h1>Welcome to Strasnote</h1>
+
+<p>Fixed time: @DateTime.Now.ToString(Formats.DateTimeFull)</p>
+
+<p>
+	Updated time: <span id="update-time"></span><br/>
+	<a asp-page="/Home/Index" asp-page-handler="Time" data-target="#update-time">Update time</a>
+</p>
+
+<p><a asp-page="/Home/Empty">Empty page</a></p>
+
+<p><a asp-page="/Home/Form">Form</a></p>
