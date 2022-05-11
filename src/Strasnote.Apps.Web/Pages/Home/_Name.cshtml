@@ -1,0 +1,12 @@
+﻿@model Strasnote.Apps.Web.Pages.Home.Person
+@{
+	ArgumentNullException.ThrowIfNull(Model);
+}
+
+<p>@Model.Text</p>
+
+<form asp-page="/Home/Form" asp-page-handler="Name" data-target="#name">
+	@Html.LabelFor(x => x.Name, "Please enter your name:")
+	@Html.TextBoxFor(x => x.Name)
+	<input type="submit" value="Send" />
+</form>
