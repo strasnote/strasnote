@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Strasnote.Data.Abstracts;
 using Strasnote.Data.Migrate;
 using Strasnote.Logging;
 
@@ -30,6 +31,9 @@ namespace Strasnote.AppBase
 			// Redirect to HTTPS
 			_ = app.UseHttpsRedirection();
 
+			// Enable static files
+			_ = app.UseStaticFiles();
+
 			// Enable endpoint routing
 			_ = app.UseRouting();
 
@@ -45,6 +49,7 @@ namespace Strasnote.AppBase
 		/// Output application name and run database migration before running the app itself
 		/// </summary>
 		/// <param name="app">WebApplication</param>
+		/// <param name="useData">If true, the database will be </param>
 		public static async Task RunAppAsync(this WebApplication app)
 		{
 			// Ready to go
@@ -52,8 +57,11 @@ namespace Strasnote.AppBase
 			log.Information("Application ready.");
 
 			// Run migration
-			var migrator = new Migrator(app.Services);
-			await migrator.ExecuteAsync().ConfigureAwait(false);
+			if (app.Services.GetService<IDbClient>() is not null)
+			{
+				var migrator = new Migrator(app.Services);
+				await migrator.ExecuteAsync().ConfigureAwait(false);
+			}
 
 			// Run app
 			await app.RunAsync();
