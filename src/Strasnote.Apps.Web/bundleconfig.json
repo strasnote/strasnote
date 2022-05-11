@@ -1,0 +1,32 @@
+[
+  {
+    "outputFileName": "wwwroot/js/bundles/strasnote-lib.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery/jquery.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/strasnote-lib.min.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery/jquery.min.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/strasnote.js",
+    "inputFiles": [
+      "wwwroot/js/**/*.inc.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  }
+]
