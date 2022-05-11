@@ -4,5 +4,7 @@
 <p><a asp-page="Home">Home</a></p>
 
 <div id="name">
-	<partial name="_Name" model="new Person()"/>
+	<partial name="_Name" model="new Form()"/>
 </div>
+
+<p>Generated @DateTime.Now.ToString(Formats.DateTimeFull)</p>

@@ -7,5 +7,5 @@ namespace Strasnote.Apps.Web.Pages.Home;
 
 public sealed partial class FormModel : PageModel
 {
-	public Person Person { get; init; } = new();
+	public Form Person { get; init; } = new();
 }

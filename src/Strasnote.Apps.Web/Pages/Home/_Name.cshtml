@@ -1,4 +1,4 @@
-﻿@model Strasnote.Apps.Web.Pages.Home.Person
+﻿@model Strasnote.Apps.Web.Pages.Home.Form
 @{
 	ArgumentNullException.ThrowIfNull(Model);
 }
@@ -6,7 +6,15 @@
 <p>@Model.Text</p>
 
 <form asp-page="/Home/Form" asp-page-handler="Name" data-target="#name">
-	@Html.LabelFor(x => x.Name, "Please enter your name:")
-	@Html.TextBoxFor(x => x.Name)
-	<input type="submit" value="Send" />
+	<div>
+		@Html.LabelFor(x => x.Name, "Please enter your name:")
+		@Html.TextBoxFor(x => x.Name)
+	</div>
+	<div>
+		@Html.LabelFor(x => x.Reset, "Reset the page?")
+		@Html.CheckBoxFor(x => x.Reset)
+	</div>
+	<div>
+		<input type="submit" value="Send" />
+	</div>
 </form>
