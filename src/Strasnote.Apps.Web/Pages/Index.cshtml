@@ -5,46 +5,51 @@
 <html lang="en">
 <head>
 
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 
-	<title>Strasnote Web App</title>
+    <title>Strasnote Web App</title>
 
-	<!-- Style -->
-	<link rel="stylesheet" href="~/css/site.css" />
+    <!-- Style -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/streditor/streditor.css" />
 
-	<!-- Script -->
-	<script type="text/javascript">
-		var readyF = [];
-		var ready = (f) => readyF.push(f);
-		var homeUrl = "@Url.Page("/Home/Index")";
-	</script>
+    <!-- Script -->
+    <script type="text/javascript">
+        var readyF = [];
+        var ready = (f) => readyF.push(f);
+        var homeUrl = "@Url.Page("/Home/Index")";
+    </script>
 
 </head>
 <body>
 
-	<!-- Header -->
-	<vc:header />
-	
-	<!-- Content -->
-	<main></main>
+    <!-- Header -->
+    <vc:header />
 
-	<!-- Footer -->
-	<vc:footer />
+    <!-- Content -->
+    <main></main>
 
-	<!-- Script -->
-	<environment names="Development">
-		<script src="~/js/bundles/strasnote-lib.js"></script>
-		<script src="~/js/bundles/strasnote.js"></script>
-	</environment>
-	<environment names="Staging,Production">
-		<script src="~/js/bundles/strasnote-lib.min.js" asp-append-version="true" csp-add-nonce="true"></script>
-		<script src="~/js/bundles/strasnote.min.js" asp-append-version="true" csp-add-nonce="true"></script>
-	</environment>
-	<script type="text/javascript">
-		$.each(readyF, (_, f) => f());
-		loadHash();
-	</script>
+    <!-- Footer -->
+    <vc:footer />
+
+    <!-- Script -->
+    <environment names="Development">
+        <script src="~/js/bundles/strasnote-lib.js"></script>
+        <script src="~/js/bundles/strasnote.js"></script>
+        <script src="~/js/bundles/streditor.js"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/js/bundles/strasnote-lib.min.js" asp-append-version="true" csp-add-nonce="true"></script>
+        <script src="~/js/bundles/strasnote.min.js" asp-append-version="true" csp-add-nonce="true"></script>
+        <script src="~/js/bundles/streditor.min.js" asp-append-version="true" csp-add-nonce="true"></script>
+    </environment>
+
+    <script type="text/javascript">
+        $.each(readyF, (_, f) => f());
+        loadHash();
+    </script>
 
 </body>
 </html>

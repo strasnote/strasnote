@@ -28,5 +28,15 @@
       "enabled": true,
       "renameLocals": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/streditor.js",
+    "inputFiles": [
+      "wwwroot/lib/**/*.inc.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": false
+    }
   }
 ]
