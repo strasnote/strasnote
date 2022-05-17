@@ -5,6 +5,10 @@
     {
       "library": "jquery@3.6.0",
       "destination": "wwwroot/lib/jquery"
+    },
+    {
+      "library": "codemirror@5.65.3",
+      "destination": "wwwroot/lib/codemirror"
     }
   ]
 }

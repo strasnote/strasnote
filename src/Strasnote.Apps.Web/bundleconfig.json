@@ -2,7 +2,16 @@
   {
     "outputFileName": "wwwroot/js/bundles/strasnote-lib.js",
     "inputFiles": [
-      "wwwroot/lib/jquery/jquery.js"
+      "wwwroot/lib/jquery/jquery.js",
+      "wwwroot/lib/codemirror/codemirror.js",
+      "wwwroot/lib/codemirror/addon/mode/overlay.js",
+      "wwwroot/lib/codemirror/mode/markdown/markdown.js",
+      "wwwroot/lib/codemirror/mode/gfm/gfm.js",
+      "wwwroot/lib/codemirror/mode/javascript/javascript.js",
+      "wwwroot/lib/codemirror/mode/css/css.js",
+      "wwwroot/lib/codemirror/mode/htmlmixed/htmlmixed.js",
+      "wwwroot/lib/codemirror/mode/clike/clike.js",
+      "wwwroot/lib/codemirror/mode/meta.js"
     ],
     "minify": {
       "enabled": false,
@@ -12,7 +21,16 @@
   {
     "outputFileName": "wwwroot/js/bundles/strasnote-lib.min.js",
     "inputFiles": [
-      "wwwroot/lib/jquery/jquery.min.js"
+      "wwwroot/lib/jquery/jquery.min.js",
+      "wwwroot/lib/codemirror/codemirror.min.js",
+      "wwwroot/lib/codemirror/addon/mode/overlay.min.js",
+      "wwwroot/lib/codemirror/mode/markdown/markdown.min.js",
+      "wwwroot/lib/codemirror/mode/gfm/gfm.min.js",
+      "wwwroot/lib/codemirror/mode/javascript/javascript.min.js",
+      "wwwroot/lib/codemirror/mode/css/css.min.js",
+      "wwwroot/lib/codemirror/mode/htmlmixed/htmlmixed.min.js",
+      "wwwroot/lib/codemirror/mode/clike/clike.min.js",
+      "wwwroot/lib/codemirror/mode/meta.min.js"
     ],
     "minify": {
       "enabled": false,

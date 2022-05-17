@@ -25,3 +25,7 @@ body {
 footer {
     margin-top: 50px;
 }
+
+.CodeMirror {
+    font-family: "Roboto";
+}
