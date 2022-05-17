@@ -1,13 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TypeScriptOutDir></TypeScriptOutDir>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptOutFile>wwwroot/lib/ink/compiled/ink.js</TypeScriptOutFile>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TypeScriptOutDir></TypeScriptOutDir>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptOutFile>wwwroot/lib/ink/compiled/ink.js</TypeScriptOutFile>
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
+    <Content Remove="compilerconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +53,7 @@
 
   <ItemGroup>
     <None Include="bundleconfig.json" />
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
   <ItemGroup>

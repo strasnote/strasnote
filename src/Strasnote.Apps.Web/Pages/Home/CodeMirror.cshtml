@@ -1,0 +1,16 @@
+﻿@page
+@model Strasnote.Apps.Web.Pages.Home.CodeMirrorModel
+@{
+}
+
+<div class="editor" style="border: 1px solid black;"></div>
+
+<script type="text/javascript">
+var myCodeMirror = CodeMirror(
+    (el) => $(".editor").html(el),
+    {
+        lineNumbers: false,
+        lineWrapping: true
+    }
+);
+</script>
