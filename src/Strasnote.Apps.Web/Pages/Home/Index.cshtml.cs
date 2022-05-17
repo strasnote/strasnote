@@ -8,6 +8,6 @@ namespace Strasnote.Apps.Web.Pages.Home;
 
 public sealed class IndexModel : PageModel
 {
-	public IActionResult OnGetTimeA() =>
+	public IActionResult OnGetTime() =>
 		Content(DateTime.Now.ToString(Formats.DateTimeFull));
 }
