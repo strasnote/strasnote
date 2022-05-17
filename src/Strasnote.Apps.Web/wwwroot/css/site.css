@@ -27,5 +27,6 @@ footer {
 }
 
 .CodeMirror {
+    border: 1px solid black;
     font-family: "Roboto";
 }

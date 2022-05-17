@@ -3,10 +3,10 @@
 @{
 }
 
-<div class="editor" style="border: 1px solid black;"></div>
+<div class="editor"></div>
 
 <script type="text/javascript">
-var myCodeMirror = CodeMirror(
+const editor = CodeMirror(
     (el) => $(".editor").html(el),
     {
         lineNumbers: false,
