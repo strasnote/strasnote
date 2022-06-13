@@ -1,8 +1,10 @@
 [
+  // SCRIPT FILES
   {
     "outputFileName": "wwwroot/js/bundles/strasnote-lib.js",
     "inputFiles": [
-      "wwwroot/lib/jquery/jquery.js",
+      "wwwroot/lib/alpine/cdn.js",
+      "wwwroot/lib/bootstrap/js/bootstrap.bundle.js",
       "wwwroot/lib/codemirror/codemirror.js",
       "wwwroot/lib/codemirror/addon/mode/overlay.js",
       "wwwroot/lib/codemirror/mode/markdown/markdown.js",
@@ -21,7 +23,8 @@
   {
     "outputFileName": "wwwroot/js/bundles/strasnote-lib.min.js",
     "inputFiles": [
-      "wwwroot/lib/jquery/jquery.min.js",
+      "wwwroot/lib/alpine/cdn.min.js",
+      "wwwroot/lib/bootstrap/js/bootstrap.bundle.min.js",
       "wwwroot/lib/codemirror/codemirror.min.js",
       "wwwroot/lib/codemirror/addon/mode/overlay.min.js",
       "wwwroot/lib/codemirror/mode/markdown/markdown.min.js",
@@ -47,13 +50,24 @@
       "renameLocals": true
     }
   },
+  // STYLESHEETS
   {
-    "outputFileName": "wwwroot/js/bundles/streditor.js",
+    "outputFileName": "wwwroot/css/bundles/strasnote-lib.css",
     "inputFiles": [
-      "wwwroot/lib/**/*.inc.js"
+      "wwwroot/lib/codemirror/codemirror.css"
     ],
     "minify": {
-      "enabled": true,
+      "enabled": false,
+      "renameLocals": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/bundles/strasnote-lib.min.css",
+    "inputFiles": [
+      "wwwroot/lib/codemirror/codemirror.min.css"
+    ],
+    "minify": {
+      "enabled": false,
       "renameLocals": false
     }
   }
