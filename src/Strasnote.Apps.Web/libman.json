@@ -3,11 +3,15 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "jquery@3.6.0",
-      "destination": "wwwroot/lib/jquery"
+      "library": "alpinejs@3.10.2",
+      "destination": "wwwroot/lib/alpine"
     },
     {
-      "library": "codemirror@5.65.3",
+      "library": "bootstrap@5.2.0-beta1",
+      "destination": "wwwroot/lib/bootstrap"
+    },
+    {
+      "library": "codemirror@5.65.5",
       "destination": "wwwroot/lib/codemirror"
     }
   ]
