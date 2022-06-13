@@ -5,52 +5,79 @@
 <html lang="en">
 <head>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Strasnote Web App</title>
+	<title>Strasnote Web App</title>
 
-    <!-- Style -->
-    <link rel="stylesheet" href="~/lib/codemirror/codemirror.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/lib/streditor/streditor.css" />
+	<!-- Style -->
+	<environment names="Development">
+		<link rel="stylesheet" href="~/css/bundles/strasnote-lib.css" />
+		<link rel="stylesheet" href="~/css/bundles/strasnote.css" />
+	</environment>
 
-    <!-- Script -->
-    <script type="text/javascript">
-        var readyF = [];
-        var ready = (f) => readyF.push(f);
-        var homeUrl = "@Url.Page("/Home/Index")";
-    </script>
+	<environment names="Staging,Production">
+		<link rel="stylesheet" href="~/css/bundles/strasnote-lib.min.css" asp-append-version="true" />
+		<link rel="stylesheet" href="~/css/bundles/strasnote.min.css" asp-append-version="true" />
+	</environment>
+
+	<!-- Script -->
+	<script type="text/javascript">
+		var readyF = [];
+		var ready = (f) => readyF.push(f);
+	</script>
 
 </head>
 <body>
 
-    <!-- Header -->
-    <vc:header />
+	<!-- Header -->
+	<vc:header />
 
-    <!-- Content -->
-    <main></main>
+	<div class="container-fluid">
 
-    <!-- Footer -->
-    <vc:footer />
+		<div class="row">
 
-    <!-- Script -->
-    <environment names="Development">
-        <script src="~/js/bundles/strasnote-lib.js"></script>
-        <script src="~/js/bundles/strasnote.js"></script>
-        <script src="~/js/bundles/streditor.js"></script>
-    </environment>
+			<button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">Toggle offcanvas</button>
 
-    <environment names="Staging,Production">
-        <script src="~/js/bundles/strasnote-lib.min.js" asp-append-version="true" csp-add-nonce="true"></script>
-        <script src="~/js/bundles/strasnote.min.js" asp-append-version="true" csp-add-nonce="true"></script>
-        <script src="~/js/bundles/streditor.min.js" asp-append-version="true" csp-add-nonce="true"></script>
-    </environment>
+			<div class="alert alert-info d-none d-lg-block">Resize your browser to show the responsive offcanvas toggle.</div>
 
-    <script type="text/javascript">
-        $.each(readyF, (_, f) => f());
-        loadHash();
-    </script>
+			<div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
+				<div class="offcanvas-header">
+					<h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Responsive offcanvas</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
+				</div>
+				<div class="offcanvas-body">
+					<p class="mb-0">This is content within an <code>.offcanvas-lg</code>.</p>
+				</div>
+			</div>
+
+
+			<!-- Content -->
+			<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+				<h1>Notes</h1>
+			</main>
+
+		</div>
+
+	</div>
+
+	<!-- Footer -->
+	<vc:footer />
+
+	<!-- Script -->
+	<environment names="Development">
+		<script src="~/js/bundles/strasnote-lib.js"></script>
+		<script src="~/js/bundles/strasnote.js"></script>
+	</environment>
+
+	<environment names="Staging,Production">
+		<script src="~/js/bundles/strasnote-lib.min.js" asp-append-version="true"></script>
+		<script src="~/js/bundles/strasnote.min.js" asp-append-version="true"></script>
+	</environment>
+
+	<script type="text/javascript">
+		$.each(readyF, (_, f) => f());
+	</script>
 
 </body>
 </html>
