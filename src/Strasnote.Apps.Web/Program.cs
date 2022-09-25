@@ -10,7 +10,7 @@ using Strasnote.AppBase;
 var builder = WebApplication.CreateBuilder(args);
 builder.ConfigureStrasnote((ctx, services) =>
 {
-	services.AddRazorPages();
+	services.AddRazorPages().AddRazorRuntimeCompilation();
 });
 
 var app = builder.Build();
