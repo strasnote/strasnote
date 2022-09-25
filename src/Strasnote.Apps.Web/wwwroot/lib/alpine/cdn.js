@@ -525,8 +525,23 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     directiveHandlers[name] = callback;
   }
   function directives(el, attributes, originalAttributeOverride) {
+    attributes = Array.from(attributes);
+    if (el._x_virtualDirectives) {
+      let vAttributes = Object.entries(el._x_virtualDirectives).map(([name, value]) => ({name, value}));
+      let staticAttributes = attributesOnly(vAttributes);
+      vAttributes = vAttributes.map((attribute) => {
+        if (staticAttributes.find((attr) => attr.name === attribute.name)) {
+          return {
+            name: `x-bind:${attribute.name}`,
+            value: `"${attribute.value}"`
+          };
+        }
+        return attribute;
+      });
+      attributes = attributes.concat(vAttributes);
+    }
     let transformedAttributeMap = {};
-    let directives2 = Array.from(attributes).map(toTransformedAttributes((newName, oldName) => transformedAttributeMap[newName] = oldName)).filter(outNonAlpineAttributes).map(toParsedDirectives(transformedAttributeMap, originalAttributeOverride)).sort(byPriority);
+    let directives2 = attributes.map(toTransformedAttributes((newName, oldName) => transformedAttributeMap[newName] = oldName)).filter(outNonAlpineAttributes).map(toParsedDirectives(transformedAttributeMap, originalAttributeOverride)).sort(byPriority);
     return directives2.map((directive2) => {
       return getDirectiveHandler(el, directive2);
     });
@@ -641,8 +656,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     "show",
     "if",
     DEFAULT,
-    "teleport",
-    "element"
+    "teleport"
   ];
   function byPriority(a, b) {
     let typeA = directiveOrder.indexOf(a.type) === -1 ? DEFAULT : a.type;
@@ -987,9 +1001,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       };
   }
   window.Element.prototype._x_toggleAndCascadeWithTransitions = function(el, value, show, hide) {
-    let clickAwayCompatibleShow = () => {
-      document.visibilityState === "visible" ? requestAnimationFrame(show) : setTimeout(show);
-    };
+    const nextTick2 = document.visibilityState === "visible" ? requestAnimationFrame : setTimeout;
+    let clickAwayCompatibleShow = () => nextTick2(show);
     if (value) {
       if (el._x_transition && (el._x_transition.enter || el._x_transition.leave)) {
         el._x_transition.enter && (Object.entries(el._x_transition.enter.during).length || Object.entries(el._x_transition.enter.start).length || Object.entries(el._x_transition.enter.end).length) ? el._x_transition.in(show) : clickAwayCompatibleShow();
@@ -1010,7 +1023,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           closest._x_hideChildren = [];
         closest._x_hideChildren.push(el);
       } else {
-        queueMicrotask(() => {
+        nextTick2(() => {
           let hideAfterChildren = (el2) => {
             let carry = Promise.all([
               el2._x_hidePromise,
@@ -1374,8 +1387,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   // packages/alpinejs/src/binds.js
   var binds = {};
-  function bind2(name, object) {
-    binds[name] = typeof object !== "function" ? () => object : object;
+  function bind2(name, bindings) {
+    let getBindings = typeof bindings !== "function" ? () => bindings : bindings;
+    if (name instanceof Element) {
+      applyBindingsObject(name, getBindings());
+    } else {
+      binds[name] = getBindings;
+    }
   }
   function injectBindingProviders(obj) {
     Object.entries(binds).forEach(([name, callback]) => {
@@ -1388,6 +1406,26 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       });
     });
     return obj;
+  }
+  function applyBindingsObject(el, obj, original) {
+    let cleanupRunners = [];
+    while (cleanupRunners.length)
+      cleanupRunners.pop()();
+    let attributes = Object.entries(obj).map(([name, value]) => ({name, value}));
+    let staticAttributes = attributesOnly(attributes);
+    attributes = attributes.map((attribute) => {
+      if (staticAttributes.find((attr) => attr.name === attribute.name)) {
+        return {
+          name: `x-bind:${attribute.name}`,
+          value: `"${attribute.value}"`
+        };
+      }
+      return attribute;
+    });
+    directives(el, attributes, original).map((handle) => {
+      cleanupRunners.push(handle.runCleanups);
+      handle();
+    });
   }
 
   // packages/alpinejs/src/datas.js
@@ -1423,7 +1461,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     get raw() {
       return raw;
     },
-    version: "3.10.0",
+    version: "3.10.3",
     flushAndStopDeferringMutations,
     dontAutoEvaluateFunctions,
     disableEffectScheduling,
@@ -1496,8 +1534,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   };
   var specialBooleanAttrs = `itemscope,allowfullscreen,formnovalidate,ismap,nomodule,novalidate,readonly`;
   var isBooleanAttr2 = /* @__PURE__ */ makeMap(specialBooleanAttrs + `,async,autofocus,autoplay,controls,default,defer,disabled,hidden,loop,open,required,reversed,scoped,seamless,checked,muted,multiple,selected`);
-  var EMPTY_OBJ = false ? Object.freeze({}) : {};
-  var EMPTY_ARR = false ? Object.freeze([]) : [];
+  var EMPTY_OBJ = true ? Object.freeze({}) : {};
+  var EMPTY_ARR = true ? Object.freeze([]) : [];
   var extend = Object.assign;
   var hasOwnProperty = Object.prototype.hasOwnProperty;
   var hasOwn = (val, key) => hasOwnProperty.call(val, key);
@@ -1533,8 +1571,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var targetMap = new WeakMap();
   var effectStack = [];
   var activeEffect;
-  var ITERATE_KEY = Symbol(false ? "iterate" : "");
-  var MAP_KEY_ITERATE_KEY = Symbol(false ? "Map key iterate" : "");
+  var ITERATE_KEY = Symbol(true ? "iterate" : "");
+  var MAP_KEY_ITERATE_KEY = Symbol(true ? "Map key iterate" : "");
   function isEffect(fn) {
     return fn && fn._isEffect === true;
   }
@@ -1624,7 +1662,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (!dep.has(activeEffect)) {
       dep.add(activeEffect);
       activeEffect.deps.push(dep);
-      if (false) {
+      if (activeEffect.options.onTrack) {
         activeEffect.options.onTrack({
           effect: activeEffect,
           target,
@@ -1688,7 +1726,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
     }
     const run = (effect3) => {
-      if (false) {
+      if (effect3.options.onTrigger) {
         effect3.options.onTrigger({
           effect: effect3,
           target,
@@ -1826,13 +1864,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var readonlyHandlers = {
     get: readonlyGet,
     set(target, key) {
-      if (false) {
+      if (true) {
         console.warn(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
       }
       return true;
     },
     deleteProperty(target, key) {
-      if (false) {
+      if (true) {
         console.warn(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
       }
       return true;
@@ -1901,7 +1939,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (!hadKey) {
       key = toRaw(key);
       hadKey = has2.call(target, key);
-    } else if (false) {
+    } else if (true) {
       checkIdentityKeys(target, has2, key);
     }
     const oldValue = get3.call(target, key);
@@ -1920,7 +1958,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (!hadKey) {
       key = toRaw(key);
       hadKey = has2.call(target, key);
-    } else if (false) {
+    } else if (true) {
       checkIdentityKeys(target, has2, key);
     }
     const oldValue = get3 ? get3.call(target, key) : void 0;
@@ -1933,7 +1971,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function clear() {
     const target = toRaw(this);
     const hadItems = target.size !== 0;
-    const oldTarget = false ? isMap(target) ? new Map(target) : new Set(target) : void 0;
+    const oldTarget = true ? isMap(target) ? new Map(target) : new Set(target) : void 0;
     const result = target.clear();
     if (hadItems) {
       trigger(target, "clear", void 0, void 0, oldTarget);
@@ -1978,7 +2016,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function createReadonlyMethod(type) {
     return function(...args) {
-      if (false) {
+      if (true) {
         const key = args[0] ? `on key "${args[0]}" ` : ``;
         console.warn(`${capitalize(type)} operation ${key}failed: target is readonly.`, toRaw(this));
       }
@@ -2077,6 +2115,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var shallowReadonlyCollectionHandlers = {
     get: createInstrumentationGetter(true, true)
   };
+  function checkIdentityKeys(target, has2, key) {
+    const rawKey = toRaw(key);
+    if (rawKey !== key && has2.call(target, rawKey)) {
+      const type = toRawType(target);
+      console.warn(`Reactive ${type} contains both the raw and reactive versions of the same object${type === `Map` ? ` as keys` : ``}, which can lead to inconsistencies. Avoid differentiating between the raw and reactive versions of an object and only use the reactive version if possible.`);
+    }
+  }
   var reactiveMap = new WeakMap();
   var shallowReactiveMap = new WeakMap();
   var readonlyMap = new WeakMap();
@@ -2109,7 +2154,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function createReactiveObject(target, isReadonly, baseHandlers, collectionHandlers, proxyMap) {
     if (!isObject(target)) {
-      if (false) {
+      if (true) {
         console.warn(`value cannot be made reactive: ${String(target)}`);
       }
       return target;
@@ -2565,7 +2610,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   mapAttributes(startingWith(":", into(prefix("bind:"))));
   directive("bind", (el, {value, modifiers, expression, original}, {effect: effect3}) => {
     if (!value) {
-      return applyBindingsObject(el, expression, original, effect3);
+      let bindingProviders = {};
+      injectBindingProviders(bindingProviders);
+      let getBindings = evaluateLater(el, expression);
+      getBindings((bindings) => {
+        applyBindingsObject(el, bindings, original);
+      }, {scope: bindingProviders});
+      return;
     }
     if (value === "key")
       return storeKeyForXFor(el, expression);
@@ -2576,31 +2627,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       mutateDom(() => bind(el, value, result, modifiers));
     }));
   });
-  function applyBindingsObject(el, expression, original, effect3) {
-    let bindingProviders = {};
-    injectBindingProviders(bindingProviders);
-    let getBindings = evaluateLater(el, expression);
-    let cleanupRunners = [];
-    while (cleanupRunners.length)
-      cleanupRunners.pop()();
-    getBindings((bindings) => {
-      let attributes = Object.entries(bindings).map(([name, value]) => ({name, value}));
-      let staticAttributes = attributesOnly(attributes);
-      attributes = attributes.map((attribute) => {
-        if (staticAttributes.find((attr) => attr.name === attribute.name)) {
-          return {
-            name: `x-bind:${attribute.name}`,
-            value: `"${attribute.value}"`
-          };
-        }
-        return attribute;
-      });
-      directives(el, attributes, original).map((handle) => {
-        cleanupRunners.push(handle.runCleanups);
-        handle();
-      });
-    }, {scope: bindingProviders});
-  }
   function storeKeyForXFor(el, expression) {
     el._x_keyExpression = expression;
   }
@@ -2632,7 +2658,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     let evaluate2 = evaluateLater(el, expression);
     if (!el._x_doHide)
       el._x_doHide = () => {
-        mutateDom(() => el.style.display = "none");
+        mutateDom(() => {
+          el.style.setProperty("display", "none", modifiers.includes("important") ? "important" : void 0);
+        });
       };
     if (!el._x_doShow)
       el._x_doShow = () => {
