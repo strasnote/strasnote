@@ -1,4 +1,12 @@
-﻿@page
-@model Strasnote.Apps.Web.Pages.Components.Footer.FooterModel
-@{
-}
+﻿@model Strasnote.Apps.Web.Pages.Components.Footer.FooterModel
+
+<footer class="footer mt-auto py-2 bg-light">
+	<div class="container">
+		<div class="small text-muted text-center">
+			Copyright &copy; @Model.LastModified.Year <a href="https://strasnote.com" target="_blank">strasnote</a><br />
+			<a href="https://raw.githubusercontent.com/strasnote/strasnote/main/LICENSE" target="_blank">Licence</a>
+			<a href="https://github.com/strasnote" target="_blank">GitHub</a>
+			| @Model.Build
+		</div>
+	</div>
+</footer>
