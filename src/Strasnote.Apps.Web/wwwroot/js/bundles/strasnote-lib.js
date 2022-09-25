@@ -525,8 +525,23 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     directiveHandlers[name] = callback;
   }
   function directives(el, attributes, originalAttributeOverride) {
+    attributes = Array.from(attributes);
+    if (el._x_virtualDirectives) {
+      let vAttributes = Object.entries(el._x_virtualDirectives).map(([name, value]) => ({name, value}));
+      let staticAttributes = attributesOnly(vAttributes);
+      vAttributes = vAttributes.map((attribute) => {
+        if (staticAttributes.find((attr) => attr.name === attribute.name)) {
+          return {
+            name: `x-bind:${attribute.name}`,
+            value: `"${attribute.value}"`
+          };
+        }
+        return attribute;
+      });
+      attributes = attributes.concat(vAttributes);
+    }
     let transformedAttributeMap = {};
-    let directives2 = Array.from(attributes).map(toTransformedAttributes((newName, oldName) => transformedAttributeMap[newName] = oldName)).filter(outNonAlpineAttributes).map(toParsedDirectives(transformedAttributeMap, originalAttributeOverride)).sort(byPriority);
+    let directives2 = attributes.map(toTransformedAttributes((newName, oldName) => transformedAttributeMap[newName] = oldName)).filter(outNonAlpineAttributes).map(toParsedDirectives(transformedAttributeMap, originalAttributeOverride)).sort(byPriority);
     return directives2.map((directive2) => {
       return getDirectiveHandler(el, directive2);
     });
@@ -641,8 +656,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     "show",
     "if",
     DEFAULT,
-    "teleport",
-    "element"
+    "teleport"
   ];
   function byPriority(a, b) {
     let typeA = directiveOrder.indexOf(a.type) === -1 ? DEFAULT : a.type;
@@ -987,9 +1001,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       };
   }
   window.Element.prototype._x_toggleAndCascadeWithTransitions = function(el, value, show, hide) {
-    let clickAwayCompatibleShow = () => {
-      document.visibilityState === "visible" ? requestAnimationFrame(show) : setTimeout(show);
-    };
+    const nextTick2 = document.visibilityState === "visible" ? requestAnimationFrame : setTimeout;
+    let clickAwayCompatibleShow = () => nextTick2(show);
     if (value) {
       if (el._x_transition && (el._x_transition.enter || el._x_transition.leave)) {
         el._x_transition.enter && (Object.entries(el._x_transition.enter.during).length || Object.entries(el._x_transition.enter.start).length || Object.entries(el._x_transition.enter.end).length) ? el._x_transition.in(show) : clickAwayCompatibleShow();
@@ -1010,7 +1023,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           closest._x_hideChildren = [];
         closest._x_hideChildren.push(el);
       } else {
-        queueMicrotask(() => {
+        nextTick2(() => {
           let hideAfterChildren = (el2) => {
             let carry = Promise.all([
               el2._x_hidePromise,
@@ -1374,8 +1387,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   // packages/alpinejs/src/binds.js
   var binds = {};
-  function bind2(name, object) {
-    binds[name] = typeof object !== "function" ? () => object : object;
+  function bind2(name, bindings) {
+    let getBindings = typeof bindings !== "function" ? () => bindings : bindings;
+    if (name instanceof Element) {
+      applyBindingsObject(name, getBindings());
+    } else {
+      binds[name] = getBindings;
+    }
   }
   function injectBindingProviders(obj) {
     Object.entries(binds).forEach(([name, callback]) => {
@@ -1388,6 +1406,26 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       });
     });
     return obj;
+  }
+  function applyBindingsObject(el, obj, original) {
+    let cleanupRunners = [];
+    while (cleanupRunners.length)
+      cleanupRunners.pop()();
+    let attributes = Object.entries(obj).map(([name, value]) => ({name, value}));
+    let staticAttributes = attributesOnly(attributes);
+    attributes = attributes.map((attribute) => {
+      if (staticAttributes.find((attr) => attr.name === attribute.name)) {
+        return {
+          name: `x-bind:${attribute.name}`,
+          value: `"${attribute.value}"`
+        };
+      }
+      return attribute;
+    });
+    directives(el, attributes, original).map((handle) => {
+      cleanupRunners.push(handle.runCleanups);
+      handle();
+    });
   }
 
   // packages/alpinejs/src/datas.js
@@ -1423,7 +1461,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     get raw() {
       return raw;
     },
-    version: "3.10.0",
+    version: "3.10.3",
     flushAndStopDeferringMutations,
     dontAutoEvaluateFunctions,
     disableEffectScheduling,
@@ -1496,8 +1534,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   };
   var specialBooleanAttrs = `itemscope,allowfullscreen,formnovalidate,ismap,nomodule,novalidate,readonly`;
   var isBooleanAttr2 = /* @__PURE__ */ makeMap(specialBooleanAttrs + `,async,autofocus,autoplay,controls,default,defer,disabled,hidden,loop,open,required,reversed,scoped,seamless,checked,muted,multiple,selected`);
-  var EMPTY_OBJ = false ? Object.freeze({}) : {};
-  var EMPTY_ARR = false ? Object.freeze([]) : [];
+  var EMPTY_OBJ = true ? Object.freeze({}) : {};
+  var EMPTY_ARR = true ? Object.freeze([]) : [];
   var extend = Object.assign;
   var hasOwnProperty = Object.prototype.hasOwnProperty;
   var hasOwn = (val, key) => hasOwnProperty.call(val, key);
@@ -1533,8 +1571,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var targetMap = new WeakMap();
   var effectStack = [];
   var activeEffect;
-  var ITERATE_KEY = Symbol(false ? "iterate" : "");
-  var MAP_KEY_ITERATE_KEY = Symbol(false ? "Map key iterate" : "");
+  var ITERATE_KEY = Symbol(true ? "iterate" : "");
+  var MAP_KEY_ITERATE_KEY = Symbol(true ? "Map key iterate" : "");
   function isEffect(fn) {
     return fn && fn._isEffect === true;
   }
@@ -1624,7 +1662,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (!dep.has(activeEffect)) {
       dep.add(activeEffect);
       activeEffect.deps.push(dep);
-      if (false) {
+      if (activeEffect.options.onTrack) {
         activeEffect.options.onTrack({
           effect: activeEffect,
           target,
@@ -1688,7 +1726,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
     }
     const run = (effect3) => {
-      if (false) {
+      if (effect3.options.onTrigger) {
         effect3.options.onTrigger({
           effect: effect3,
           target,
@@ -1826,13 +1864,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var readonlyHandlers = {
     get: readonlyGet,
     set(target, key) {
-      if (false) {
+      if (true) {
         console.warn(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
       }
       return true;
     },
     deleteProperty(target, key) {
-      if (false) {
+      if (true) {
         console.warn(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
       }
       return true;
@@ -1901,7 +1939,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (!hadKey) {
       key = toRaw(key);
       hadKey = has2.call(target, key);
-    } else if (false) {
+    } else if (true) {
       checkIdentityKeys(target, has2, key);
     }
     const oldValue = get3.call(target, key);
@@ -1920,7 +1958,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (!hadKey) {
       key = toRaw(key);
       hadKey = has2.call(target, key);
-    } else if (false) {
+    } else if (true) {
       checkIdentityKeys(target, has2, key);
     }
     const oldValue = get3 ? get3.call(target, key) : void 0;
@@ -1933,7 +1971,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function clear() {
     const target = toRaw(this);
     const hadItems = target.size !== 0;
-    const oldTarget = false ? isMap(target) ? new Map(target) : new Set(target) : void 0;
+    const oldTarget = true ? isMap(target) ? new Map(target) : new Set(target) : void 0;
     const result = target.clear();
     if (hadItems) {
       trigger(target, "clear", void 0, void 0, oldTarget);
@@ -1978,7 +2016,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function createReadonlyMethod(type) {
     return function(...args) {
-      if (false) {
+      if (true) {
         const key = args[0] ? `on key "${args[0]}" ` : ``;
         console.warn(`${capitalize(type)} operation ${key}failed: target is readonly.`, toRaw(this));
       }
@@ -2077,6 +2115,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var shallowReadonlyCollectionHandlers = {
     get: createInstrumentationGetter(true, true)
   };
+  function checkIdentityKeys(target, has2, key) {
+    const rawKey = toRaw(key);
+    if (rawKey !== key && has2.call(target, rawKey)) {
+      const type = toRawType(target);
+      console.warn(`Reactive ${type} contains both the raw and reactive versions of the same object${type === `Map` ? ` as keys` : ``}, which can lead to inconsistencies. Avoid differentiating between the raw and reactive versions of an object and only use the reactive version if possible.`);
+    }
+  }
   var reactiveMap = new WeakMap();
   var shallowReactiveMap = new WeakMap();
   var readonlyMap = new WeakMap();
@@ -2109,7 +2154,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function createReactiveObject(target, isReadonly, baseHandlers, collectionHandlers, proxyMap) {
     if (!isObject(target)) {
-      if (false) {
+      if (true) {
         console.warn(`value cannot be made reactive: ${String(target)}`);
       }
       return target;
@@ -2565,7 +2610,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   mapAttributes(startingWith(":", into(prefix("bind:"))));
   directive("bind", (el, {value, modifiers, expression, original}, {effect: effect3}) => {
     if (!value) {
-      return applyBindingsObject(el, expression, original, effect3);
+      let bindingProviders = {};
+      injectBindingProviders(bindingProviders);
+      let getBindings = evaluateLater(el, expression);
+      getBindings((bindings) => {
+        applyBindingsObject(el, bindings, original);
+      }, {scope: bindingProviders});
+      return;
     }
     if (value === "key")
       return storeKeyForXFor(el, expression);
@@ -2576,31 +2627,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       mutateDom(() => bind(el, value, result, modifiers));
     }));
   });
-  function applyBindingsObject(el, expression, original, effect3) {
-    let bindingProviders = {};
-    injectBindingProviders(bindingProviders);
-    let getBindings = evaluateLater(el, expression);
-    let cleanupRunners = [];
-    while (cleanupRunners.length)
-      cleanupRunners.pop()();
-    getBindings((bindings) => {
-      let attributes = Object.entries(bindings).map(([name, value]) => ({name, value}));
-      let staticAttributes = attributesOnly(attributes);
-      attributes = attributes.map((attribute) => {
-        if (staticAttributes.find((attr) => attr.name === attribute.name)) {
-          return {
-            name: `x-bind:${attribute.name}`,
-            value: `"${attribute.value}"`
-          };
-        }
-        return attribute;
-      });
-      directives(el, attributes, original).map((handle) => {
-        cleanupRunners.push(handle.runCleanups);
-        handle();
-      });
-    }, {scope: bindingProviders});
-  }
   function storeKeyForXFor(el, expression) {
     el._x_keyExpression = expression;
   }
@@ -2632,7 +2658,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     let evaluate2 = evaluateLater(el, expression);
     if (!el._x_doHide)
       el._x_doHide = () => {
-        mutateDom(() => el.style.display = "none");
+        mutateDom(() => {
+          el.style.setProperty("display", "none", modifiers.includes("important") ? "important" : void 0);
+        });
       };
     if (!el._x_doShow)
       el._x_doShow = () => {
@@ -2930,7 +2958,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 })();
 
 /*!
-  * Bootstrap v5.2.0-beta1 (https://getbootstrap.com/)
+  * Bootstrap v5.2.1 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -2942,13 +2970,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/index.js
+   * Bootstrap (v5.2.1): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   const MAX_UID = 1000000;
   const MILLISECONDS_MULTIPLIER = 1000;
-  const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+  const TRANSITION_END = 'transitionend'; // Shout-out Angus Croll (https://goo.gl/pxwQGp)
 
   const toType = object => {
     if (object === null || object === undefined) {
@@ -3257,7 +3285,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): dom/event-handler.js
+   * Bootstrap (v5.2.1): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3280,12 +3308,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
    * Private methods
    */
 
-  function getUidEvent(element, uid) {
+  function makeEventUid(element, uid) {
     return uid && `${uid}::${uidEvent++}` || element.uidEvent || uidEvent++;
   }
 
-  function getEvent(element) {
-    const uid = getUidEvent(element);
+  function getElementEvents(element) {
+    const uid = makeEventUid(element);
     element.uidEvent = uid;
     eventRegistry[uid] = eventRegistry[uid] || {};
     return eventRegistry[uid];
@@ -3293,7 +3321,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   function bootstrapHandler(element, fn) {
     return function handler(event) {
-      event.delegateTarget = element;
+      hydrateObj(event, {
+        delegateTarget: element
+      });
 
       if (handler.oneOff) {
         EventHandler.off(element, event.type, fn);
@@ -3315,7 +3345,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             continue;
           }
 
-          event.delegateTarget = target;
+          hydrateObj(event, {
+            delegateTarget: target
+          });
 
           if (handler.oneOff) {
             EventHandler.off(element, event.type, selector, fn);
@@ -3327,20 +3359,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     };
   }
 
-  function findHandler(events, handler, delegationSelector = null) {
-    return Object.values(events).find(event => event.originalHandler === handler && event.delegationSelector === delegationSelector);
+  function findHandler(events, callable, delegationSelector = null) {
+    return Object.values(events).find(event => event.callable === callable && event.delegationSelector === delegationSelector);
   }
 
   function normalizeParameters(originalTypeEvent, handler, delegationFunction) {
-    const delegation = typeof handler === 'string';
-    const originalHandler = delegation ? delegationFunction : handler;
+    const isDelegated = typeof handler === 'string'; // todo: tooltip passes `false` instead of selector, so we need to check
+
+    const callable = isDelegated ? delegationFunction : handler || delegationFunction;
     let typeEvent = getTypeEvent(originalTypeEvent);
 
     if (!nativeEvents.has(typeEvent)) {
       typeEvent = originalTypeEvent;
     }
 
-    return [delegation, originalHandler, typeEvent];
+    return [isDelegated, callable, typeEvent];
   }
 
   function addHandler(element, originalTypeEvent, handler, delegationFunction, oneOff) {
@@ -3348,12 +3381,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       return;
     }
 
-    if (!handler) {
-      handler = delegationFunction;
-      delegationFunction = null;
-    } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
+    let [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction); // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
     // this prevents the handler from being dispatched the same way as mouseover or mouseout does
-
 
     if (originalTypeEvent in customEvents) {
       const wrapFunction = fn => {
@@ -3364,31 +3393,26 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         };
       };
 
-      if (delegationFunction) {
-        delegationFunction = wrapFunction(delegationFunction);
-      } else {
-        handler = wrapFunction(handler);
-      }
+      callable = wrapFunction(callable);
     }
 
-    const [delegation, originalHandler, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
-    const events = getEvent(element);
+    const events = getElementEvents(element);
     const handlers = events[typeEvent] || (events[typeEvent] = {});
-    const previousFunction = findHandler(handlers, originalHandler, delegation ? handler : null);
+    const previousFunction = findHandler(handlers, callable, isDelegated ? handler : null);
 
     if (previousFunction) {
       previousFunction.oneOff = previousFunction.oneOff && oneOff;
       return;
     }
 
-    const uid = getUidEvent(originalHandler, originalTypeEvent.replace(namespaceRegex, ''));
-    const fn = delegation ? bootstrapDelegationHandler(element, handler, delegationFunction) : bootstrapHandler(element, handler);
-    fn.delegationSelector = delegation ? handler : null;
-    fn.originalHandler = originalHandler;
+    const uid = makeEventUid(callable, originalTypeEvent.replace(namespaceRegex, ''));
+    const fn = isDelegated ? bootstrapDelegationHandler(element, handler, callable) : bootstrapHandler(element, callable);
+    fn.delegationSelector = isDelegated ? handler : null;
+    fn.callable = callable;
     fn.oneOff = oneOff;
     fn.uidEvent = uid;
     handlers[uid] = fn;
-    element.addEventListener(typeEvent, fn, delegation);
+    element.addEventListener(typeEvent, fn, isDelegated);
   }
 
   function removeHandler(element, events, typeEvent, handler, delegationSelector) {
@@ -3408,7 +3432,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     for (const handlerKey of Object.keys(storeElementEvent)) {
       if (handlerKey.includes(namespace)) {
         const event = storeElementEvent[handlerKey];
-        removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
+        removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
       }
     }
   }
@@ -3433,18 +3457,19 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return;
       }
 
-      const [delegation, originalHandler, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
+      const [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
       const inNamespace = typeEvent !== originalTypeEvent;
-      const events = getEvent(element);
+      const events = getElementEvents(element);
+      const storeElementEvent = events[typeEvent] || {};
       const isNamespace = originalTypeEvent.startsWith('.');
 
-      if (typeof originalHandler !== 'undefined') {
+      if (typeof callable !== 'undefined') {
         // Simplest case: handler is passed, remove that listener ONLY.
-        if (!events || !events[typeEvent]) {
+        if (!Object.keys(storeElementEvent).length) {
           return;
         }
 
-        removeHandler(element, events, typeEvent, originalHandler, delegation ? handler : null);
+        removeHandler(element, events, typeEvent, callable, isDelegated ? handler : null);
         return;
       }
 
@@ -3454,14 +3479,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
       }
 
-      const storeElementEvent = events[typeEvent] || {};
-
       for (const keyHandlers of Object.keys(storeElementEvent)) {
         const handlerKey = keyHandlers.replace(stripUidRegex, '');
 
         if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
           const event = storeElementEvent[keyHandlers];
-          removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
+          removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
         }
       }
     },
@@ -3487,21 +3510,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         defaultPrevented = jQueryEvent.isDefaultPrevented();
       }
 
-      const evt = new Event(event, {
+      let evt = new Event(event, {
         bubbles,
         cancelable: true
-      }); // merge custom information in our event
-
-      if (typeof args !== 'undefined') {
-        for (const key of Object.keys(args)) {
-          Object.defineProperty(evt, key, {
-            get() {
-              return args[key];
-            }
-
-          });
-        }
-      }
+      });
+      evt = hydrateObj(evt, args);
 
       if (defaultPrevented) {
         evt.preventDefault();
@@ -3520,9 +3533,28 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   };
 
+  function hydrateObj(obj, meta) {
+    for (const [key, value] of Object.entries(meta || {})) {
+      try {
+        obj[key] = value;
+      } catch (_unused) {
+        Object.defineProperty(obj, key, {
+          configurable: true,
+
+          get() {
+            return value;
+          }
+
+        });
+      }
+    }
+
+    return obj;
+  }
+
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): dom/data.js
+   * Bootstrap (v5.2.1): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3574,7 +3606,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): dom/manipulator.js
+   * Bootstrap (v5.2.1): dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3644,7 +3676,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/config.js
+   * Bootstrap (v5.2.1): util/config.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3705,7 +3737,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): base-component.js
+   * Bootstrap (v5.2.1): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3713,7 +3745,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
    * Constants
    */
 
-  const VERSION = '5.2.0-beta1';
+  const VERSION = '5.2.1';
   /**
    * Class definition
    */
@@ -3784,7 +3816,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/component-functions.js
+   * Bootstrap (v5.2.1): util/component-functions.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3810,7 +3842,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): alert.js
+   * Bootstrap (v5.2.1): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3890,7 +3922,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): button.js
+   * Bootstrap (v5.2.1): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3952,7 +3984,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): dom/selector-engine.js
+   * Bootstrap (v5.2.1): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4023,7 +4055,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/swipe.js
+   * Bootstrap (v5.2.1): util/swipe.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4043,14 +4075,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const CLASS_NAME_POINTER_EVENT = 'pointer-event';
   const SWIPE_THRESHOLD = 40;
   const Default$c = {
+    endCallback: null,
     leftCallback: null,
-    rightCallback: null,
-    endCallback: null
+    rightCallback: null
   };
   const DefaultType$c = {
+    endCallback: '(function|null)',
     leftCallback: '(function|null)',
-    rightCallback: '(function|null)',
-    endCallback: '(function|null)'
+    rightCallback: '(function|null)'
   };
   /**
    * Class definition
@@ -4159,7 +4191,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): carousel.js
+   * Bootstrap (v5.2.1): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4215,9 +4247,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   };
   const DefaultType$b = {
     interval: '(number|boolean)',
+    // TODO:v6 remove boolean support
     keyboard: 'boolean',
-    ride: '(boolean|string)',
     pause: '(string|boolean)',
+    ride: '(boolean|string)',
     touch: 'boolean',
     wrap: 'boolean'
   };
@@ -4606,7 +4639,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): collapse.js
+   * Bootstrap (v5.2.1): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4634,12 +4667,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const SELECTOR_ACTIVES = '.collapse.show, .collapse.collapsing';
   const SELECTOR_DATA_TOGGLE$4 = '[data-bs-toggle="collapse"]';
   const Default$a = {
-    toggle: true,
-    parent: null
+    parent: null,
+    toggle: true
   };
   const DefaultType$a = {
-    toggle: 'boolean',
-    parent: '(null|element)'
+    parent: '(null|element)',
+    toggle: 'boolean'
   };
   /**
    * Class definition
@@ -5054,38 +5087,57 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var min = Math.min;
   var round = Math.round;
 
-  function getBoundingClientRect(element, includeScale) {
+  function getUAString() {
+    var uaData = navigator.userAgentData;
+
+    if (uaData != null && uaData.brands) {
+      return uaData.brands.map(function (item) {
+        return item.brand + "/" + item.version;
+      }).join(' ');
+    }
+
+    return navigator.userAgent;
+  }
+
+  function isLayoutViewport() {
+    return !/^((?!chrome|android).)*safari/i.test(getUAString());
+  }
+
+  function getBoundingClientRect(element, includeScale, isFixedStrategy) {
     if (includeScale === void 0) {
       includeScale = false;
     }
 
-    var rect = element.getBoundingClientRect();
+    if (isFixedStrategy === void 0) {
+      isFixedStrategy = false;
+    }
+
+    var clientRect = element.getBoundingClientRect();
     var scaleX = 1;
     var scaleY = 1;
 
-    if (isHTMLElement(element) && includeScale) {
-      var offsetHeight = element.offsetHeight;
-      var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-      // Fallback to 1 in case both values are `0`
-
-      if (offsetWidth > 0) {
-        scaleX = round(rect.width) / offsetWidth || 1;
-      }
-
-      if (offsetHeight > 0) {
-        scaleY = round(rect.height) / offsetHeight || 1;
-      }
+    if (includeScale && isHTMLElement(element)) {
+      scaleX = element.offsetWidth > 0 ? round(clientRect.width) / element.offsetWidth || 1 : 1;
+      scaleY = element.offsetHeight > 0 ? round(clientRect.height) / element.offsetHeight || 1 : 1;
     }
 
+    var _ref = isElement(element) ? getWindow(element) : window,
+        visualViewport = _ref.visualViewport;
+
+    var addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
+    var x = (clientRect.left + (addVisualOffsets && visualViewport ? visualViewport.offsetLeft : 0)) / scaleX;
+    var y = (clientRect.top + (addVisualOffsets && visualViewport ? visualViewport.offsetTop : 0)) / scaleY;
+    var width = clientRect.width / scaleX;
+    var height = clientRect.height / scaleY;
     return {
-      width: rect.width / scaleX,
-      height: rect.height / scaleY,
-      top: rect.top / scaleY,
-      right: rect.right / scaleX,
-      bottom: rect.bottom / scaleY,
-      left: rect.left / scaleX,
-      x: rect.left / scaleX,
-      y: rect.top / scaleY
+      width: width,
+      height: height,
+      top: y,
+      right: x + width,
+      bottom: y + height,
+      left: x,
+      x: x,
+      y: y
     };
   }
 
@@ -5180,8 +5232,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
 
   function getContainingBlock(element) {
-    var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-    var isIE = navigator.userAgent.indexOf('Trident') !== -1;
+    var isFirefox = /firefox/i.test(getUAString());
+    var isIE = /Trident/i.test(getUAString());
 
     if (isIE && isHTMLElement(element)) {
       // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
@@ -5602,31 +5654,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     return getBoundingClientRect(getDocumentElement(element)).left + getWindowScroll(element).scrollLeft;
   }
 
-  function getViewportRect(element) {
+  function getViewportRect(element, strategy) {
     var win = getWindow(element);
     var html = getDocumentElement(element);
     var visualViewport = win.visualViewport;
     var width = html.clientWidth;
     var height = html.clientHeight;
     var x = 0;
-    var y = 0; // NB: This isn't supported on iOS <= 12. If the keyboard is open, the popper
-    // can be obscured underneath it.
-    // Also, `html.clientHeight` adds the bottom bar height in Safari iOS, even
-    // if it isn't open, so if this isn't available, the popper will be detected
-    // to overflow the bottom of the screen too early.
+    var y = 0;
 
     if (visualViewport) {
       width = visualViewport.width;
-      height = visualViewport.height; // Uses Layout Viewport (like Chrome; Safari does not currently)
-      // In Chrome, it returns a value very close to 0 (+/-) but contains rounding
-      // errors due to floating point numbers, so we need to check precision.
-      // Safari returns a number <= 0, usually < -1 when pinch-zoomed
-      // Feature detection fails in mobile emulation mode in Chrome.
-      // Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
-      // 0.001
-      // Fallback here: "Not Safari" userAgent
+      height = visualViewport.height;
+      var layoutViewport = isLayoutViewport();
 
-      if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+      if (layoutViewport || !layoutViewport && strategy === 'fixed') {
         x = visualViewport.offsetLeft;
         y = visualViewport.offsetTop;
       }
@@ -5720,8 +5762,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
   }
 
-  function getInnerBoundingClientRect(element) {
-    var rect = getBoundingClientRect(element);
+  function getInnerBoundingClientRect(element, strategy) {
+    var rect = getBoundingClientRect(element, false, strategy === 'fixed');
     rect.top = rect.top + element.clientTop;
     rect.left = rect.left + element.clientLeft;
     rect.bottom = rect.top + element.clientHeight;
@@ -5733,8 +5775,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     return rect;
   }
 
-  function getClientRectFromMixedType(element, clippingParent) {
-    return clippingParent === viewport ? rectToClientRect(getViewportRect(element)) : isElement(clippingParent) ? getInnerBoundingClientRect(clippingParent) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
+  function getClientRectFromMixedType(element, clippingParent, strategy) {
+    return clippingParent === viewport ? rectToClientRect(getViewportRect(element, strategy)) : isElement(clippingParent) ? getInnerBoundingClientRect(clippingParent, strategy) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
   } // A "clipping parent" is an overflowable container with the characteristic of
   // clipping (or hiding) overflowing elements with a position different from
   // `initial`
@@ -5757,18 +5799,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   // clipping parents
 
 
-  function getClippingRect(element, boundary, rootBoundary) {
+  function getClippingRect(element, boundary, rootBoundary, strategy) {
     var mainClippingParents = boundary === 'clippingParents' ? getClippingParents(element) : [].concat(boundary);
     var clippingParents = [].concat(mainClippingParents, [rootBoundary]);
     var firstClippingParent = clippingParents[0];
     var clippingRect = clippingParents.reduce(function (accRect, clippingParent) {
-      var rect = getClientRectFromMixedType(element, clippingParent);
+      var rect = getClientRectFromMixedType(element, clippingParent, strategy);
       accRect.top = max(rect.top, accRect.top);
       accRect.right = min(rect.right, accRect.right);
       accRect.bottom = min(rect.bottom, accRect.bottom);
       accRect.left = max(rect.left, accRect.left);
       return accRect;
-    }, getClientRectFromMixedType(element, firstClippingParent));
+    }, getClientRectFromMixedType(element, firstClippingParent, strategy));
     clippingRect.width = clippingRect.right - clippingRect.left;
     clippingRect.height = clippingRect.bottom - clippingRect.top;
     clippingRect.x = clippingRect.left;
@@ -5849,6 +5891,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var _options = options,
         _options$placement = _options.placement,
         placement = _options$placement === void 0 ? state.placement : _options$placement,
+        _options$strategy = _options.strategy,
+        strategy = _options$strategy === void 0 ? state.strategy : _options$strategy,
         _options$boundary = _options.boundary,
         boundary = _options$boundary === void 0 ? clippingParents : _options$boundary,
         _options$rootBoundary = _options.rootBoundary,
@@ -5863,7 +5907,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var altContext = elementContext === popper ? reference : popper;
     var popperRect = state.rects.popper;
     var element = state.elements[altBoundary ? altContext : elementContext];
-    var clippingClientRect = getClippingRect(isElement(element) ? element : element.contextElement || getDocumentElement(state.elements.popper), boundary, rootBoundary);
+    var clippingClientRect = getClippingRect(isElement(element) ? element : element.contextElement || getDocumentElement(state.elements.popper), boundary, rootBoundary, strategy);
     var referenceClientRect = getBoundingClientRect(state.elements.reference);
     var popperOffsets = computeOffsets({
       reference: referenceClientRect,
@@ -6377,7 +6421,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var isOffsetParentAnElement = isHTMLElement(offsetParent);
     var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
     var documentElement = getDocumentElement(offsetParent);
-    var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled);
+    var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled, isFixed);
     var scroll = {
       scrollLeft: 0,
       scrollTop: 0
@@ -6731,7 +6775,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): dropdown.js
+   * Bootstrap (v5.2.1): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -6777,20 +6821,20 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const PLACEMENT_TOPCENTER = 'top';
   const PLACEMENT_BOTTOMCENTER = 'bottom';
   const Default$9 = {
-    offset: [0, 2],
+    autoClose: true,
     boundary: 'clippingParents',
-    reference: 'toggle',
     display: 'dynamic',
+    offset: [0, 2],
     popperConfig: null,
-    autoClose: true
+    reference: 'toggle'
   };
   const DefaultType$9 = {
-    offset: '(array|string|function)',
+    autoClose: '(boolean|string)',
     boundary: '(string|element)',
-    reference: '(string|element|object)',
     display: 'string',
+    offset: '(array|string|function)',
     popperConfig: '(null|object|function)',
-    autoClose: '(boolean|string)'
+    reference: '(string|element|object)'
   };
   /**
    * Class definition
@@ -6801,8 +6845,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       super(element, config);
       this._popper = null;
       this._parent = this._element.parentNode; // dropdown wrapper
+      // todo: v6 revert #37011 & change markup https://getbootstrap.com/docs/5.2/forms/input-group/
 
-      this._menu = SelectorEngine.findOne(SELECTOR_MENU, this._parent);
+      this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0];
       this._inNavbar = this._detectNavbar();
     } // Getters
 
@@ -7118,8 +7163,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return;
       }
 
-      event.preventDefault();
-      const getToggleButton = SelectorEngine.findOne(SELECTOR_DATA_TOGGLE$3, event.delegateTarget.parentNode);
+      event.preventDefault(); // todo: v6 revert #37011 & change markup https://getbootstrap.com/docs/5.2/forms/input-group/
+
+      const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0];
       const instance = Dropdown.getOrCreateInstance(getToggleButton);
 
       if (isUpOrDownEvent) {
@@ -7161,7 +7207,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/scrollBar.js
+   * Bootstrap (v5.2.1): util/scrollBar.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7280,7 +7326,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/backdrop.js
+   * Bootstrap (v5.2.1): util/backdrop.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7294,19 +7340,19 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const EVENT_MOUSEDOWN = `mousedown.bs.${NAME$9}`;
   const Default$8 = {
     className: 'modal-backdrop',
+    clickCallback: null,
+    isAnimated: false,
     isVisible: true,
     // if false, we use the backdrop helper without adding any element to the dom
-    isAnimated: false,
-    rootElement: 'body',
-    // give the choice to place backdrop under different elements
-    clickCallback: null
+    rootElement: 'body' // give the choice to place backdrop under different elements
+
   };
   const DefaultType$8 = {
     className: 'string',
-    isVisible: 'boolean',
+    clickCallback: '(function|null)',
     isAnimated: 'boolean',
-    rootElement: '(element|string)',
-    clickCallback: '(function|null)'
+    isVisible: 'boolean',
+    rootElement: '(element|string)'
   };
   /**
    * Class definition
@@ -7426,7 +7472,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/focustrap.js
+   * Bootstrap (v5.2.1): util/focustrap.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7443,13 +7489,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const TAB_NAV_FORWARD = 'forward';
   const TAB_NAV_BACKWARD = 'backward';
   const Default$7 = {
-    trapElement: null,
-    // The element to trap focus inside of
-    autofocus: true
+    autofocus: true,
+    trapElement: null // The element to trap focus inside of
+
   };
   const DefaultType$7 = {
-    trapElement: 'element',
-    autofocus: 'boolean'
+    autofocus: 'boolean',
+    trapElement: 'element'
   };
   /**
    * Class definition
@@ -7535,7 +7581,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): modal.js
+   * Bootstrap (v5.2.1): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7555,6 +7601,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const EVENT_SHOWN$4 = `shown${EVENT_KEY$4}`;
   const EVENT_RESIZE$1 = `resize${EVENT_KEY$4}`;
   const EVENT_CLICK_DISMISS = `click.dismiss${EVENT_KEY$4}`;
+  const EVENT_MOUSEDOWN_DISMISS = `mousedown.dismiss${EVENT_KEY$4}`;
   const EVENT_KEYDOWN_DISMISS$1 = `keydown.dismiss${EVENT_KEY$4}`;
   const EVENT_CLICK_DATA_API$2 = `click${EVENT_KEY$4}${DATA_API_KEY$2}`;
   const CLASS_NAME_OPEN = 'modal-open';
@@ -7567,13 +7614,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const SELECTOR_DATA_TOGGLE$2 = '[data-bs-toggle="modal"]';
   const Default$6 = {
     backdrop: true,
-    keyboard: true,
-    focus: true
+    focus: true,
+    keyboard: true
   };
   const DefaultType$6 = {
     backdrop: '(boolean|string)',
-    keyboard: 'boolean',
-    focus: 'boolean'
+    focus: 'boolean',
+    keyboard: 'boolean'
   };
   /**
    * Class definition
@@ -7745,21 +7792,23 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           this._adjustDialog();
         }
       });
-      EventHandler.on(this._element, EVENT_CLICK_DISMISS, event => {
-        if (event.target !== event.currentTarget) {
-          // click is inside modal-dialog
-          return;
-        }
+      EventHandler.on(this._element, EVENT_MOUSEDOWN_DISMISS, event => {
+        EventHandler.one(this._element, EVENT_CLICK_DISMISS, event2 => {
+          // a bad trick to segregate clicks that may start inside dialog but end outside, and avoid listen to scrollbar clicks
+          if (this._dialog.contains(event.target) || this._dialog.contains(event2.target)) {
+            return;
+          }
 
-        if (this._config.backdrop === 'static') {
-          this._triggerBackdropTransition();
+          if (this._config.backdrop === 'static') {
+            this._triggerBackdropTransition();
 
-          return;
-        }
+            return;
+          }
 
-        if (this._config.backdrop) {
-          this.hide();
-        }
+          if (this._config.backdrop) {
+            this.hide();
+          }
+        });
       });
     }
 
@@ -7908,7 +7957,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): offcanvas.js
+   * Bootstrap (v5.2.1): offcanvas.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8006,7 +8055,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this._element.classList.add(CLASS_NAME_SHOWING$1);
 
       const completeCallBack = () => {
-        if (!this._config.scroll) {
+        if (!this._config.scroll || this._config.backdrop) {
           this._focustrap.activate();
         }
 
@@ -8182,7 +8231,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/sanitizer.js
+   * Bootstrap (v5.2.1): util/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8191,14 +8240,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   /**
    * A pattern that recognizes a commonly useful subset of URLs that are safe.
    *
-   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
+   * Shout-out to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
 
   const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^#&/:?]*(?:[#/?]|$))/i;
   /**
    * A pattern that matches safe data URLs. Only matches image, video and audio types.
    *
-   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
+   * Shout-out to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
 
   const DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[\d+/a-z]+=*$/i;
@@ -8287,7 +8336,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): util/template-factory.js
+   * Bootstrap (v5.2.1): util/template-factory.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8297,27 +8346,27 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   const NAME$5 = 'TemplateFactory';
   const Default$4 = {
-    extraClass: '',
-    template: '<div></div>',
+    allowList: DefaultAllowlist,
     content: {},
     // { selector : text ,  selector2 : text2 , }
+    extraClass: '',
     html: false,
     sanitize: true,
     sanitizeFn: null,
-    allowList: DefaultAllowlist
+    template: '<div></div>'
   };
   const DefaultType$4 = {
-    extraClass: '(string|function)',
-    template: 'string',
+    allowList: 'object',
     content: 'object',
+    extraClass: '(string|function)',
     html: 'boolean',
     sanitize: 'boolean',
     sanitizeFn: '(null|function)',
-    allowList: 'object'
+    template: 'string'
   };
   const DefaultContentType = {
-    selector: '(string|element)',
-    entry: '(string|element|function|null)'
+    entry: '(string|element|function|null)',
+    selector: '(string|element)'
   };
   /**
    * Class definition
@@ -8445,7 +8494,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): tooltip.js
+   * Bootstrap (v5.2.1): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8483,42 +8532,42 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     LEFT: isRTL() ? 'right' : 'left'
   };
   const Default$3 = {
+    allowList: DefaultAllowlist,
     animation: true,
-    template: '<div class="tooltip" role="tooltip">' + '<div class="tooltip-arrow"></div>' + '<div class="tooltip-inner"></div>' + '</div>',
-    trigger: 'hover focus',
-    title: '',
-    delay: 0,
-    html: false,
-    selector: false,
-    placement: 'top',
-    offset: [0, 0],
-    container: false,
-    fallbackPlacements: ['top', 'right', 'bottom', 'left'],
     boundary: 'clippingParents',
+    container: false,
     customClass: '',
+    delay: 0,
+    fallbackPlacements: ['top', 'right', 'bottom', 'left'],
+    html: false,
+    offset: [0, 0],
+    placement: 'top',
+    popperConfig: null,
     sanitize: true,
     sanitizeFn: null,
-    allowList: DefaultAllowlist,
-    popperConfig: null
+    selector: false,
+    template: '<div class="tooltip" role="tooltip">' + '<div class="tooltip-arrow"></div>' + '<div class="tooltip-inner"></div>' + '</div>',
+    title: '',
+    trigger: 'hover focus'
   };
   const DefaultType$3 = {
+    allowList: 'object',
     animation: 'boolean',
-    template: 'string',
-    title: '(string|element|function)',
-    trigger: 'string',
-    delay: '(number|object)',
-    html: 'boolean',
-    selector: '(string|boolean)',
-    placement: '(string|function)',
-    offset: '(array|string|function)',
-    container: '(string|element|boolean)',
-    fallbackPlacements: 'array',
     boundary: '(string|element)',
+    container: '(string|element|boolean)',
     customClass: '(string|function)',
+    delay: '(number|object)',
+    fallbackPlacements: 'array',
+    html: 'boolean',
+    offset: '(array|string|function)',
+    placement: '(string|function)',
+    popperConfig: '(null|object|function)',
     sanitize: 'boolean',
     sanitizeFn: '(null|function)',
-    allowList: 'object',
-    popperConfig: '(null|object|function)'
+    selector: '(string|boolean)',
+    template: 'string',
+    title: '(string|element|function)',
+    trigger: 'string'
   };
   /**
    * Class definition
@@ -8534,10 +8583,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
       this._isEnabled = true;
       this._timeout = 0;
-      this._isHovered = false;
+      this._isHovered = null;
       this._activeTrigger = {};
       this._popper = null;
-      this._templateFactory = null; // Protected
+      this._templateFactory = null;
+      this._newContent = null; // Protected
 
       this.tip = null;
 
@@ -8606,6 +8656,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this.tip.remove();
       }
 
+      if (this._config.originalTitle) {
+        this._element.setAttribute('title', this._config.originalTitle);
+      }
+
       this._disposePopper();
 
       super.dispose();
@@ -8627,6 +8681,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
       if (showEvent.defaultPrevented || !isInTheDom) {
         return;
+      } // todo v6 remove this OR make it optional
+
+
+      if (this.tip) {
+        this.tip.remove();
+        this.tip = null;
       }
 
       const tip = this._getTipElement();
@@ -8645,7 +8705,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (this._popper) {
         this._popper.update();
       } else {
-        this._createPopper(tip);
+        this._popper = this._createPopper(tip);
       }
 
       tip.classList.add(CLASS_NAME_SHOW$2); // If this is a touch-enabled device we add extra
@@ -8660,13 +8720,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
 
       const complete = () => {
-        const previousHoverState = this._isHovered;
-        this._isHovered = false;
         EventHandler.trigger(this._element, this.constructor.eventName(EVENT_SHOWN$2));
 
-        if (previousHoverState) {
+        if (this._isHovered === false) {
           this._leave();
         }
+
+        this._isHovered = false;
       };
 
       this._queueCallback(complete, this.tip, this._isAnimated());
@@ -8697,7 +8757,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this._activeTrigger[TRIGGER_CLICK] = false;
       this._activeTrigger[TRIGGER_FOCUS] = false;
       this._activeTrigger[TRIGGER_HOVER] = false;
-      this._isHovered = false;
+      this._isHovered = null; // it is a trick to support manual triggering
 
       const complete = () => {
         if (this._isWithActiveTrigger()) {
@@ -8731,7 +8791,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
     _getTipElement() {
       if (!this.tip) {
-        this.tip = this._createTipElement(this._getContentForTemplate());
+        this.tip = this._createTipElement(this._newContent || this._getContentForTemplate());
       }
 
       return this.tip;
@@ -8759,19 +8819,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
 
     setContent(content) {
-      let isShown = false;
+      this._newContent = content;
 
-      if (this.tip) {
-        isShown = this._isShown();
-        this.tip.remove();
-        this.tip = null;
-      }
+      if (this._isShown()) {
+        this._disposePopper();
 
-      this._disposePopper();
-
-      this.tip = this._createTipElement(content);
-
-      if (isShown) {
         this.show();
       }
     }
@@ -8798,7 +8850,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
 
     _getTitle() {
-      return this._config.title;
+      return this._resolvePossibleFunction(this._config.title) || this._config.originalTitle;
     } // Private
 
 
@@ -8817,7 +8869,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     _createPopper(tip) {
       const placement = typeof this._config.placement === 'function' ? this._config.placement.call(this, tip, this._element) : this._config.placement;
       const attachment = AttachmentMap[placement.toUpperCase()];
-      this._popper = createPopper(this._element, tip, this._getPopperConfig(attachment));
+      return createPopper(this._element, tip, this._getPopperConfig(attachment));
     }
 
     _getOffset() {
@@ -8930,7 +8982,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return;
       }
 
-      if (!this._element.getAttribute('aria-label') && !this._element.textContent) {
+      if (!this._element.getAttribute('aria-label') && !this._element.textContent.trim()) {
         this._element.setAttribute('aria-label', title);
       }
 
@@ -9006,7 +9058,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
 
       config.originalTitle = this._element.getAttribute('title') || '';
-      config.title = this._resolvePossibleFunction(config.title) || config.originalTitle;
 
       if (typeof config.title === 'number') {
         config.title = config.title.toString();
@@ -9069,7 +9120,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): popover.js
+   * Bootstrap (v5.2.1): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9081,11 +9132,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const SELECTOR_TITLE = '.popover-header';
   const SELECTOR_CONTENT = '.popover-body';
   const Default$2 = { ...Tooltip.Default,
-    placement: 'right',
-    offset: [0, 8],
-    trigger: 'click',
     content: '',
-    template: '<div class="popover" role="tooltip">' + '<div class="popover-arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body"></div>' + '</div>'
+    offset: [0, 8],
+    placement: 'right',
+    template: '<div class="popover" role="tooltip">' + '<div class="popover-arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body"></div>' + '</div>',
+    trigger: 'click'
   };
   const DefaultType$2 = { ...Tooltip.DefaultType,
     content: '(null|string|element|function)'
@@ -9152,7 +9203,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): scrollspy.js
+   * Bootstrap (v5.2.1): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9183,14 +9234,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // TODO: v6 @deprecated, keep it for backwards compatibility reasons
     rootMargin: '0px 0px -25%',
     smoothScroll: false,
-    target: null
+    target: null,
+    threshold: [0.1, 0.5, 1]
   };
   const DefaultType$1 = {
     offset: '(number|null)',
     // TODO v6 @deprecated, keep it for backwards compatibility reasons
     rootMargin: 'string',
     smoothScroll: 'boolean',
-    target: 'element'
+    target: 'element',
+    threshold: 'array'
   };
   /**
    * Class definition
@@ -9251,7 +9304,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
     _configAfterMerge(config) {
       // TODO: on v6 target should be given explicitly & remove the {target: 'ss-target'} case
-      config.target = getElement(config.target) || document.body;
+      config.target = getElement(config.target) || document.body; // TODO: v6 Only for backwards compatibility reasons. Use rootMargin only
+
+      config.rootMargin = config.offset ? `${config.offset}px 0px -30%` : config.rootMargin;
+
+      if (typeof config.threshold === 'string') {
+        config.threshold = config.threshold.split(',').map(value => Number.parseFloat(value));
+      }
+
       return config;
     }
 
@@ -9272,7 +9332,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
           if (root.scrollTo) {
             root.scrollTo({
-              top: height
+              top: height,
+              behavior: 'smooth'
             });
             return;
           } // Chrome 60 doesn't support `scrollTo`
@@ -9286,8 +9347,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     _getNewObserver() {
       const options = {
         root: this._rootElement,
-        threshold: [0.1, 0.5, 1],
-        rootMargin: this._getRootMargin()
+        threshold: this._config.threshold,
+        rootMargin: this._config.rootMargin
       };
       return new IntersectionObserver(entries => this._observerCallback(entries), options);
     } // The logic of selection
@@ -9332,11 +9393,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           activate(entry);
         }
       }
-    } // TODO: v6 Only for backwards compatibility reasons. Use rootMargin only
-
-
-    _getRootMargin() {
-      return this._config.offset ? `${this._config.offset}px 0px -30%` : this._config.rootMargin;
     }
 
     _initializeTargetsAndObservables() {
@@ -9438,7 +9494,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): tab.js
+   * Bootstrap (v5.2.1): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9539,15 +9595,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this._activate(getElementFromSelector(element)); // Search and activate/show the proper section
 
 
-      const isAnimated = element.classList.contains(CLASS_NAME_FADE$1);
-
       const complete = () => {
-        if (isAnimated) {
-          // todo: maybe is redundant
-          element.classList.add(CLASS_NAME_SHOW$1);
-        }
-
         if (element.getAttribute('role') !== 'tab') {
+          element.classList.add(CLASS_NAME_SHOW$1);
           return;
         }
 
@@ -9562,7 +9612,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         });
       };
 
-      this._queueCallback(complete, element, isAnimated);
+      this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE$1));
     }
 
     _deactivate(element, relatedElem) {
@@ -9576,15 +9626,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this._deactivate(getElementFromSelector(element)); // Search and deactivate the shown section too
 
 
-      const isAnimated = element.classList.contains(CLASS_NAME_FADE$1);
-
       const complete = () => {
-        if (isAnimated) {
-          // todo maybe is redundant
-          element.classList.remove(CLASS_NAME_SHOW$1);
-        }
-
         if (element.getAttribute('role') !== 'tab') {
+          element.classList.remove(CLASS_NAME_SHOW$1);
           return;
         }
 
@@ -9598,7 +9642,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         });
       };
 
-      this._queueCallback(complete, element, isAnimated);
+      this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE$1));
     }
 
     _keydown(event) {
@@ -9763,7 +9807,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): toast.js
+   * Bootstrap (v5.2.1): toast.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9980,7 +10024,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.0-beta1): index.umd.js
+   * Bootstrap (v5.2.1): index.umd.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -10005,9 +10049,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 //# sourceMappingURL=bootstrap.bundle.js.map
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
-// This is CodeMirror (https://codemirror.net), a code editor
+// This is CodeMirror (https://codemirror.net/5), a code editor
 // implemented in JavaScript on top of the browser's DOM.
 //
 // You can find some technical background for some of the code below
@@ -10118,15 +10162,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     } while (child = child.parentNode)
   }
 
-  function activeElt() {
+  function activeElt(doc) {
     // IE and Edge may throw an "Unspecified Error" when accessing document.activeElement.
     // IE < 10 will throw when accessed while the page is loading or in an iframe.
     // IE > 9 and Edge will throw when accessed in an iframe if document.body is unavailable.
     var activeElement;
     try {
-      activeElement = document.activeElement;
+      activeElement = doc.activeElement;
     } catch(e) {
-      activeElement = document.body || null;
+      activeElement = doc.body || null;
     }
     while (activeElement && activeElement.shadowRoot && activeElement.shadowRoot.activeElement)
       { activeElement = activeElement.shadowRoot.activeElement; }
@@ -10149,6 +10193,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     { selectInput = function(node) { node.selectionStart = 0; node.selectionEnd = node.value.length; }; }
   else if (ie) // Suppress mysterious IE10 errors
     { selectInput = function(node) { try { node.select(); } catch(_e) {} }; }
+
+  function doc(cm) { return cm.display.wrapper.ownerDocument }
+
+  function win(cm) { return doc(cm).defaultView }
 
   function bind(f) {
     var args = Array.prototype.slice.call(arguments, 1);
@@ -12579,16 +12627,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     cm.display.lineNumChars = null;
   }
 
-  function pageScrollX() {
+  function pageScrollX(doc) {
     // Work around https://bugs.chromium.org/p/chromium/issues/detail?id=489206
     // which causes page_Offset and bounding client rects to use
     // different reference viewports and invalidate our calculations.
-    if (chrome && android) { return -(document.body.getBoundingClientRect().left - parseInt(getComputedStyle(document.body).marginLeft)) }
-    return window.pageXOffset || (document.documentElement || document.body).scrollLeft
+    if (chrome && android) { return -(doc.body.getBoundingClientRect().left - parseInt(getComputedStyle(doc.body).marginLeft)) }
+    return doc.defaultView.pageXOffset || (doc.documentElement || doc.body).scrollLeft
   }
-  function pageScrollY() {
-    if (chrome && android) { return -(document.body.getBoundingClientRect().top - parseInt(getComputedStyle(document.body).marginTop)) }
-    return window.pageYOffset || (document.documentElement || document.body).scrollTop
+  function pageScrollY(doc) {
+    if (chrome && android) { return -(doc.body.getBoundingClientRect().top - parseInt(getComputedStyle(doc.body).marginTop)) }
+    return doc.defaultView.pageYOffset || (doc.documentElement || doc.body).scrollTop
   }
 
   function widgetTopHeight(lineObj) {
@@ -12616,8 +12664,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     else { yOff -= cm.display.viewOffset; }
     if (context == "page" || context == "window") {
       var lOff = cm.display.lineSpace.getBoundingClientRect();
-      yOff += lOff.top + (context == "window" ? 0 : pageScrollY());
-      var xOff = lOff.left + (context == "window" ? 0 : pageScrollX());
+      yOff += lOff.top + (context == "window" ? 0 : pageScrollY(doc(cm)));
+      var xOff = lOff.left + (context == "window" ? 0 : pageScrollX(doc(cm)));
       rect.left += xOff; rect.right += xOff;
     }
     rect.top += yOff; rect.bottom += yOff;
@@ -12631,8 +12679,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var left = coords.left, top = coords.top;
     // First move into "page" coordinate system
     if (context == "page") {
-      left -= pageScrollX();
-      top -= pageScrollY();
+      left -= pageScrollX(doc(cm));
+      top -= pageScrollY(doc(cm));
     } else if (context == "local" || !context) {
       var localBox = cm.display.sizer.getBoundingClientRect();
       left += localBox.left;
@@ -13448,8 +13496,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     if (signalDOMEvent(cm, "scrollCursorIntoView")) { return }
 
     var display = cm.display, box = display.sizer.getBoundingClientRect(), doScroll = null;
+    var doc = display.wrapper.ownerDocument;
     if (rect.top + box.top < 0) { doScroll = true; }
-    else if (rect.bottom + box.top > (window.innerHeight || document.documentElement.clientHeight)) { doScroll = false; }
+    else if (rect.bottom + box.top > (doc.defaultView.innerHeight || doc.documentElement.clientHeight)) { doScroll = false; }
     if (doScroll != null && !phantom) {
       var scrollNode = elt("div", "\u200b", null, ("position: absolute;\n                         top: " + (rect.top - display.viewOffset - paddingTop(cm.display)) + "px;\n                         height: " + (rect.bottom - rect.top + scrollGap(cm) + display.barHeight) + "px;\n                         left: " + (rect.left) + "px; width: " + (Math.max(2, rect.right - rect.left)) + "px;"));
       cm.display.lineSpace.appendChild(scrollNode);
@@ -13703,13 +13752,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   NativeScrollbars.prototype.zeroWidthHack = function () {
     var w = mac && !mac_geMountainLion ? "12px" : "18px";
     this.horiz.style.height = this.vert.style.width = w;
-    this.horiz.style.pointerEvents = this.vert.style.pointerEvents = "none";
+    this.horiz.style.visibility = this.vert.style.visibility = "hidden";
     this.disableHoriz = new Delayed;
     this.disableVert = new Delayed;
   };
 
   NativeScrollbars.prototype.enableZeroWidthBar = function (bar, delay, type) {
-    bar.style.pointerEvents = "auto";
+    bar.style.visibility = "";
     function maybeDisable() {
       // To find out whether the scrollbar is still visible, we
       // check whether the element under the pixel in the bottom
@@ -13720,7 +13769,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var box = bar.getBoundingClientRect();
       var elt = type == "vert" ? document.elementFromPoint(box.right - 1, (box.top + box.bottom) / 2)
           : document.elementFromPoint((box.right + box.left) / 2, box.bottom - 1);
-      if (elt != bar) { bar.style.pointerEvents = "none"; }
+      if (elt != bar) { bar.style.visibility = "hidden"; }
       else { delay.set(1000, maybeDisable); }
     }
     delay.set(1000, maybeDisable);
@@ -13901,7 +13950,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       cm.display.maxLineChanged = false;
     }
 
-    var takeFocus = op.focus && op.focus == activeElt();
+    var takeFocus = op.focus && op.focus == activeElt(doc(cm));
     if (op.preparedSelection)
       { cm.display.input.showSelection(op.preparedSelection, takeFocus); }
     if (op.updatedDisplay || op.startHeight != cm.doc.height)
@@ -14078,11 +14127,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   function selectionSnapshot(cm) {
     if (cm.hasFocus()) { return null }
-    var active = activeElt();
+    var active = activeElt(doc(cm));
     if (!active || !contains(cm.display.lineDiv, active)) { return null }
     var result = {activeElt: active};
     if (window.getSelection) {
-      var sel = window.getSelection();
+      var sel = win(cm).getSelection();
       if (sel.anchorNode && sel.extend && contains(cm.display.lineDiv, sel.anchorNode)) {
         result.anchorNode = sel.anchorNode;
         result.anchorOffset = sel.anchorOffset;
@@ -14094,11 +14143,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
 
   function restoreSelection(snapshot) {
-    if (!snapshot || !snapshot.activeElt || snapshot.activeElt == activeElt()) { return }
+    if (!snapshot || !snapshot.activeElt || snapshot.activeElt == activeElt(snapshot.activeElt.ownerDocument)) { return }
     snapshot.activeElt.focus();
     if (!/^(INPUT|TEXTAREA)$/.test(snapshot.activeElt.nodeName) &&
         snapshot.anchorNode && contains(document.body, snapshot.anchorNode) && contains(document.body, snapshot.focusNode)) {
-      var sel = window.getSelection(), range = document.createRange();
+      var doc = snapshot.activeElt.ownerDocument;
+      var sel = doc.defaultView.getSelection(), range = doc.createRange();
       range.setEnd(snapshot.anchorNode, snapshot.anchorOffset);
       range.collapse(false);
       sel.removeAllRanges();
@@ -14415,6 +14465,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     d.scroller.setAttribute("tabIndex", "-1");
     // The element in which the editor lives.
     d.wrapper = elt("div", [d.scrollbarFiller, d.gutterFiller, d.scroller], "CodeMirror");
+    // See #6982. FIXME remove when this has been fixed for a while in Chrome
+    if (chrome && chrome_version >= 105) { d.wrapper.style.clipPath = "inset(0px)"; }
 
     // This attribute is respected by automatic translation systems such as Google Translate,
     // and may also be respected by tools used by human translators.
@@ -14519,7 +14571,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // On Chrome 102, viewport updates somehow stop wheel-based
     // scrolling. Turning off pointer events during the scroll seems
     // to avoid the issue.
-    if (chrome && chrome_version >= 102) {
+    if (chrome && chrome_version == 102) {
       if (cm.display.chromeScrollHack == null) { cm.display.sizer.style.pointerEvents = "none"; }
       else { clearTimeout(cm.display.chromeScrollHack); }
       cm.display.chromeScrollHack = setTimeout(function () {
@@ -15210,7 +15262,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var range = sel.ranges[i];
       var old = sel.ranges.length == doc.sel.ranges.length && doc.sel.ranges[i];
       var newAnchor = skipAtomic(doc, range.anchor, old && old.anchor, bias, mayClear);
-      var newHead = skipAtomic(doc, range.head, old && old.head, bias, mayClear);
+      var newHead = range.head == range.anchor ? newAnchor : skipAtomic(doc, range.head, old && old.head, bias, mayClear);
       if (out || newAnchor != range.anchor || newHead != range.head) {
         if (!out) { out = sel.ranges.slice(0, i); }
         out[i] = new Range(newAnchor, newHead);
@@ -17262,7 +17314,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function onKeyDown(e) {
     var cm = this;
     if (e.target && e.target != cm.display.input.getField()) { return }
-    cm.curOp.focus = activeElt();
+    cm.curOp.focus = activeElt(doc(cm));
     if (signalDOMEvent(cm, e)) { return }
     // IE does strange things with escape.
     if (ie && ie_version < 11 && e.keyCode == 27) { e.returnValue = false; }
@@ -17369,7 +17421,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     if (clickInGutter(cm, e)) { return }
     var pos = posFromMouse(cm, e), button = e_button(e), repeat = pos ? clickRepeat(pos, button) : "single";
-    window.focus();
+    win(cm).focus();
 
     // #3261: make sure, that we're not starting a second selection
     if (button == 1 && cm.state.selectingText)
@@ -17424,7 +17476,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   function leftButtonDown(cm, pos, repeat, event) {
     if (ie) { setTimeout(bind(ensureFocus, cm), 0); }
-    else { cm.curOp.focus = activeElt(); }
+    else { cm.curOp.focus = activeElt(doc(cm)); }
 
     var behavior = configureMouse(cm, repeat, event);
 
@@ -17494,19 +17546,19 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   // Normal selection, as opposed to text dragging.
   function leftButtonSelect(cm, event, start, behavior) {
     if (ie) { delayBlurEvent(cm); }
-    var display = cm.display, doc = cm.doc;
+    var display = cm.display, doc$1 = cm.doc;
     e_preventDefault(event);
 
-    var ourRange, ourIndex, startSel = doc.sel, ranges = startSel.ranges;
+    var ourRange, ourIndex, startSel = doc$1.sel, ranges = startSel.ranges;
     if (behavior.addNew && !behavior.extend) {
-      ourIndex = doc.sel.contains(start);
+      ourIndex = doc$1.sel.contains(start);
       if (ourIndex > -1)
         { ourRange = ranges[ourIndex]; }
       else
         { ourRange = new Range(start, start); }
     } else {
-      ourRange = doc.sel.primary();
-      ourIndex = doc.sel.primIndex;
+      ourRange = doc$1.sel.primary();
+      ourIndex = doc$1.sel.primIndex;
     }
 
     if (behavior.unit == "rectangle") {
@@ -17523,18 +17575,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
     if (!behavior.addNew) {
       ourIndex = 0;
-      setSelection(doc, new Selection([ourRange], 0), sel_mouse);
-      startSel = doc.sel;
+      setSelection(doc$1, new Selection([ourRange], 0), sel_mouse);
+      startSel = doc$1.sel;
     } else if (ourIndex == -1) {
       ourIndex = ranges.length;
-      setSelection(doc, normalizeSelection(cm, ranges.concat([ourRange]), ourIndex),
+      setSelection(doc$1, normalizeSelection(cm, ranges.concat([ourRange]), ourIndex),
                    {scroll: false, origin: "*mouse"});
     } else if (ranges.length > 1 && ranges[ourIndex].empty() && behavior.unit == "char" && !behavior.extend) {
-      setSelection(doc, normalizeSelection(cm, ranges.slice(0, ourIndex).concat(ranges.slice(ourIndex + 1)), 0),
+      setSelection(doc$1, normalizeSelection(cm, ranges.slice(0, ourIndex).concat(ranges.slice(ourIndex + 1)), 0),
                    {scroll: false, origin: "*mouse"});
-      startSel = doc.sel;
+      startSel = doc$1.sel;
     } else {
-      replaceOneSelection(doc, ourIndex, ourRange, sel_mouse);
+      replaceOneSelection(doc$1, ourIndex, ourRange, sel_mouse);
     }
 
     var lastPos = start;
@@ -17544,19 +17596,19 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
       if (behavior.unit == "rectangle") {
         var ranges = [], tabSize = cm.options.tabSize;
-        var startCol = countColumn(getLine(doc, start.line).text, start.ch, tabSize);
-        var posCol = countColumn(getLine(doc, pos.line).text, pos.ch, tabSize);
+        var startCol = countColumn(getLine(doc$1, start.line).text, start.ch, tabSize);
+        var posCol = countColumn(getLine(doc$1, pos.line).text, pos.ch, tabSize);
         var left = Math.min(startCol, posCol), right = Math.max(startCol, posCol);
         for (var line = Math.min(start.line, pos.line), end = Math.min(cm.lastLine(), Math.max(start.line, pos.line));
              line <= end; line++) {
-          var text = getLine(doc, line).text, leftPos = findColumn(text, left, tabSize);
+          var text = getLine(doc$1, line).text, leftPos = findColumn(text, left, tabSize);
           if (left == right)
             { ranges.push(new Range(Pos(line, leftPos), Pos(line, leftPos))); }
           else if (text.length > leftPos)
             { ranges.push(new Range(Pos(line, leftPos), Pos(line, findColumn(text, right, tabSize)))); }
         }
         if (!ranges.length) { ranges.push(new Range(start, start)); }
-        setSelection(doc, normalizeSelection(cm, startSel.ranges.slice(0, ourIndex).concat(ranges), ourIndex),
+        setSelection(doc$1, normalizeSelection(cm, startSel.ranges.slice(0, ourIndex).concat(ranges), ourIndex),
                      {origin: "*mouse", scroll: false});
         cm.scrollIntoView(pos);
       } else {
@@ -17571,8 +17623,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           anchor = maxPos(oldRange.to(), range.head);
         }
         var ranges$1 = startSel.ranges.slice(0);
-        ranges$1[ourIndex] = bidiSimplify(cm, new Range(clipPos(doc, anchor), head));
-        setSelection(doc, normalizeSelection(cm, ranges$1, ourIndex), sel_mouse);
+        ranges$1[ourIndex] = bidiSimplify(cm, new Range(clipPos(doc$1, anchor), head));
+        setSelection(doc$1, normalizeSelection(cm, ranges$1, ourIndex), sel_mouse);
       }
     }
 
@@ -17588,9 +17640,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var cur = posFromMouse(cm, e, true, behavior.unit == "rectangle");
       if (!cur) { return }
       if (cmp(cur, lastPos) != 0) {
-        cm.curOp.focus = activeElt();
+        cm.curOp.focus = activeElt(doc(cm));
         extendTo(cur);
-        var visible = visibleLines(display, doc);
+        var visible = visibleLines(display, doc$1);
         if (cur.line >= visible.to || cur.line < visible.from)
           { setTimeout(operation(cm, function () {if (counter == curCount) { extend(e); }}), 150); }
       } else {
@@ -17615,7 +17667,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
       off(display.wrapper.ownerDocument, "mousemove", move);
       off(display.wrapper.ownerDocument, "mouseup", up);
-      doc.history.lastSelOrigin = null;
+      doc$1.history.lastSelOrigin = null;
     }
 
     var move = operation(cm, function (e) {
@@ -17772,7 +17824,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       for (var i = newBreaks.length - 1; i >= 0; i--)
         { replaceRange(cm.doc, val, newBreaks[i], Pos(newBreaks[i].line, newBreaks[i].ch + val.length)); }
     });
-    option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b\u200e\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g, function (cm, val, old) {
+    option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b\u200e\u200f\u2028\u2029\u202d\u202e\u2066\u2067\u2069\ufeff\ufff9-\ufffc]/g, function (cm, val, old) {
       cm.state.specialChars = new RegExp(val.source + (val.test("\t") ? "" : "|\t"), "g");
       if (old != Init) { cm.refresh(); }
     });
@@ -18292,7 +18344,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
     CodeMirror.prototype = {
       constructor: CodeMirror,
-      focus: function(){window.focus(); this.display.input.focus();},
+      focus: function(){win(this).focus(); this.display.input.focus();},
 
       setOption: function(option, value) {
         var options = this.options, old = options[option];
@@ -18616,7 +18668,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
         signal(this, "overwriteToggle", this, this.state.overwrite);
       },
-      hasFocus: function() { return this.display.input.getField() == activeElt() },
+      hasFocus: function() { return this.display.input.getField() == activeElt(doc(this)) },
       isReadOnly: function() { return !!(this.options.readOnly || this.doc.cantEdit) },
 
       scrollTo: methodOp(function (x, y) { scrollToCoords(this, x, y); }),
@@ -18797,7 +18849,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function findPosV(cm, pos, dir, unit) {
     var doc = cm.doc, x = pos.left, y;
     if (unit == "page") {
-      var pageSize = Math.min(cm.display.wrapper.clientHeight, window.innerHeight || document.documentElement.clientHeight);
+      var pageSize = Math.min(cm.display.wrapper.clientHeight, win(cm).innerHeight || doc(cm).documentElement.clientHeight);
       var moveAmount = Math.max(pageSize - .5 * textHeight(cm.display), 3);
       y = (dir > 0 ? pos.bottom : pos.top) + dir * moveAmount;
 
@@ -18897,7 +18949,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       var kludge = hiddenTextarea(), te = kludge.firstChild;
       cm.display.lineSpace.insertBefore(kludge, cm.display.lineSpace.firstChild);
       te.value = lastCopied.text.join("\n");
-      var hadFocus = activeElt();
+      var hadFocus = activeElt(div.ownerDocument);
       selectInput(te);
       setTimeout(function () {
         cm.display.lineSpace.removeChild(kludge);
@@ -18920,7 +18972,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   ContentEditableInput.prototype.prepareSelection = function () {
     var result = prepareSelection(this.cm, false);
-    result.focus = activeElt() == this.div;
+    result.focus = activeElt(this.div.ownerDocument) == this.div;
     return result
   };
 
@@ -19016,7 +19068,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   ContentEditableInput.prototype.focus = function () {
     if (this.cm.options.readOnly != "nocursor") {
-      if (!this.selectionInEditor() || activeElt() != this.div)
+      if (!this.selectionInEditor() || activeElt(this.div.ownerDocument) != this.div)
         { this.showSelection(this.prepareSelection(), true); }
       this.div.focus();
     }
@@ -19368,6 +19420,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // Used to work around IE issue with selection being forgotten when focus moves away from textarea
     this.hasSelection = false;
     this.composing = null;
+    this.resetting = false;
   };
 
   TextareaInput.prototype.init = function (display) {
@@ -19500,8 +19553,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   // Reset the input to correspond to the selection (or to be empty,
   // when not typing and nothing is selected)
   TextareaInput.prototype.reset = function (typing) {
-    if (this.contextMenuPending || this.composing) { return }
+    if (this.contextMenuPending || this.composing && typing) { return }
     var cm = this.cm;
+    this.resetting = true;
     if (cm.somethingSelected()) {
       this.prevInput = "";
       var content = cm.getSelection();
@@ -19512,6 +19566,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this.prevInput = this.textarea.value = "";
       if (ie && ie_version >= 9) { this.hasSelection = null; }
     }
+    this.resetting = false;
   };
 
   TextareaInput.prototype.getField = function () { return this.textarea };
@@ -19519,7 +19574,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   TextareaInput.prototype.supportsTouch = function () { return false };
 
   TextareaInput.prototype.focus = function () {
-    if (this.cm.options.readOnly != "nocursor" && (!mobile || activeElt() != this.textarea)) {
+    if (this.cm.options.readOnly != "nocursor" && (!mobile || activeElt(this.textarea.ownerDocument) != this.textarea)) {
       try { this.textarea.focus(); }
       catch (e) {} // IE8 will throw if the textarea is display: none or not in DOM
     }
@@ -19573,7 +19628,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // possible when it is clear that nothing happened. hasSelection
     // will be the case when there is a lot of text in the textarea,
     // in which case reading its value would be expensive.
-    if (this.contextMenuPending || !cm.state.focused ||
+    if (this.contextMenuPending || this.resetting || !cm.state.focused ||
         (hasSelection(input) && !prevInput && !this.composing) ||
         cm.isReadOnly() || cm.options.disableInput || cm.state.keySeq)
       { return false }
@@ -19642,9 +19697,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     input.wrapper.style.cssText = "position: static";
     te.style.cssText = "position: absolute; width: 30px; height: 30px;\n      top: " + (e.clientY - wrapperBox.top - 5) + "px; left: " + (e.clientX - wrapperBox.left - 5) + "px;\n      z-index: 1000; background: " + (ie ? "rgba(255, 255, 255, .05)" : "transparent") + ";\n      outline: none; border-width: 0; outline: none; overflow: hidden; opacity: .05; filter: alpha(opacity=5);";
     var oldScrollY;
-    if (webkit) { oldScrollY = window.scrollY; } // Work around Chrome issue (#2712)
+    if (webkit) { oldScrollY = te.ownerDocument.defaultView.scrollY; } // Work around Chrome issue (#2712)
     display.input.focus();
-    if (webkit) { window.scrollTo(null, oldScrollY); }
+    if (webkit) { te.ownerDocument.defaultView.scrollTo(null, oldScrollY); }
     display.input.reset();
     // Adds "Select all" to context menu in FF
     if (!cm.somethingSelected()) { te.value = input.prevInput = " "; }
@@ -19726,7 +19781,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // Set autofocus to true if this textarea is focused, or if it has
     // autofocus and no other element is focused.
     if (options.autofocus == null) {
-      var hasFocus = activeElt();
+      var hasFocus = activeElt(textarea.ownerDocument);
       options.autofocus = hasFocus == textarea ||
         textarea.getAttribute("autofocus") != null && hasFocus == document.body;
     }
@@ -19860,14 +19915,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.65.5";
+  CodeMirror.version = "5.65.9";
 
   return CodeMirror;
 
 })));
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 // Utility function that allows modes to be combined. The mode given
 // as the base argument takes care of most of the normal mode
@@ -19958,7 +20013,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -20845,7 +20900,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -20975,7 +21030,7 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -21936,7 +21991,7 @@ CodeMirror.defineMIME("application/typescript", { name: "javascript", typescript
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -22165,7 +22220,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     if (type == "}" || type == "{") return popAndPass(type, stream, state);
     if (type == "(") return pushContext(state, stream, "parens");
 
-    if (type == "hash" && !/^#([0-9a-fA-f]{3,4}|[0-9a-fA-f]{6}|[0-9a-fA-f]{8})$/.test(stream.current())) {
+    if (type == "hash" && !/^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(stream.current())) {
       override += " error";
     } else if (type == "word") {
       wordAsValue(stream);
@@ -22799,7 +22854,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -22953,7 +23008,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -23894,7 +23949,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
 });
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
