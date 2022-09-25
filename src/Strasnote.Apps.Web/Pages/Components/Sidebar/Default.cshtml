@@ -1,0 +1,36 @@
+﻿@model Strasnote.Apps.Web.Pages.Components.Sidebar.SidebarModel
+
+<div class="offcanvas-md offcanvas-start col-md-3 col-xl-2" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body pt-3 flex-column">
+		<!-- Create Note button -->
+		<div>
+			<button class="btn btn-outline-primary">
+				<i class="lni lni-plus pe-2"></i> Create Note
+			</button>
+		</div>
+
+		<!-- Menus -->
+		@foreach (var menu in Model.Menus)
+		{
+			<h5 class="fw-light mt-4 pt-1 border-top border-1 border-light">@menu.Title</h5>
+			<ul class="nav flex-column">
+				@foreach (var item in menu.Items)
+				{
+					var href = Url.Page(item.Page);
+					var current = Path == href;
+
+					var css = "nav-link" + (current ? " active" : "");
+					var aria = current ? " aria-current=\"page\"" : "";
+
+					<li class="nav-item">
+						<a class="@css" href="@href"@aria>@item.Text</a>
+					</li>
+				}
+			</ul>
+		}
+	</div>
+</div>

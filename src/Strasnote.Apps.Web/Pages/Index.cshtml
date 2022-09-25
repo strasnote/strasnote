@@ -2,7 +2,7 @@
 @model Strasnote.Apps.Web.Pages.IndexModel
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
 
 	<meta charset="utf-8" />
@@ -11,6 +11,7 @@
 	<title>Strasnote Web App</title>
 
 	<!-- Style -->
+	<link href="https://cdn.lineicons.com/3.0/lineicons.css" rel="stylesheet" />
 	<environment names="Development">
 		<link rel="stylesheet" href="~/css/bundles/strasnote-lib.css" />
 		<link rel="stylesheet" href="~/css/bundles/strasnote.css" />
@@ -28,32 +29,20 @@
 	</script>
 
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 
 	<!-- Header -->
 	<vc:header />
 
-	<div class="container-fluid">
+	<div class="container-fluid flex-shrink-0">
 
 		<div class="row">
 
-			<button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">Toggle offcanvas</button>
+			<!-- Sidebar -->
+			<vc:sidebar />
 
-			<div class="alert alert-info d-none d-lg-block">Resize your browser to show the responsive offcanvas toggle.</div>
-
-			<div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
-				<div class="offcanvas-header">
-					<h5 class="offcanvas-title" id="offcanvasResponsiveLabel">Responsive offcanvas</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
-				</div>
-				<div class="offcanvas-body">
-					<p class="mb-0">This is content within an <code>.offcanvas-lg</code>.</p>
-				</div>
-			</div>
-
-
-			<!-- Content -->
-			<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+			<!-- Main Content -->
+			<main role="main" class="col-12 col-md-9 col-xl-10 pt-2 px-md-4">
 				<h1>Notes</h1>
 			</main>
 
