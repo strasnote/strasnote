@@ -46,7 +46,7 @@ namespace Strasnote.Auth.Data
 		#region Retrieve
 
 		/// <inheritdoc/>
-		public async Task<UserEntity> FindByIdAsync(string userId, CancellationToken cancellationToken)
+		public async Task<UserEntity?> FindByIdAsync(string userId, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -68,7 +68,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public async Task<UserEntity> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+		public async Task<UserEntity?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -91,7 +91,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task<string> GetNormalizedUserNameAsync(UserEntity user, CancellationToken cancellationToken)
+		public Task<string?> GetNormalizedUserNameAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -99,7 +99,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task<string> GetUserNameAsync(UserEntity user, CancellationToken cancellationToken)
+		public Task<string?> GetUserNameAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -107,7 +107,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task<string> GetEmailAsync(UserEntity user, CancellationToken cancellationToken)
+		public Task<string?> GetEmailAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -133,7 +133,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public async Task<UserEntity> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+		public async Task<UserEntity?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -148,7 +148,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task<string> GetNormalizedEmailAsync(UserEntity user, CancellationToken cancellationToken)
+		public Task<string?> GetNormalizedEmailAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -156,7 +156,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task<string> GetPasswordHashAsync(UserEntity user, CancellationToken cancellationToken)
+		public Task<string?> GetPasswordHashAsync(UserEntity user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -194,7 +194,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task SetNormalizedUserNameAsync(UserEntity user, string normalizedName, CancellationToken cancellationToken)
+		public Task SetNormalizedUserNameAsync(UserEntity user, string? normalizedName, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -204,7 +204,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task SetUserNameAsync(UserEntity user, string userName, CancellationToken cancellationToken)
+		public Task SetUserNameAsync(UserEntity user, string? userName, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -214,7 +214,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task SetEmailAsync(UserEntity user, string email, CancellationToken cancellationToken)
+		public Task SetEmailAsync(UserEntity user, string? email, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -244,7 +244,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task SetNormalizedEmailAsync(UserEntity user, string normalizedEmail, CancellationToken cancellationToken)
+		public Task SetNormalizedEmailAsync(UserEntity user, string? normalizedEmail, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -254,7 +254,7 @@ namespace Strasnote.Auth.Data
 		}
 
 		/// <inheritdoc/>
-		public Task SetPasswordHashAsync(UserEntity user, string passwordHash, CancellationToken cancellationToken)
+		public Task SetPasswordHashAsync(UserEntity user, string? passwordHash, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
