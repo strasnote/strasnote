@@ -37,10 +37,11 @@ namespace Strasnote.Auth.Extensions
 					config.TokenValidationParameters = new AuthConfigTokenValidationParameters(configuration);
 				});
 
+			services.AddAuthorization();
+
 			// Identity
 			services.AddTransient<IUserManager, UserManager>();
 			services.AddTransient<ISignInManager, SignInManager>();
-			services.AddHttpContextAccessor();
 
 			return services;
 		}

@@ -4,7 +4,7 @@
 using System;
 using Dapper;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Strasnote.AppBase.Abstracts;
 using Strasnote.Data.TypeHandlers;
@@ -31,14 +31,14 @@ namespace Strasnote.AppBase
 		/// <param name="configure">Register custom services</param>
 		public static WebApplicationBuilder ConfigureStrasnote(
 			this WebApplicationBuilder builder,
-			Action<WebHostBuilderContext, IServiceCollection> configure
+			Action<IConfiguration, IServiceCollection> configure
 		)
 		{
 			/** Add default Strasnote configuration
 			 * ========================================================================== */
 			_ = builder.Host.ConfigureStrasnote();
 
-			/** Add default web services
+			/** Add default services
 			 * ========================================================================== */
 			_ = builder.Services
 
@@ -47,6 +47,10 @@ namespace Strasnote.AppBase
 
 				// Add app context
 				.AddTransient<IAppContext, WebAppContext>();
+
+			/** Add custom services
+			 * ========================================================================== */
+			configure(builder.Configuration, builder.Services);
 
 			/** Add Dapper TypeHandlers
 			 * ========================================================================== */
