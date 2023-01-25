@@ -142,7 +142,7 @@ namespace Tests.Strasnote.Auth
 		{
 			// Arrange
 			userManager.FindByEmailAsync(Arg.Any<string>())
-				.Throws<UserNotFoundByEmailException>();
+				.ThrowsAsync<UserNotFoundByEmailException>();
 
 			var jwtTokenService = new JwtTokenIssuer(
 				userManager,
