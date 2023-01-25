@@ -40,18 +40,13 @@ namespace Strasnote.AppBase
 
 			/** Add default web services
 			 * ========================================================================== */
-			_ = builder.WebHost.ConfigureServices((ctx, services) =>
-			{
-				_ = services
-					// Enable custom Http Clients
-					.AddHttpContextAccessor()
+			_ = builder.Services
 
-					// Add app context
-					.AddTransient<IAppContext, WebAppContext>();
+				// Enable custom Http Clients
+				.AddHttpContextAccessor()
 
-				// Register custom services
-				configure(ctx, services);
-			});
+				// Add app context
+				.AddTransient<IAppContext, WebAppContext>();
 
 			/** Add Dapper TypeHandlers
 			 * ========================================================================== */
