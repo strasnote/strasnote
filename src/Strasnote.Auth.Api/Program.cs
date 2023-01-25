@@ -34,7 +34,7 @@ var app = builder.Build();
 // =========================================================================
 
 app.UseAppDefaults();
-app.UseEndpoints(endpoints => endpoints.MapControllers());
+app.MapControllers();
 
 // =========================================================================
 // RUN

@@ -58,7 +58,7 @@ var app = builder.Build();
 app.UseAppDefaults();
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "Strasnote Notes API v1"));
-app.UseEndpoints(endpoints => endpoints.MapControllers());
+app.MapControllers();
 
 // =========================================================================
 // RUN
