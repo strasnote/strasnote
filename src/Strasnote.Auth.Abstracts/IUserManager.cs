@@ -10,9 +10,9 @@ namespace Strasnote.Auth.Abstracts
 {
 	public interface IUserManager
 	{
-		Task<UserEntity> FindByEmailAsync(string email);
+		Task<UserEntity?> FindByEmailAsync(string email);
 
-		Task<UserEntity> FindByIdAsync(string userId);
+		Task<UserEntity?> FindByIdAsync(string userId);
 
 		Task<IList<string>> GetRolesAsync(UserEntity user);
 
