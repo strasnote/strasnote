@@ -273,9 +273,14 @@ namespace Strasnote.Auth.Data
 		#region Delete
 
 		/// <inheritdoc/>
-		public async Task<IdentityResult> DeleteAsync(UserEntity user, CancellationToken cancellationToken)
+		public async Task<IdentityResult> DeleteAsync(UserEntity? user, CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
+
+			if (user is null)
+			{
+				return IdentityResult.Failed(new IdentityError() { Description = "User cannot be null." });
+			}
 
 			return await userRepository.DeleteAsync(user.Id).ConfigureAwait(false) switch
 			{

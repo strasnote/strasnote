@@ -53,6 +53,11 @@ namespace Strasnote.Auth
 				}
 
 				var user = await userManager.FindByEmailAsync(email);
+				if (user is null)
+				{
+					return new TokenResponse("Could not find user by email.", false);
+				}
+
 				var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, true);
 
 				if (signInResult.IsLockedOut)
@@ -111,6 +116,10 @@ namespace Strasnote.Auth
 			}
 
 			var user = await userManager.FindByIdAsync(userId);
+			if (user is null)
+			{
+				return new("Could not find user by ID.", false);
+			}
 
 			var existingRefreshToken = await refreshTokenRepository.RetrieveForUserAsync(user.Id, refreshToken);
 
