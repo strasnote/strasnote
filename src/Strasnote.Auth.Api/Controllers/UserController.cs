@@ -32,7 +32,7 @@ namespace Strasnote.Auth.Api.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<UserEntity> GetById(string id)
+		public async Task<UserEntity?> GetById(string id)
 		{
 			log.Trace("Get user with ID: {Id}", id);
 			return await users.FindByIdAsync(id, new());
