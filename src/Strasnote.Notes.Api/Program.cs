@@ -18,14 +18,14 @@ using Strasnote.Notes.Data;
 // =========================================================================
 
 var builder = WebApplication.CreateBuilder(args);
-builder.ConfigureStrasnote((ctx, services) =>
+builder.ConfigureStrasnote((config, services) =>
 {
 	// MVC
 	services.AddControllers(opt => opt.ModelBinderProviders.Insert(0, new RouteIdModelBinderProvider()));
 	services.AddApiVersioning();
 
 	// Auth
-	services.AddAuth(ctx.Configuration);
+	services.AddAuth(config);
 	services.AddAuthData<MySqlClient>();
 
 	// Notes

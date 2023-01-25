@@ -14,14 +14,14 @@ using Strasnote.Notes.Data;
 // =========================================================================
 
 var builder = WebApplication.CreateBuilder(args);
-builder.ConfigureStrasnote((ctx, services) =>
+builder.ConfigureStrasnote((config, services) =>
 {
 	// MVC
 	services.AddControllers();
 	services.AddApiVersioning();
 
 	// Auth
-	services.AddAuth(ctx.Configuration);
+	services.AddAuth(config);
 	services.AddAuthData<MySqlClient>();
 
 	// Notes (required for migrator)
