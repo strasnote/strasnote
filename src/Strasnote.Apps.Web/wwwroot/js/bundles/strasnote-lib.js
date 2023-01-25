@@ -466,7 +466,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     let AsyncFunction = Object.getPrototypeOf(async function() {
     }).constructor;
-    let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression) || /^(let|const)\s/.test(expression) ? `(() => { ${expression} })()` : expression;
+    let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression) || /^(let|const)\s/.test(expression) ? `(async()=>{ ${expression} })()` : expression;
     const safeAsyncFunction = () => {
       try {
         return new AsyncFunction(["__self", "scope"], `with (scope) { __self.result = ${rightSideSafeExpression} }; __self.finished = true; return __self.result;`);
@@ -507,6 +507,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       } else {
         receiver(result);
       }
+    } else if (typeof value === "object" && value instanceof Promise) {
+      value.then((i) => receiver(i));
     } else {
       receiver(value);
     }
@@ -523,6 +525,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var directiveHandlers = {};
   function directive(name, callback) {
     directiveHandlers[name] = callback;
+    return {
+      before(directive2) {
+        if (!directiveHandlers[directive2]) {
+          console.warn("Cannot find directive `${directive}`. `${name}` will use the default order of execution");
+          return;
+        }
+        const pos = directiveOrder.indexOf(directive2) ?? directiveOrder.indexOf("DEFAULT");
+        if (pos >= 0) {
+          directiveOrder.splice(pos, 0, name);
+        }
+      }
+    };
   }
   function directives(el, attributes, originalAttributeOverride) {
     attributes = Array.from(attributes);
@@ -646,6 +660,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     "ref",
     "data",
     "id",
+    "radio",
+    "tabs",
+    "switch",
+    "disclosure",
+    "menu",
+    "listbox",
+    "combobox",
     "bind",
     "init",
     "for",
@@ -672,32 +693,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       composed: true,
       cancelable: true
     }));
-  }
-
-  // packages/alpinejs/src/nextTick.js
-  var tickStack = [];
-  var isHolding = false;
-  function nextTick(callback = () => {
-  }) {
-    queueMicrotask(() => {
-      isHolding || setTimeout(() => {
-        releaseNextTicks();
-      });
-    });
-    return new Promise((res) => {
-      tickStack.push(() => {
-        callback();
-        res();
-      });
-    });
-  }
-  function releaseNextTicks() {
-    isHolding = false;
-    while (tickStack.length)
-      tickStack.shift()();
-  }
-  function holdNextTicks() {
-    isHolding = true;
   }
 
   // packages/alpinejs/src/utils/walk.js
@@ -775,9 +770,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function isRoot(el) {
     return rootSelectors().some((selector) => el.matches(selector));
   }
-  function initTree(el, walker = walk) {
+  var initInterceptors2 = [];
+  function interceptInit(callback) {
+    initInterceptors2.push(callback);
+  }
+  function initTree(el, walker = walk, intercept = () => {
+  }) {
     deferHandlingDirectives(() => {
       walker(el, (el2, skip) => {
+        intercept(el2, skip);
+        initInterceptors2.forEach((i) => i(el2, skip));
         directives(el2, el2.attributes).forEach((handle) => handle());
         el2._x_ignore && skip();
       });
@@ -785,6 +787,32 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function destroyTree(root) {
     walk(root, (el) => cleanupAttributes(el));
+  }
+
+  // packages/alpinejs/src/nextTick.js
+  var tickStack = [];
+  var isHolding = false;
+  function nextTick(callback = () => {
+  }) {
+    queueMicrotask(() => {
+      isHolding || setTimeout(() => {
+        releaseNextTicks();
+      });
+    });
+    return new Promise((res) => {
+      tickStack.push(() => {
+        callback();
+        res();
+      });
+    });
+  }
+  function releaseNextTicks() {
+    isHolding = false;
+    while (tickStack.length)
+      tickStack.shift()();
+  }
+  function holdNextTicks() {
+    isHolding = true;
   }
 
   // packages/alpinejs/src/utils/classes.js
@@ -1165,6 +1193,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }) {
     return (...args) => isCloning ? fallback(...args) : callback(...args);
   }
+  function onlyDuringClone(callback) {
+    return (...args) => isCloning && callback(...args);
+  }
   function clone(oldEl, newEl) {
     if (!newEl._x_dataStack)
       newEl._x_dataStack = oldEl._x_dataStack;
@@ -1324,11 +1355,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     let attr = el.getAttribute(name);
     if (attr === null)
       return typeof fallback === "function" ? fallback() : fallback;
+    if (attr === "")
+      return true;
     if (isBooleanAttr(name)) {
       return !![name, "true"].includes(attr);
     }
-    if (attr === "")
-      return true;
     return attr;
   }
 
@@ -1461,23 +1492,28 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     get raw() {
       return raw;
     },
-    version: "3.10.3",
+    version: "3.11.1",
     flushAndStopDeferringMutations,
     dontAutoEvaluateFunctions,
     disableEffectScheduling,
+    startObservingMutations,
+    stopObservingMutations,
     setReactivityEngine,
     closestDataStack,
     skipDuringClone,
+    onlyDuringClone,
     addRootSelector,
     addInitSelector,
     addScopeToNode,
     deferMutations,
     mapAttributes,
     evaluateLater,
+    interceptInit,
     setEvaluator,
     mergeProxies,
     findClosest,
     closestRoot,
+    destroyTree,
     interceptor,
     transition,
     setStyles,
@@ -1497,6 +1533,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     clone,
     bound: getBinding,
     $data: scope,
+    walk,
     data,
     bind: bind2
   };
@@ -2271,8 +2308,41 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     magic(magicName, (el) => warn(`You can't use [$${directiveName}] without first installing the "${name}" plugin here: https://alpinejs.dev/plugins/${slug}`, el));
   }
 
+  // packages/alpinejs/src/entangle.js
+  function entangle({get: outerGet, set: outerSet}, {get: innerGet, set: innerSet}) {
+    let firstRun = true;
+    let outerHash, innerHash, outerHashLatest, innerHashLatest;
+    let reference = effect(() => {
+      let outer, inner;
+      if (firstRun) {
+        outer = outerGet();
+        innerSet(outer);
+        inner = innerGet();
+        firstRun = false;
+      } else {
+        outer = outerGet();
+        inner = innerGet();
+        outerHashLatest = JSON.stringify(outer);
+        innerHashLatest = JSON.stringify(inner);
+        if (outerHashLatest !== outerHash) {
+          inner = innerGet();
+          innerSet(outer);
+          inner = outer;
+        } else {
+          outerSet(inner);
+          outer = inner;
+        }
+      }
+      outerHash = JSON.stringify(outer);
+      innerHash = JSON.stringify(inner);
+    });
+    return () => {
+      release(reference);
+    };
+  }
+
   // packages/alpinejs/src/directives/x-modelable.js
-  directive("modelable", (el, {expression}, {effect: effect3, evaluateLater: evaluateLater2}) => {
+  directive("modelable", (el, {expression}, {effect: effect3, evaluateLater: evaluateLater2, cleanup: cleanup2}) => {
     let func = evaluateLater2(expression);
     let innerGet = () => {
       let result;
@@ -2290,16 +2360,35 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       el._x_removeModelListeners["default"]();
       let outerGet = el._x_model.get;
       let outerSet = el._x_model.set;
-      effect3(() => innerSet(outerGet()));
-      effect3(() => outerSet(innerGet()));
+      let releaseEntanglement = entangle({
+        get() {
+          return outerGet();
+        },
+        set(value) {
+          outerSet(value);
+        }
+      }, {
+        get() {
+          return innerGet();
+        },
+        set(value) {
+          innerSet(value);
+        }
+      });
+      cleanup2(releaseEntanglement);
     });
   });
 
   // packages/alpinejs/src/directives/x-teleport.js
-  directive("teleport", (el, {expression}, {cleanup: cleanup2}) => {
+  var teleportContainerDuringClone = document.createElement("div");
+  directive("teleport", (el, {modifiers, expression}, {cleanup: cleanup2}) => {
     if (el.tagName.toLowerCase() !== "template")
       warn("x-teleport can only be used on a <template> tag", el);
-    let target = document.querySelector(expression);
+    let target = skipDuringClone(() => {
+      return document.querySelector(expression);
+    }, () => {
+      return teleportContainerDuringClone;
+    })();
     if (!target)
       warn(`Cannot find x-teleport element for selector: "${expression}"`);
     let clone2 = el.content.cloneNode(true).firstElementChild;
@@ -2315,7 +2404,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     addScopeToNode(clone2, {}, el);
     mutateDom(() => {
-      target.appendChild(clone2);
+      if (modifiers.includes("prepend")) {
+        target.parentNode.insertBefore(clone2, target);
+      } else if (modifiers.includes("append")) {
+        target.parentNode.insertBefore(clone2, target.nextSibling);
+      } else {
+        target.appendChild(clone2);
+      }
       initTree(clone2);
       clone2._x_ignore = true;
     });
@@ -2421,6 +2516,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     return !Array.isArray(subject) && !isNaN(subject);
   }
   function kebabCase2(subject) {
+    if ([" ", "_"].includes(subject))
+      return subject;
     return subject.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[_\s]/, "-").toLowerCase();
   }
   function isKeyEvent(event) {
@@ -2432,6 +2529,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
     if (keyModifiers.includes("debounce")) {
       let debounceIndex = keyModifiers.indexOf("debounce");
+      keyModifiers.splice(debounceIndex, isNumeric((keyModifiers[debounceIndex + 1] || "invalid-wait").split("ms")[0]) ? 2 : 1);
+    }
+    if (keyModifiers.includes("throttle")) {
+      let debounceIndex = keyModifiers.indexOf("throttle");
       keyModifiers.splice(debounceIndex, isNumeric((keyModifiers[debounceIndex + 1] || "invalid-wait").split("ms")[0]) ? 2 : 1);
     }
     if (keyModifiers.length === 0)
@@ -2461,8 +2562,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     let modifierToKeyMap = {
       ctrl: "control",
       slash: "/",
-      space: "-",
-      spacebar: "-",
+      space: " ",
+      spacebar: " ",
       cmd: "meta",
       esc: "escape",
       up: "arrow-up",
@@ -2470,7 +2571,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       left: "arrow-left",
       right: "arrow-right",
       period: ".",
-      equal: "="
+      equal: "=",
+      minus: "-",
+      underscore: "_"
     };
     modifierToKeyMap[key] = key;
     return Object.keys(modifierToKeyMap).map((modifier) => {
@@ -2481,80 +2584,103 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   // packages/alpinejs/src/directives/x-model.js
   directive("model", (el, {modifiers, expression}, {effect: effect3, cleanup: cleanup2}) => {
-    let evaluate2 = evaluateLater(el, expression);
-    let assignmentExpression = `${expression} = rightSideOfExpression($event, ${expression})`;
-    let evaluateAssignment = evaluateLater(el, assignmentExpression);
-    var event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) || modifiers.includes("lazy") ? "change" : "input";
-    let assigmentFunction = generateAssignmentFunction(el, modifiers, expression);
-    let removeListener = on(el, event, modifiers, (e) => {
-      evaluateAssignment(() => {
-      }, {scope: {
-        $event: e,
-        rightSideOfExpression: assigmentFunction
-      }});
-    });
-    if (!el._x_removeModelListeners)
-      el._x_removeModelListeners = {};
-    el._x_removeModelListeners["default"] = removeListener;
-    cleanup2(() => el._x_removeModelListeners["default"]());
-    let evaluateSetModel = evaluateLater(el, `${expression} = __placeholder`);
-    el._x_model = {
-      get() {
-        let result;
-        evaluate2((value) => result = value);
-        return result;
-      },
-      set(value) {
-        evaluateSetModel(() => {
-        }, {scope: {__placeholder: value}});
+    let scopeTarget = el;
+    if (modifiers.includes("parent")) {
+      scopeTarget = el.parentNode;
+    }
+    let evaluateGet = evaluateLater(scopeTarget, expression);
+    let evaluateSet;
+    if (typeof expression === "string") {
+      evaluateSet = evaluateLater(scopeTarget, `${expression} = __placeholder`);
+    } else if (typeof expression === "function" && typeof expression() === "string") {
+      evaluateSet = evaluateLater(scopeTarget, `${expression()} = __placeholder`);
+    } else {
+      evaluateSet = () => {
+      };
+    }
+    let getValue = () => {
+      let result;
+      evaluateGet((value) => result = value);
+      return isGetterSetter(result) ? result.get() : result;
+    };
+    let setValue = (value) => {
+      let result;
+      evaluateGet((value2) => result = value2);
+      if (isGetterSetter(result)) {
+        result.set(value);
+      } else {
+        evaluateSet(() => {
+        }, {
+          scope: {__placeholder: value}
+        });
       }
     };
-    el._x_forceModelUpdate = () => {
-      evaluate2((value) => {
-        if (value === void 0 && expression.match(/\./))
-          value = "";
-        window.fromModel = true;
-        mutateDom(() => bind(el, "value", value));
-        delete window.fromModel;
-      });
-    };
-    effect3(() => {
-      if (modifiers.includes("unintrusive") && document.activeElement.isSameNode(el))
-        return;
-      el._x_forceModelUpdate();
-    });
-  });
-  function generateAssignmentFunction(el, modifiers, expression) {
-    if (el.type === "radio") {
+    if (typeof expression === "string" && el.type === "radio") {
       mutateDom(() => {
         if (!el.hasAttribute("name"))
           el.setAttribute("name", expression);
       });
     }
-    return (event, currentValue) => {
-      return mutateDom(() => {
-        if (event instanceof CustomEvent && event.detail !== void 0) {
-          return event.detail || event.target.value;
-        } else if (el.type === "checkbox") {
-          if (Array.isArray(currentValue)) {
-            let newValue = modifiers.includes("number") ? safeParseNumber(event.target.value) : event.target.value;
-            return event.target.checked ? currentValue.concat([newValue]) : currentValue.filter((el2) => !checkedAttrLooseCompare2(el2, newValue));
-          } else {
-            return event.target.checked;
-          }
-        } else if (el.tagName.toLowerCase() === "select" && el.multiple) {
-          return modifiers.includes("number") ? Array.from(event.target.selectedOptions).map((option) => {
-            let rawValue = option.value || option.text;
-            return safeParseNumber(rawValue);
-          }) : Array.from(event.target.selectedOptions).map((option) => {
-            return option.value || option.text;
-          });
-        } else {
-          let rawValue = event.target.value;
-          return modifiers.includes("number") ? safeParseNumber(rawValue) : modifiers.includes("trim") ? rawValue.trim() : rawValue;
-        }
+    var event = el.tagName.toLowerCase() === "select" || ["checkbox", "radio"].includes(el.type) || modifiers.includes("lazy") ? "change" : "input";
+    let removeListener = on(el, event, modifiers, (e) => {
+      setValue(getInputValue(el, modifiers, e, getValue()));
+    });
+    if (!el._x_removeModelListeners)
+      el._x_removeModelListeners = {};
+    el._x_removeModelListeners["default"] = removeListener;
+    cleanup2(() => el._x_removeModelListeners["default"]());
+    if (el.form) {
+      let removeResetListener = on(el.form, "reset", [], (e) => {
+        nextTick(() => el._x_model && el._x_model.set(el.value));
       });
+      cleanup2(() => removeResetListener());
+    }
+    el._x_model = {
+      get() {
+        return getValue();
+      },
+      set(value) {
+        setValue(value);
+      }
     };
+    el._x_forceModelUpdate = (value) => {
+      value = value === void 0 ? getValue() : value;
+      if (value === void 0 && typeof expression === "string" && expression.match(/\./))
+        value = "";
+      window.fromModel = true;
+      mutateDom(() => bind(el, "value", value));
+      delete window.fromModel;
+    };
+    effect3(() => {
+      let value = getValue();
+      if (modifiers.includes("unintrusive") && document.activeElement.isSameNode(el))
+        return;
+      el._x_forceModelUpdate(value);
+    });
+  });
+  function getInputValue(el, modifiers, event, currentValue) {
+    return mutateDom(() => {
+      if (event instanceof CustomEvent && event.detail !== void 0) {
+        return typeof event.detail != "undefined" ? event.detail : event.target.value;
+      } else if (el.type === "checkbox") {
+        if (Array.isArray(currentValue)) {
+          let newValue = modifiers.includes("number") ? safeParseNumber(event.target.value) : event.target.value;
+          return event.target.checked ? currentValue.concat([newValue]) : currentValue.filter((el2) => !checkedAttrLooseCompare2(el2, newValue));
+        } else {
+          return event.target.checked;
+        }
+      } else if (el.tagName.toLowerCase() === "select" && el.multiple) {
+        return modifiers.includes("number") ? Array.from(event.target.selectedOptions).map((option) => {
+          let rawValue = option.value || option.text;
+          return safeParseNumber(rawValue);
+        }) : Array.from(event.target.selectedOptions).map((option) => {
+          return option.value || option.text;
+        });
+      } else {
+        let rawValue = event.target.value;
+        return modifiers.includes("number") ? safeParseNumber(rawValue) : modifiers.includes("trim") ? rawValue.trim() : rawValue;
+      }
+    });
   }
   function safeParseNumber(rawValue) {
     let number = rawValue ? parseFloat(rawValue) : null;
@@ -2565,6 +2691,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
   function isNumeric2(subject) {
     return !Array.isArray(subject) && !isNaN(subject);
+  }
+  function isGetterSetter(value) {
+    return value !== null && typeof value === "object" && typeof value.get === "function" && typeof value.set === "function";
   }
 
   // packages/alpinejs/src/directives/x-cloak.js
@@ -2622,8 +2751,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       return storeKeyForXFor(el, expression);
     let evaluate2 = evaluateLater(el, expression);
     effect3(() => evaluate2((result) => {
-      if (result === void 0 && expression.match(/\./))
+      if (result === void 0 && typeof expression === "string" && expression.match(/\./)) {
         result = "";
+      }
       mutateDom(() => bind(el, value, result, modifiers));
     }));
   });
@@ -2958,7 +3088,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 })();
 
 /*!
-  * Bootstrap v5.2.1 (https://getbootstrap.com/)
+  * Bootstrap v5.2.3 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -2970,7 +3100,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/index.js
+   * Bootstrap (v5.2.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3285,7 +3415,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/event-handler.js
+   * Bootstrap (v5.2.3): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3554,7 +3684,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/data.js
+   * Bootstrap (v5.2.3): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3606,7 +3736,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/manipulator.js
+   * Bootstrap (v5.2.3): dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3676,7 +3806,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/config.js
+   * Bootstrap (v5.2.3): util/config.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3737,7 +3867,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): base-component.js
+   * Bootstrap (v5.2.3): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3745,7 +3875,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
    * Constants
    */
 
-  const VERSION = '5.2.1';
+  const VERSION = '5.2.3';
   /**
    * Class definition
    */
@@ -3816,7 +3946,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/component-functions.js
+   * Bootstrap (v5.2.3): util/component-functions.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3842,7 +3972,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): alert.js
+   * Bootstrap (v5.2.3): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3922,7 +4052,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): button.js
+   * Bootstrap (v5.2.3): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3984,7 +4114,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dom/selector-engine.js
+   * Bootstrap (v5.2.3): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4055,7 +4185,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/swipe.js
+   * Bootstrap (v5.2.3): util/swipe.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4191,7 +4321,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): carousel.js
+   * Bootstrap (v5.2.3): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4639,7 +4769,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): collapse.js
+   * Bootstrap (v5.2.3): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -6775,7 +6905,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): dropdown.js
+   * Bootstrap (v5.2.3): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -6847,7 +6977,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this._parent = this._element.parentNode; // dropdown wrapper
       // todo: v6 revert #37011 & change markup https://getbootstrap.com/docs/5.2/forms/input-group/
 
-      this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0];
+      this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0] || SelectorEngine.findOne(SELECTOR_MENU, this._parent);
       this._inNavbar = this._detectNavbar();
     } // Getters
 
@@ -7165,7 +7295,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
       event.preventDefault(); // todo: v6 revert #37011 & change markup https://getbootstrap.com/docs/5.2/forms/input-group/
 
-      const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0];
+      const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.findOne(SELECTOR_DATA_TOGGLE$3, event.delegateTarget.parentNode);
       const instance = Dropdown.getOrCreateInstance(getToggleButton);
 
       if (isUpOrDownEvent) {
@@ -7207,7 +7337,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/scrollBar.js
+   * Bootstrap (v5.2.3): util/scrollBar.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7326,7 +7456,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/backdrop.js
+   * Bootstrap (v5.2.3): util/backdrop.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7472,7 +7602,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/focustrap.js
+   * Bootstrap (v5.2.3): util/focustrap.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7581,7 +7711,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): modal.js
+   * Bootstrap (v5.2.3): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7793,9 +7923,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
       });
       EventHandler.on(this._element, EVENT_MOUSEDOWN_DISMISS, event => {
+        // a bad trick to segregate clicks that may start inside dialog but end outside, and avoid listen to scrollbar clicks
         EventHandler.one(this._element, EVENT_CLICK_DISMISS, event2 => {
-          // a bad trick to segregate clicks that may start inside dialog but end outside, and avoid listen to scrollbar clicks
-          if (this._dialog.contains(event.target) || this._dialog.contains(event2.target)) {
+          if (this._element !== event.target || this._element !== event2.target) {
             return;
           }
 
@@ -7957,7 +8087,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): offcanvas.js
+   * Bootstrap (v5.2.3): offcanvas.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8231,7 +8361,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/sanitizer.js
+   * Bootstrap (v5.2.3): util/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8336,7 +8466,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): util/template-factory.js
+   * Bootstrap (v5.2.3): util/template-factory.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8494,7 +8624,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): tooltip.js
+   * Bootstrap (v5.2.3): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8592,6 +8722,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this.tip = null;
 
       this._setListeners();
+
+      if (!this._config.selector) {
+        this._fixTitle();
+      }
     } // Getters
 
 
@@ -8620,24 +8754,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       this._isEnabled = !this._isEnabled;
     }
 
-    toggle(event) {
+    toggle() {
       if (!this._isEnabled) {
         return;
       }
 
-      if (event) {
-        const context = this._initializeOnDelegatedTarget(event);
-
-        context._activeTrigger.click = !context._activeTrigger.click;
-
-        if (context._isWithActiveTrigger()) {
-          context._enter();
-        } else {
-          context._leave();
-        }
-
-        return;
-      }
+      this._activeTrigger.click = !this._activeTrigger.click;
 
       if (this._isShown()) {
         this._leave();
@@ -8652,12 +8774,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       clearTimeout(this._timeout);
       EventHandler.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
 
-      if (this.tip) {
-        this.tip.remove();
-      }
-
-      if (this._config.originalTitle) {
-        this._element.setAttribute('title', this._config.originalTitle);
+      if (this._element.getAttribute('data-bs-original-title')) {
+        this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
       }
 
       this._disposePopper();
@@ -8684,10 +8802,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       } // todo v6 remove this OR make it optional
 
 
-      if (this.tip) {
-        this.tip.remove();
-        this.tip = null;
-      }
+      this._disposePopper();
 
       const tip = this._getTipElement();
 
@@ -8702,12 +8817,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         EventHandler.trigger(this._element, this.constructor.eventName(EVENT_INSERTED));
       }
 
-      if (this._popper) {
-        this._popper.update();
-      } else {
-        this._popper = this._createPopper(tip);
-      }
-
+      this._popper = this._createPopper(tip);
       tip.classList.add(CLASS_NAME_SHOW$2); // If this is a touch-enabled device we add extra
       // empty mouseover listeners to the body's immediate children;
       // only needed because of broken event delegation on iOS
@@ -8765,14 +8875,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
 
         if (!this._isHovered) {
-          tip.remove();
+          this._disposePopper();
         }
 
         this._element.removeAttribute('aria-describedby');
 
         EventHandler.trigger(this._element, this.constructor.eventName(EVENT_HIDDEN$2));
-
-        this._disposePopper();
       };
 
       this._queueCallback(complete, this.tip, this._isAnimated());
@@ -8850,7 +8958,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
 
     _getTitle() {
-      return this._resolvePossibleFunction(this._config.title) || this._config.originalTitle;
+      return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute('data-bs-original-title');
     } // Private
 
 
@@ -8936,7 +9044,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
       for (const trigger of triggers) {
         if (trigger === 'click') {
-          EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, event => this.toggle(event));
+          EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, event => {
+            const context = this._initializeOnDelegatedTarget(event);
+
+            context.toggle();
+          });
         } else if (trigger !== TRIGGER_MANUAL) {
           const eventIn = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSEENTER) : this.constructor.eventName(EVENT_FOCUSIN$1);
           const eventOut = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSELEAVE) : this.constructor.eventName(EVENT_FOCUSOUT$1);
@@ -8964,19 +9076,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       };
 
       EventHandler.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-
-      if (this._config.selector) {
-        this._config = { ...this._config,
-          trigger: 'manual',
-          selector: ''
-        };
-      } else {
-        this._fixTitle();
-      }
     }
 
     _fixTitle() {
-      const title = this._config.originalTitle;
+      const title = this._element.getAttribute('title');
 
       if (!title) {
         return;
@@ -8985,6 +9088,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (!this._element.getAttribute('aria-label') && !this._element.textContent.trim()) {
         this._element.setAttribute('aria-label', title);
       }
+
+      this._element.setAttribute('data-bs-original-title', title); // DO NOT USE IT. Is only for backwards compatibility
+
 
       this._element.removeAttribute('title');
     }
@@ -9057,8 +9163,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         };
       }
 
-      config.originalTitle = this._element.getAttribute('title') || '';
-
       if (typeof config.title === 'number') {
         config.title = config.title.toString();
       }
@@ -9077,10 +9181,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (this.constructor.Default[key] !== this._config[key]) {
           config[key] = this._config[key];
         }
-      } // In the future can be replaced with:
+      }
+
+      config.selector = false;
+      config.trigger = 'manual'; // In the future can be replaced with:
       // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
       // `Object.fromEntries(keysWithDifferentValues)`
-
 
       return config;
     }
@@ -9090,6 +9196,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this._popper.destroy();
 
         this._popper = null;
+      }
+
+      if (this.tip) {
+        this.tip.remove();
+        this.tip = null;
       }
     } // Static
 
@@ -9120,7 +9231,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): popover.js
+   * Bootstrap (v5.2.3): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9203,7 +9314,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): scrollspy.js
+   * Bootstrap (v5.2.3): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9494,7 +9605,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): tab.js
+   * Bootstrap (v5.2.3): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9522,7 +9633,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   const CLASS_DROPDOWN = 'dropdown';
   const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
   const SELECTOR_DROPDOWN_MENU = '.dropdown-menu';
-  const SELECTOR_DROPDOWN_ITEM = '.dropdown-item';
   const NOT_SELECTOR_DROPDOWN_TOGGLE = ':not(.dropdown-toggle)';
   const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]';
   const SELECTOR_OUTER = '.nav-item, .list-group-item';
@@ -9601,7 +9711,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           return;
         }
 
-        element.focus();
         element.removeAttribute('tabindex');
         element.setAttribute('aria-selected', true);
 
@@ -9657,6 +9766,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       const nextActiveElement = getNextActiveElement(this._getChildren().filter(element => !isDisabled(element)), event.target, isNext, true);
 
       if (nextActiveElement) {
+        nextActiveElement.focus({
+          preventScroll: true
+        });
         Tab.getOrCreateInstance(nextActiveElement).show();
       }
     }
@@ -9732,7 +9844,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
       toggle(SELECTOR_DROPDOWN_TOGGLE, CLASS_NAME_ACTIVE);
       toggle(SELECTOR_DROPDOWN_MENU, CLASS_NAME_SHOW$1);
-      toggle(SELECTOR_DROPDOWN_ITEM, CLASS_NAME_ACTIVE);
       outerElem.setAttribute('aria-expanded', open);
     }
 
@@ -9807,7 +9918,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): toast.js
+   * Bootstrap (v5.2.3): toast.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9958,13 +10069,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       switch (event.type) {
         case 'mouseover':
         case 'mouseout':
-          this._hasMouseInteraction = isInteracting;
-          break;
+          {
+            this._hasMouseInteraction = isInteracting;
+            break;
+          }
 
         case 'focusin':
         case 'focusout':
-          this._hasKeyboardInteraction = isInteracting;
-          break;
+          {
+            this._hasKeyboardInteraction = isInteracting;
+            break;
+          }
       }
 
       if (isInteracting) {
@@ -10024,7 +10139,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.1): index.umd.js
+   * Bootstrap (v5.2.3): index.umd.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -18309,8 +18424,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   }
 
   function disableBrowserMagic(field, spellcheck, autocorrect, autocapitalize) {
-    field.setAttribute("autocorrect", autocorrect ? "" : "off");
-    field.setAttribute("autocapitalize", autocapitalize ? "" : "off");
+    field.setAttribute("autocorrect", autocorrect ? "on" : "off");
+    field.setAttribute("autocapitalize", autocapitalize ? "on" : "off");
     field.setAttribute("spellcheck", !!spellcheck);
   }
 
@@ -18325,7 +18440,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     else { te.setAttribute("wrap", "off"); }
     // If border: 0; -- iOS fails to open keyboard (issue #1287)
     if (ios) { te.style.border = "1px solid black"; }
-    disableBrowserMagic(te);
     return div
   }
 
@@ -18947,6 +19061,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
       // Old-fashioned briefly-focus-a-textarea hack
       var kludge = hiddenTextarea(), te = kludge.firstChild;
+      disableBrowserMagic(te);
       cm.display.lineSpace.insertBefore(kludge, cm.display.lineSpace.firstChild);
       te.value = lastCopied.text.join("\n");
       var hadFocus = activeElt(div.ownerDocument);
@@ -19511,6 +19626,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // The semihidden textarea that is focused when the editor is
     // focused, and receives input.
     this.textarea = this.wrapper.firstChild;
+    var opts = this.cm.options;
+    disableBrowserMagic(this.textarea, opts.spellcheck, opts.autocorrect, opts.autocapitalize);
   };
 
   TextareaInput.prototype.screenReaderLabelChanged = function (label) {
@@ -19915,7 +20032,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.65.9";
+  CodeMirror.version = "5.65.11";
 
   return CodeMirror;
 
@@ -21810,7 +21927,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     if (type == "async" ||
         (type == "variable" &&
          (value == "static" || value == "get" || value == "set" || (isTS && isModifier(value))) &&
-         cx.stream.match(/^\s+[\w$\xa1-\uffff]/, false))) {
+         cx.stream.match(/^\s+#?[\w$\xa1-\uffff]/, false))) {
       cx.marked = "keyword";
       return cont(classBody);
     }
@@ -23521,8 +23638,8 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     name: "clike",
     keywords: words("abstract as async await base break case catch checked class const continue" +
                     " default delegate do else enum event explicit extern finally fixed for" +
-                    " foreach goto if implicit in interface internal is lock namespace new" +
-                    " operator out override params private protected public readonly ref return sealed" +
+                    " foreach goto if implicit in init interface internal is lock namespace new" +
+                    " operator out override params private protected public readonly record ref required return sealed" +
                     " sizeof stackalloc static struct switch this throw try typeof unchecked" +
                     " unsafe using virtual void volatile while add alias ascending descending dynamic from get" +
                     " global group into join let orderby partial remove select set value var yield"),
@@ -23531,7 +23648,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
                  " UInt64 bool byte char decimal double short int long object"  +
                  " sbyte float string ushort uint ulong"),
     blockKeywords: words("catch class do else finally for foreach if struct switch try while"),
-    defKeywords: words("class interface namespace struct var"),
+    defKeywords: words("class interface namespace record struct var"),
     typeFirstDefinitions: true,
     atoms: words("true false null"),
     hooks: {
