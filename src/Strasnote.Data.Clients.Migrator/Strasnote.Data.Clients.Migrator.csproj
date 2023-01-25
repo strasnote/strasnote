@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<PackageReference Include="Simple.Migrations" Version="0.9.21" />
+		<PackageReference Include="Simple.Migrations" />
 	</ItemGroup>
 </Project>

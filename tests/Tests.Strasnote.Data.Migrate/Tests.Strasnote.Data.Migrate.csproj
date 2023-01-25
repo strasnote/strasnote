@@ -3,9 +3,9 @@
 		<RootNamespace>Strasnote.Data.Migrate</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="MaybeF.Testing" Version="9.1.2" />
+		<PackageReference Include="MaybeF.Testing" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
+		<ProjectReference Include="..\..\src\Strasnote.Data.Migrate\Strasnote.Data.Migrate.csproj" />
 	</ItemGroup>
 </Project>
