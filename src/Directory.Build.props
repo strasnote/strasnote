@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-	
+
 	<!-- Standard Configuration -->
- <PropertyGroup>
-	 <TargetFramework>net6.0</TargetFramework>
-	 <LangVersion>latest</LangVersion>
-	 <Nullable>enable</Nullable>
- </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 	<!-- Enable Internal Testing -->
 	<ItemGroup Label="Test Internals">
@@ -16,8 +16,8 @@
 	</ItemGroup>
 
 	<!-- Import Licence file -->
-  <ItemGroup Label="Licence">
-    <None Include="$([MSBuild]::GetPathOfFileAbove(LICENSE))" Pack="true" />
-  </ItemGroup>
-	
+	<ItemGroup Label="Licence">
+		<None Include="$([MSBuild]::GetPathOfFileAbove(LICENSE))" Pack="true" />
+	</ItemGroup>
+
 </Project>
